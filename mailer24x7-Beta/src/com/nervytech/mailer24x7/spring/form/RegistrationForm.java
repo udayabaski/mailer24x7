@@ -21,6 +21,8 @@ public class RegistrationForm {
 	private String confirmPassword;
 	private String message;
 	private String messageType;
+	private String action;
+	private String userId;
 
 	/**
 	 * @return the fullName
@@ -155,6 +157,36 @@ public class RegistrationForm {
 	 */
 	public void setMessageType(String messageType) {
 		this.messageType = messageType;
+	}
+
+	/**
+	 * @return the action
+	 */
+	public String getAction() {
+		return action;
+	}
+
+	/**
+	 * @param action
+	 *            the action to set
+	 */
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	/**
+	 * @return the userId
+	 */
+	public String getUserId() {
+		return userId;
+	}
+
+	/**
+	 * @param userId
+	 *            the userId to set
+	 */
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 }
