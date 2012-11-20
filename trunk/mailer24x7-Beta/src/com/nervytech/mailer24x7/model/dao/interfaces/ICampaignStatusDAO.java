@@ -3,10 +3,36 @@
  */
 package com.nervytech.mailer24x7.model.dao.interfaces;
 
+import com.nervytech.mailer24x7.common.enums.MailgunSyncStatusEnum;
+import com.nervytech.mailer24x7.mailgun.CampaignStatsVO;
+
 /**
  * @author bsikkaya
- *
+ * 
  */
 public interface ICampaignStatusDAO {
+
+	public void updateCampaignStatus(long campaignId, int status,
+			String sentTime);
+
+	public void updateCampaignSubscriberStatus(CampaignStatsVO cmpnStatusVO);
+
+	public void updateCampaignEventsStats(CampaignStatsVO cmpnStatusVO);
+
+	public void updateCampaignSyncStatus(long campaignId,
+			MailgunSyncStatusEnum status);
+
+	public void updateDeliveredCount(long campaignId, int deliveredCount);
+
+	public int getCampaignEventFetchCount(long campaignId);
+
+	public void updateLatestCampaignSubscriberId(long campaignId,
+			long subscriberId);
+
+	public long getLatestCampaignSubscriberId(long campaignId);
+
+	public void updateCampaignEventFetchCount(long campaignId, int count);
+
+	public void updateCampaignStatus(CampaignStatsVO cmpnStatusVO);
 
 }

@@ -1,5 +1,7 @@
 package com.nervytech.mailer24x7.model.dao.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -26,6 +28,32 @@ public class SubscriberListDAO extends JdbcDaoSupport implements ISubscriberList
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(SubscriberListDAO.class);
+	
+	public void updateBounceCounts(final long subListId,
+			List<String> emailIdList) {
+		String udateQuery = "update SUBSCRIBER_LIST set "
+				+ " BOUNCE_COUNT= BOUNCE_COUNT+" + emailIdList.size()
+				+ " AND ACTIVE_COUNT= ACTIVE_COUNT-" + emailIdList.size()
+				+ " WHERE SUBSCRIBER_LIST_ID =" + subListId;
+
+		logger.debug("Update Bounced Count Query : " + udateQuery);
+
+		getJdbcTemplate().execute(udateQuery);
+	}
+	
+	public void updateUnSubscriberCounts(final long subListId,
+			List<String> emailIdList) {
+		String udateQuery = "update SUBSCRIBER_LIST set "
+				+ " UNSUBSCRIBER_COUNT= UNSUBSCRIBER_COUNT+"
+				+ emailIdList.size() + " AND ACTIVE_COUNT= ACTIVE_COUNT-"
+				+ emailIdList.size() + " WHERE SUBSCRIBER_LIST_ID ="
+				+ subListId;
+
+		logger.debug("Update Unsubscriber Count Query : " + udateQuery);
+
+		getJdbcTemplate().execute(udateQuery);
+	}
+
 	
 	public static SubscriberListDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (SubscriberListDAO) ctx.getBean("SubscriberListDAO");

@@ -23,10 +23,13 @@ import com.nervytech.mailer24x7.common.enums.MailgunSyncStatusEnum;
 import com.nervytech.mailer24x7.common.enums.SubscriberCampaignStatusEnum;
 import com.nervytech.mailer24x7.common.enums.SubscriberStatusEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
-import com.nervytech.mailer24x7.model.dao.impl.CampaignDAO;
-import com.nervytech.mailer24x7.model.dao.impl.SubscriberDAO;
-import com.nervytech.mailer24x7.model.domains.Campaign;
-import com.nervytech.mailer24x7.model.domains.SubscriberIdStatus;
+import com.nervytech.mailer24x7.domain.model.Campaign;
+import com.nervytech.mailer24x7.domain.model.CampaignStatus;
+import com.nervytech.mailer24x7.domain.model.SubscriberIdStatus;
+import com.nervytech.mailer24x7.model.service.api.ICampaignStatusService;
+import com.nervytech.mailer24x7.model.service.api.ISubscriberIdStatusService;
+import com.nervytech.mailer24x7.model.service.api.ISubscriberListService;
+import com.nervytech.mailer24x7.model.service.api.ISubscriberReportsService;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -40,10 +43,16 @@ public class MailgunCampignSyncer {
 			.getLogger(MailgunCampignSyncer.class);
 
 	@Autowired
-	private CampaignDAO campaignDAO;
-
+	private ICampaignStatusService cmpnStatusService;
+	
 	@Autowired
-	private SubscriberDAO subscriberDAO;
+	private ISubscriberIdStatusService subscriberIdStatusService;
+	
+	@Autowired
+	private ISubscriberListService subscriberListService;
+	
+	@Autowired
+	private ISubscriberReportsService subscriberReportsService;
 	
 	public final SimpleDateFormat sdft = new SimpleDateFormat(
 			"EEE, dd MMM yyyy HH:mm:ss z");
@@ -130,7 +139,7 @@ public class MailgunCampignSyncer {
 						}
 					}
 					if (updateDb) {
-						 campaignDAO.updateCampaignStatus(campainStatsVO);
+						cmpnStatusService.updateCampaignStatus(campainStatsVO);
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -141,7 +150,7 @@ public class MailgunCampignSyncer {
 		System.out.println("Update Campaign Stats Completed : ");
 	}
 
-	public void updateCampaignInMailgun(Campaign cmpn) throws JSONException,
+	public void updateCampaignInMailgun(Campaign cmpn,CampaignStatus cmpnStatus) throws JSONException,
 			MailerException {
 		
 		System.out.println("Update Campaign in Mailgun Started : "+cmpn.getCampaignId());
@@ -149,57 +158,57 @@ public class MailgunCampignSyncer {
 		logger.info("Synching Campaign in Mailgun Started : "
 				+ cmpn.getCampaignId());
 
-		MailgunSyncStatusEnum status = getEnumStatus(cmpn.getSyncstatus());
+		MailgunSyncStatusEnum status = getEnumStatus(cmpnStatus.getSyncStatus());
 
 		switch (status) {
 		case NONE:
 			createCampaign("campaign_" + cmpn.getCampaignId(),
 					"" + cmpn.getCampaignId());
 			System.out.println("Created Campaign "+cmpn.getCampaignId());
-			campaignDAO.updateCampaignSyncStatus(cmpn.getCampaignId(),
+			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.CAMPAIGN_CREATED);
 			// TODO. Domain we are hardcoding here
 			MailgunSubscriberUtil.createMailingList(
-					"sl_" + cmpn.getSubscriberListId(), "sungod.mailgun.org",
-					"Subscriber List - " + cmpn.getSubscriberListId(), "sl_"
-							+ cmpn.getSubscriberListId()
+					"sl_" + cmpnStatus.getSubscriberListId(), "sungod.mailgun.org",
+					"Subscriber List - " + cmpnStatus.getSubscriberListId(), "sl_"
+							+ cmpnStatus.getSubscriberListId()
 							+ "@sungod.mailgun.org");
-			campaignDAO.updateCampaignSyncStatus(cmpn.getCampaignId(),
+			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_IN_PROGRESS);
 
-			syncSubscribers(cmpn);
+			syncSubscribers(cmpn.getCampaignId(),cmpnStatus.getSubscriberListId());
 
-			campaignDAO.updateCampaignSyncStatus(cmpn.getCampaignId(),
+			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_COMPLETED);
 			break;
 		case CAMPAIGN_CREATED:
 			MailgunSubscriberUtil.createMailingList(
-					"sl_" + cmpn.getSubscriberListId(), "sungod.mailgun.org",
-					"Subscriber List - " + cmpn.getSubscriberListId(), "sl_"
-							+ cmpn.getSubscriberListId()
+					"sl_" + cmpnStatus.getSubscriberListId(), "sungod.mailgun.org",
+					"Subscriber List - " + cmpnStatus.getSubscriberListId(), "sl_"
+							+ cmpnStatus.getSubscriberListId()
 							+ "@sungod.mailgun.org");
-			campaignDAO.updateCampaignSyncStatus(cmpn.getCampaignId(),
+			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_IN_PROGRESS);
 
-			syncSubscribers(cmpn);
+			syncSubscribers(cmpn.getCampaignId(),cmpnStatus.getSubscriberListId());
 
-			campaignDAO.updateCampaignSyncStatus(cmpn.getCampaignId(),
+			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_COMPLETED);
 			break;
 		case SUBSCRIBER_LIST_CREATED:
-			campaignDAO.updateCampaignSyncStatus(cmpn.getCampaignId(),
+			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_IN_PROGRESS);
 
-			syncSubscribers(cmpn);
+			syncSubscribers(cmpn.getCampaignId(),cmpnStatus.getSubscriberListId());
 
-			campaignDAO.updateCampaignSyncStatus(cmpn.getCampaignId(),
+			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_COMPLETED);
 			break;
 		case SUBSCRIBER_UPDATE_IN_PROGRESS:
 
-			syncSubscribers(cmpn);
+			syncSubscribers(cmpn.getCampaignId(),cmpnStatus.getSubscriberListId());
 
-			campaignDAO.updateCampaignSyncStatus(cmpn.getCampaignId(),
+			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_COMPLETED);
 			break;
 		case SUBSCRIBER_UPDATE_COMPLETED:
@@ -226,9 +235,9 @@ public class MailgunCampignSyncer {
 		
 		System.out.println("Updating EventsFrom mailgun "+campaignId+" DeliveredCount is "+deliveredCount);
 		// TODO. No need to repeat every time. Have to change later.
-		campaignDAO.updateDeliveredCount(campaignId, deliveredCount);
+		cmpnStatusService.updateDeliveredCount(campaignId, deliveredCount);
 
-		int ourEventCount = campaignDAO.getCampaignEventFetchCount(campaignId);
+		int ourEventCount = cmpnStatusService.getCampaignEventFetchCount(campaignId);
 
 		System.out.println("OurCOunt is ====>>>>> "+ourEventCount+" MailgunEventCount =====>>>> "+mailgunEventCount);
 		
@@ -404,21 +413,18 @@ public class MailgunCampignSyncer {
 		}
 	}
 
-	private void syncSubscribers(Campaign campaign) throws JSONException {
+	private void syncSubscribers(long campaignId,long subscriberListId) throws JSONException {
 		
 		boolean finishFlag = false;
 		while (!finishFlag) {
-			List<SubscriberIdStatus> subscriberList = subscriberDAO
-					.getNextSubscribers(campaign.getSubscriberListId(), 0L,
+			List<SubscriberIdStatus> subscriberList = subscriberIdStatusService.getNextSubscribers(subscriberListId, 0L,
 							SubscriberStatusEnum.ACTIVE.getStatus(), 1000);
 			if (subscriberList != null && !subscriberList.isEmpty()) {
 				MailgunSubscriberUtil.addMutipleMembers(
-						"sl_" + campaign.getSubscriberListId()
+						"sl_" + subscriberListId
 								+ "@sungod.mailgun.org", subscriberList, true);
-				campaignDAO.updateLatestCampaignSubscriberId(campaign
-						.getCampaignId(),
-						subscriberList.get(subscriberList.size() - 1)
-								.getStatusId());
+				cmpnStatusService.updateLatestCampaignSubscriberId(campaignId,
+						subscriberList.get(subscriberList.size() - 1).getStatusId());
 			} else {
 				finishFlag = true;
 			}
@@ -553,12 +559,12 @@ public class MailgunCampignSyncer {
 			}
 		}
 		// Updating the subscriber_reports table here.
-		campaignDAO.addCampaignEvents(campaignId, campaignEventList);
+		subscriberReportsService.addCampaignEvents(campaignId, campaignEventList);
 
 		campaignStatusVO.setEventCount(campaignEventList.size());
 		// Updating the campaign opened, clicked, bounced, unsubscribe and
 		// dropped count
-		campaignDAO.addCampaignStats(campaignId, campaignStatusVO);
+		cmpnStatusService.updateCampaignEventsStats(campaignStatusVO);
 
 		// Updating the subscriberid_status table for unsubscribe here.
 		Map<Long, List<String>> unsubscribeMap = campaignStatusVO
@@ -567,11 +573,11 @@ public class MailgunCampignSyncer {
 			Iterator<Long> itr = unsubscribeMap.keySet().iterator();
 			while (itr.hasNext()) {
 				Long subListId = itr.next();
-				subscriberDAO.updateSubscriberStatus(subListId,
+				subscriberIdStatusService.updateSubscriberStatus(subListId,
 						unsubscribeMap.get(subListId),
 						SubscriberStatusEnum.UNSUBSCRIBED.getStatus());
 				
-				subscriberDAO.updateUnSubscriberCounts(subListId, unsubscribeMap.get(subListId));
+				subscriberListService.updateUnSubscriberCounts(subListId, unsubscribeMap.get(subListId));
 			}
 		}
 
@@ -581,11 +587,11 @@ public class MailgunCampignSyncer {
 			Iterator<Long> itr = bouncedMap.keySet().iterator();
 			while (itr.hasNext()) {
 				Long subListId = itr.next();
-				subscriberDAO.updateSubscriberStatus(subListId,
+				subscriberIdStatusService.updateSubscriberStatus(subListId,
 						bouncedMap.get(subListId),
 						SubscriberStatusEnum.BOUNCED.getStatus());
 				
-				subscriberDAO.updateBounceCounts(subListId, unsubscribeMap.get(subListId));
+				subscriberListService.updateBounceCounts(subListId, unsubscribeMap.get(subListId));
 			}
 		}
 	}

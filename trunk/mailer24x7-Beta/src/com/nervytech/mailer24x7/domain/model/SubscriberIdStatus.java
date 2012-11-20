@@ -10,7 +10,7 @@ package com.nervytech.mailer24x7.domain.model;
 public class SubscriberIdStatus {
 
 	private long statusId;
-	private long subscriberStatusId;
+	private long subscriberListId;
 	private String emailId;
 	private int status;
 
@@ -30,18 +30,18 @@ public class SubscriberIdStatus {
 	}
 
 	/**
-	 * @return the subscriberStatusId
+	 * @return the subscriberListId
 	 */
-	public long getSubscriberStatusId() {
-		return subscriberStatusId;
+	public long getSubscriberListId() {
+		return subscriberListId;
 	}
 
 	/**
-	 * @param subscriberStatusId
-	 *            the subscriberStatusId to set
+	 * @param subscriberListId
+	 *            the subscriberListId to set
 	 */
-	public void setSubscriberStatusId(long subscriberStatusId) {
-		this.subscriberStatusId = subscriberStatusId;
+	public void setSubscriberListId(long subscriberListId) {
+		this.subscriberListId = subscriberListId;
 	}
 
 	/**
@@ -84,8 +84,8 @@ public class SubscriberIdStatus {
 		StringBuilder builder = new StringBuilder();
 		builder.append("SubscriberIdStatus [statusId=");
 		builder.append(statusId);
-		builder.append(", subscriberStatusId=");
-		builder.append(subscriberStatusId);
+		builder.append(", subscriberListId=");
+		builder.append(subscriberListId);
 		builder.append(", emailId=");
 		builder.append(emailId);
 		builder.append(", status=");

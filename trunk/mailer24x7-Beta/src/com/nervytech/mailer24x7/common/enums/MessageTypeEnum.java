@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.skillthirst.sdc.enums;
+package com.nervytech.mailer24x7.common.enums;
 
 /**
  * @author bsikkaya
