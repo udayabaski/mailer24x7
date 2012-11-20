@@ -27,6 +27,7 @@ import com.nervytech.mailer24x7.common.enums.UserRoleEnum;
 import com.nervytech.mailer24x7.common.enums.UserStatusEnum;
 import com.nervytech.mailer24x7.domain.model.User;
 import com.nervytech.mailer24x7.model.dao.interfaces.IUserDAO;
+import com.nervytech.mailer24x7.model.service.api.IUserService;
 
 /**
  * @author ADMIN
@@ -40,7 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			.getLogger(UserDetailsServiceImpl.class);
 
 	@Autowired
-	private IUserDAO usersDAO;
+	private IUserService usrService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -50,8 +51,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		SessionUser springUser = null;
 		User user = null;
 		try {
-			List<User> users = usersDAO.getUser(username);
-			if (users.size() <= 0) {
+			user = usrService.getUserByEmailId(username);
+			if (user == null) {
 				
 				logger.info("User "+username+" not found in the system.");
 				
@@ -59,7 +60,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 						"Oops!!! Invalid username.");
 				
 			}
-			user = (User) users.get(0);
 
 			Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 			/*

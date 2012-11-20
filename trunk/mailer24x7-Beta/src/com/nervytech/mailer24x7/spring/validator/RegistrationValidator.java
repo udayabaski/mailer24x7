@@ -28,14 +28,10 @@ public class RegistrationValidator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "fullName", "NotEmpty.registrationForm.fullName","Full name must not be empty.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "organization", "NotEmpty.registrationForm.organization","Company must not be empty.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "website", "NotEmpty.registrationForm.website","Website must not be empty.");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "country", "NotEmpty.registrationForm.country","Username must not be empty.");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "country", "NotEmpty.registrationForm.country","Country must not be empty.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "emailId", "NotEmpty.registrationForm.emailId","Email must not be empty.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty.registrationForm.password","Password must not be empty.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "NotEmpty.registrationForm.confirmPassword","Confirm password must not be empty.");
-		
-		if(registrationForm.getCountry().equals("-1")){
-			errors.rejectValue("country", "NotEmpty.registrationForm.country", "Please select your country.");
-		}
 		
 	    if (!(registrationForm.getPassword()).equals(registrationForm.getConfirmPassword())) {
 	        errors.rejectValue("confirmPassword","matchingPassword.registrationForm.password","Password and Confirm Password does not match.");
