@@ -1,12 +1,18 @@
 package com.nervytech.mailer24x7.model.dao.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
+import com.nervytech.mailer24x7.domain.model.Organization;
 import com.nervytech.mailer24x7.model.dao.interfaces.IOrganizationDAO;
 
 /**
@@ -22,12 +28,73 @@ import com.nervytech.mailer24x7.model.dao.interfaces.IOrganizationDAO;
  */
 
 @Resource(mappedName = "organizationDAO")
-public class OrganizationDAO extends JdbcDaoSupport implements IOrganizationDAO{
+public class OrganizationDAO extends JdbcDaoSupport implements IOrganizationDAO {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(OrganizationDAO.class);
-	
-	public static OrganizationDAO getFromApplicationContext(ApplicationContext ctx) {
+
+	public List<Organization> getOrganization(String orgName, String country) {
+		RowMapper<Organization> mapper = new RowMapper<Organization>() {
+			public Organization mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				Organization org = new Organization();
+				org.setOrgName(rs.getString("ORG_NAME"));
+				org.setContactEmail(rs.getString("CONTACT_EMAIL"));
+				return org;
+			}
+		};
+		String orgSQL = "SELECT * FROM ORGANIZATION WHERE ORG_NAME='" + orgName
+				+ "' AND COUNTRY='" + country + "'";
+
+		logger.debug("Organization checking Query : " + orgSQL);
+
+		return getJdbcTemplate().query(orgSQL, mapper);
+	}
+
+	public long saveOrganization(Organization org) {
+
+		String insertOrgQuery = "INSERT INTO ORGANIZATION (ORG_NAME,DISPLAYNAME,STATUS,CREATED_TIME,CREATED_EMAILID,"
+				+ "CONTACT_EMAIL,CONTACT_NO,WEBSITE,ADDRESS,COUNTRY,TIMEZONE,SENDER_EMAIL) "
+				+ " VALUES('"
+				+ org.getOrgName()
+				+ "','"
+				+ org.getDisplayName()
+				+ "','"
+				+ org.getStatus()
+				+ "','"
+				+ org.getCreatedTime()
+				+ "',"
+				+ "'"
+				+ org.getCreatedEmailId()
+				+ "','"
+				+ org.getContactEmail()
+				+ "','"
+				+ org.getContactNo()
+				+ "','"
+				+ org.getWebsite()
+				+ "','"
+				+ org.getAddress()
+				+ "',"
+				+ "'"
+				+ org.getCountry()
+				+ "','"
+				+ org.getTimeZone() + "','" + org.getSenderEmail() + "')";
+
+		logger.debug("Save Oraganization Query : " + insertOrgQuery);
+
+		getJdbcTemplate().execute(insertOrgQuery);
+
+		String selectOrgIdQuery = "SELECT ORG_ID FROM ORGANIZATION"
+				+ " WHERE ORG_NAME='" + org.getOrgName() + "' AND "
+				+ " COUNTRY='" + org.getCountry() + "'";
+
+		logger.debug("Select Oraganization ID Query : " + selectOrgIdQuery);
+
+		return getJdbcTemplate().queryForLong(selectOrgIdQuery);
+	}
+
+	public static OrganizationDAO getFromApplicationContext(
+			ApplicationContext ctx) {
 		return (OrganizationDAO) ctx.getBean("OrganizationDAO");
 	}
 }

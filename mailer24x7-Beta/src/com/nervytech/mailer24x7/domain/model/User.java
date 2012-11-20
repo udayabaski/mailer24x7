@@ -20,7 +20,7 @@ public class User {
 	private String fullName;
 	private String language;
 	private String timeZone;
-	private String creatdTime;
+	private String createdTime;
 
 	/**
 	 * @return the userId
@@ -188,18 +188,18 @@ public class User {
 	}
 
 	/**
-	 * @return the creatdTime
+	 * @return the createdTime
 	 */
-	public String getCreatdTime() {
-		return creatdTime;
+	public String getCreatedTime() {
+		return createdTime;
 	}
 
 	/**
-	 * @param creatdTime
-	 *            the creatdTime to set
+	 * @param createdTime
+	 *            the createdTime to set
 	 */
-	public void setCreatdTime(String creatdTime) {
-		this.creatdTime = creatdTime;
+	public void setCreatedTime(String createdTime) {
+		this.createdTime = createdTime;
 	}
 
 	/*
@@ -232,8 +232,8 @@ public class User {
 		builder.append(language);
 		builder.append(", timeZone=");
 		builder.append(timeZone);
-		builder.append(", creatdTime=");
-		builder.append(creatdTime);
+		builder.append(", createdTime=");
+		builder.append(createdTime);
 		builder.append("]");
 		return builder.toString();
 	}
