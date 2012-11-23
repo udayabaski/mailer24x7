@@ -22,7 +22,7 @@ public class RegistrationForm {
 	private String message;
 	private String messageType;
 	private String action;
-	private String userId;
+	private String uuId;
 
 	/**
 	 * @return the fullName
@@ -175,18 +175,18 @@ public class RegistrationForm {
 	}
 
 	/**
-	 * @return the userId
+	 * @return the uuId
 	 */
-	public String getUserId() {
-		return userId;
+	public String getUuId() {
+		return uuId;
 	}
 
 	/**
-	 * @param userId
-	 *            the userId to set
+	 * @param uuId
+	 *            the uuId to set
 	 */
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUuId(String uuId) {
+		this.uuId = uuId;
 	}
 
 }

@@ -4,7 +4,7 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 //String encodedBasePath = URLEncoder.encode(basePath,"ISO-8859-1");
-basePath +="usr/home.form";
+basePath +="usr/home";
 %>
 <SCRIPT>
 

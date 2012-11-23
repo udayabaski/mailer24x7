@@ -153,6 +153,12 @@
 		</property>
 	</bean>
 	
+	<bean id="historyDAO" class="com.nervytech.mailer24x7.model.dao.impl.HistoryDAO">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>
+	
 	<bean id="mailgunCampignSyncer" class="com.nervytech.mailer24x7.mailgun.MailgunCampignSyncer" />
 	<bean id="campaignTaskExecutor"
 		class="com.nervytech.mailer24x7.campaign.job.task.CampaignTaskExecutor" />
