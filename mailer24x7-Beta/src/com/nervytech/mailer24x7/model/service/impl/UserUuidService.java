@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.nervytech.mailer24x7.client.exception.DAOServiceException;
 import com.nervytech.mailer24x7.domain.model.UserUuid;
 import com.nervytech.mailer24x7.model.dao.interfaces.IUserUuidDAO;
 import com.nervytech.mailer24x7.model.service.api.IUserUuidService;

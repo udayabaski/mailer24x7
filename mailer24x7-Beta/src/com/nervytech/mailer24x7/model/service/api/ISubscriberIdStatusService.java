@@ -22,4 +22,6 @@ public interface ISubscriberIdStatusService {
 	public void updateSubscriberStatus(final long subListId,
 			final List<String> emailIdList, final int status);
 
+	public int getSubscribersCount(String subscriberListId);
+
 }

@@ -9,56 +9,152 @@ import org.springframework.stereotype.Repository;
  * @author ADMIN
  * 
  */
-@Repository("campaignStep2Form")
+@Repository("campaignStep1Form")
 public class CampaignStep1Form {
 
-	private String emailContentType;
-	private String message;
-	private String messageType;
+	private String campaignName;
+	private String subject;
+	private String senderName;
+	private String senderEmail;
+	private String replyToAddress;
+	private boolean addGoogleAnalytics;
+	private boolean personalizeToAddress;
+	private String nextAction;
+	private String campaignId;
 
 	/**
-	 * @return the emailContentType
+	 * @return the campaignName
 	 */
-	public String getEmailContentType() {
-		return emailContentType;
+	public String getCampaignName() {
+		return campaignName;
 	}
 
 	/**
-	 * @param emailContentType
-	 *            the emailContentType to set
+	 * @param campaignName
+	 *            the campaignName to set
 	 */
-	public void setEmailContentType(String emailContentType) {
-		this.emailContentType = emailContentType;
+	public void setCampaignName(String campaignName) {
+		this.campaignName = campaignName;
 	}
 
 	/**
-	 * @return the message
+	 * @return the subject
 	 */
-	public String getMessage() {
-		return message;
+	public String getSubject() {
+		return subject;
 	}
 
 	/**
-	 * @param message
-	 *            the message to set
+	 * @param subject
+	 *            the subject to set
 	 */
-	public void setMessage(String message) {
-		this.message = message;
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 	/**
-	 * @return the messageType
+	 * @return the senderName
 	 */
-	public String getMessageType() {
-		return messageType;
+	public String getSenderName() {
+		return senderName;
 	}
 
 	/**
-	 * @param messageType
-	 *            the messageType to set
+	 * @param senderName
+	 *            the senderName to set
 	 */
-	public void setMessageType(String messageType) {
-		this.messageType = messageType;
+	public void setSenderName(String senderName) {
+		this.senderName = senderName;
+	}
+
+	/**
+	 * @return the senderEmail
+	 */
+	public String getSenderEmail() {
+		return senderEmail;
+	}
+
+	/**
+	 * @param senderEmail
+	 *            the senderEmail to set
+	 */
+	public void setSenderEmail(String senderEmail) {
+		this.senderEmail = senderEmail;
+	}
+
+	/**
+	 * @return the replyToAddress
+	 */
+	public String getReplyToAddress() {
+		return replyToAddress;
+	}
+
+	/**
+	 * @param replyToAddress
+	 *            the replyToAddress to set
+	 */
+	public void setReplyToAddress(String replyToAddress) {
+		this.replyToAddress = replyToAddress;
+	}
+
+	/**
+	 * @return the addGoogleAnalytics
+	 */
+	public boolean isAddGoogleAnalytics() {
+		return addGoogleAnalytics;
+	}
+
+	/**
+	 * @param addGoogleAnalytics
+	 *            the addGoogleAnalytics to set
+	 */
+	public void setAddGoogleAnalytics(boolean addGoogleAnalytics) {
+		this.addGoogleAnalytics = addGoogleAnalytics;
+	}
+
+	/**
+	 * @return the personalizeToAddress
+	 */
+	public boolean isPersonalizeToAddress() {
+		return personalizeToAddress;
+	}
+
+	/**
+	 * @param personalizeToAddress
+	 *            the personalizeToAddress to set
+	 */
+	public void setPersonalizeToAddress(boolean personalizeToAddress) {
+		this.personalizeToAddress = personalizeToAddress;
+	}
+
+	/**
+	 * @return the campaignId
+	 */
+	public String getCampaignId() {
+		return campaignId;
+	}
+
+	/**
+	 * @param campaignId
+	 *            the campaignId to set
+	 */
+	public void setCampaignId(String campaignId) {
+		this.campaignId = campaignId;
+	}
+
+	/**
+	 * @return the nextAction
+	 */
+	public String getNextAction() {
+		return nextAction;
+	}
+
+	/**
+	 * @param nextAction
+	 *            the nextAction to set
+	 */
+	public void setNextAction(String nextAction) {
+		this.nextAction = nextAction;
 	}
 
 }

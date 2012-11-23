@@ -67,4 +67,16 @@ public class SubscriberIdStatusService implements ISubscriberIdStatusService {
 			throw new RuntimeException(e.getMessage());
 		}		
 	}
+
+	@Override
+	public int getSubscribersCount(String subscriberListId) {
+		int count = 0;
+		try {
+			count = subscriberIdStatusDAO.getSubscribersCount(subscriberListId);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		return count;
+	}
 }
