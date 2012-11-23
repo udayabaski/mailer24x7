@@ -40,24 +40,24 @@ import com.nervytech.mailer24x7.client.exception.MailerS3Exception;
  * 
  */
 public class MailerS3Client {
-	
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(MailerS3Client.class);
-
 
 	/*
 	 * private static final Logger logger = LoggerFactory
 	 * .getLogger(MailerS3Client.class);
 	 */
-	public static String bucketName = "mailer24x7";
-	public static String s3Url = "https://s3-ap-southeast-1.amazonaws.com/"
-			+ bucketName;
-	public static String defaultHTMLFileName = "Campaign.html";
+	public static String BUCKET_NAME = "mailer24x7";
+	public static String S3_URL = "https://s3-ap-southeast-1.amazonaws.com/"
+			+ BUCKET_NAME;
+	public static String DEFAULT_HTML_FILENAME = "Campaign.html";
+	public static String DEFAULT_TEXT_FILENAME = "Campaign.txt";
 
 	final static int BUFFER = 1024;
 
 	public static AmazonS3 s3Client = null;
-	
+
 	/**
 	 * The only information needed to create a client are security credentials
 	 * consisting of the AWS Access Key ID and Secret Access Key. All other
@@ -77,9 +77,9 @@ public class MailerS3Client {
 
 			s3Client = new AmazonS3Client(credentials);
 			// Setting to Singapore Endpoint ...
-			//s3Client.setEndpoint(S3_ENDPOINT);
+			// s3Client.setEndpoint(S3_ENDPOINT);
 		} catch (Exception e) {
-			logger.error("Unable to read AWS property file ",e);
+			logger.error("Unable to read AWS property file ", e);
 			throw new MailerS3Exception("Unable to read AWS property file ", e);
 		}
 	}
@@ -97,30 +97,38 @@ public class MailerS3Client {
 		}
 	}
 
-	public static String putObject(long orgId, long userId, long campaignId,
+	public static String putTxtObject(long orgId, long userId, long campaignId,
 			String htmlContent, boolean isPublic) {
 		return putObject(orgId, userId, campaignId, new ByteArrayInputStream(
-				htmlContent.getBytes()), defaultHTMLFileName, isPublic);
+				htmlContent.getBytes()), DEFAULT_TEXT_FILENAME, isPublic);
 	}
-	
+
+	public static String putHtmlObject(long orgId, long userId,
+			long campaignId, String htmlContent, boolean isPublic) {
+		return putObject(orgId, userId, campaignId, new ByteArrayInputStream(
+				htmlContent.getBytes()), DEFAULT_HTML_FILENAME, isPublic);
+	}
+
 	public static String putObject(long orgId, long userId, long campaignId,
 			File file, String fileName, boolean isPublic) {
-		
+
 		String key = orgId + "/" + userId + "/" + campaignId + "/" + fileName;
-		PutObjectRequest request = new PutObjectRequest(bucketName, key, file);
+		PutObjectRequest request = new PutObjectRequest(BUCKET_NAME, key, file);
 		request.setStorageClass(StorageClass.ReducedRedundancy);
 
 		if (isPublic) {
 			AccessControlList aclList = new AccessControlList();
 			aclList.grantPermission(GroupGrantee.AllUsers, Permission.Read);
-			/*Set<Grant> grantsSet = aclList.getGrants();
-			
-			Grant grant = new Grant(GroupGrantee.AuthenticatedUsers, permission);
-			grantsSet.add();*/
+			/*
+			 * Set<Grant> grantsSet = aclList.getGrants();
+			 * 
+			 * Grant grant = new Grant(GroupGrantee.AuthenticatedUsers,
+			 * permission); grantsSet.add();
+			 */
 			request.setAccessControlList(aclList);
 		}
-		
-		PutObjectResult result = s3Client.putObject(request);
+
+		PutObjectResult result = getAmazonS3Client().putObject(request);
 		// result.getETag();
 
 		return key;
@@ -130,25 +138,54 @@ public class MailerS3Client {
 			InputStream in, String fileName, boolean isPublic) {
 		String key = orgId + "/" + userId + "/" + campaignId + "/" + fileName;
 		ObjectMetadata metaData = new ObjectMetadata();
-		metaData.setHeader("fileName", "Campaign.html");
-		PutObjectRequest request = new PutObjectRequest(bucketName, key, in,
+		metaData.setHeader("fileName", fileName);
+		PutObjectRequest request = new PutObjectRequest(BUCKET_NAME, key, in,
 				metaData);
 		request.setStorageClass(StorageClass.ReducedRedundancy);
 
 		if (isPublic) {
 			AccessControlList aclList = new AccessControlList();
 			aclList.grantPermission(GroupGrantee.AllUsers, Permission.Read);
-			/*Set<Grant> grantsSet = aclList.getGrants();
-			
-			Grant grant = new Grant(GroupGrantee.AuthenticatedUsers, permission);
-			grantsSet.add();*/
+			/*
+			 * Set<Grant> grantsSet = aclList.getGrants();
+			 * 
+			 * Grant grant = new Grant(GroupGrantee.AuthenticatedUsers,
+			 * permission); grantsSet.add();
+			 */
 			request.setAccessControlList(aclList);
 		}
 
-		PutObjectResult result = s3Client.putObject(request);
+		PutObjectResult result = getAmazonS3Client().putObject(request);
 		// result.getETag();
 
 		return key;
+	}
+
+	public static String getTextObject(String key) {
+
+		String textContent = null;
+		GetObjectRequest request = null;
+		S3Object s3Object = null;
+		S3ObjectInputStream s3InputStream = null;
+
+		try {
+			request = new GetObjectRequest(BUCKET_NAME, key);
+			s3Object = s3Client.getObject(request);
+			s3InputStream = s3Object.getObjectContent();
+			textContent = new Scanner(s3InputStream).useDelimiter("\\A").next();
+		} finally {
+			if (s3InputStream != null) {
+				try {
+					s3InputStream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return textContent;
+
 	}
 
 	public static String getHTMLObject(String key) {
@@ -159,7 +196,7 @@ public class MailerS3Client {
 		S3ObjectInputStream s3InputStream = null;
 
 		try {
-			request = new GetObjectRequest(bucketName, key);
+			request = new GetObjectRequest(BUCKET_NAME, key);
 			s3Object = s3Client.getObject(request);
 			s3InputStream = s3Object.getObjectContent();
 			htmlContent = new Scanner(s3InputStream).useDelimiter("\\A").next();
@@ -190,56 +227,57 @@ public class MailerS3Client {
 					file.getInputStream()));
 
 			ZipEntry zipEntry;
-			
+
 			while ((zipEntry = zIn.getNextEntry()) != null) {
 
-				String fileName = zipEntry.getName
-						().toLowerCase();
+				String fileName = zipEntry.getName().toLowerCase();
 
 				System.out.println("FileName is " + fileName);
-				
+
 				String randomId = UUID.randomUUID().toString();
-				
-				tempFile = new File(randomId+"###"+fileName);
-				
+
+				tempFile = new File(randomId + "###" + fileName);
+
 				IOUtil.copy(zIn, new FileOutputStream(tempFile));
 
 				if (fileName.lastIndexOf(".css") != -1) {
-					//putObject(orgId, userId, campaignId, zIn, fileName, true);
-					putObject(orgId, userId, campaignId, tempFile, fileName, true);
+					// putObject(orgId, userId, campaignId, zIn, fileName,
+					// true);
+					putObject(orgId, userId, campaignId, tempFile, fileName,
+							true);
 				} else if (fileName.lastIndexOf(".jpg") != -1
 						|| fileName.lastIndexOf(".gif") != -1
 						|| fileName.lastIndexOf(".png") != -1) {
-					//putObject(orgId, userId, campaignId, zIn, fileName, true);
-					putObject(orgId, userId, campaignId, tempFile, fileName, true);
+					// putObject(orgId, userId, campaignId, zIn, fileName,
+					// true);
+					putObject(orgId, userId, campaignId, tempFile, fileName,
+							true);
 				} else if (fileName.lastIndexOf(".html") != -1) {
 					// putObject(orgId, userId, campaignId, zIn, fileName);
 
-					/*int size;
-					byte[] buffer = new byte[1024];
-					StringBuilder builder = new StringBuilder();
-
-					while ((size = zIn.read(buffer, 0, buffer.length)) != -1) {
-						builder.append(new String(buffer));
-					}
-					
-					String parsedString = HTMLParser.replaceWithS3Url(
-							builder.toString(), "href=\"" + s3Url + "/" + orgId
-									+ "/" + "/" + userId + "/" + campaignId
-									+ "/");
-					
-*/					
-					//s3Path = putObject(orgId, userId, campaignId, zIn, fileName,true);
-					s3Path = putObject(orgId, userId, campaignId, tempFile, fileName, true);
+					/*
+					 * int size; byte[] buffer = new byte[1024]; StringBuilder
+					 * builder = new StringBuilder();
+					 * 
+					 * while ((size = zIn.read(buffer, 0, buffer.length)) != -1)
+					 * { builder.append(new String(buffer)); }
+					 * 
+					 * String parsedString = HTMLParser.replaceWithS3Url(
+					 * builder.toString(), "href=\"" + s3Url + "/" + orgId + "/"
+					 * + "/" + userId + "/" + campaignId + "/");
+					 */
+					// s3Path = putObject(orgId, userId, campaignId, zIn,
+					// fileName,true);
+					s3Path = putObject(orgId, userId, campaignId, tempFile,
+							fileName, true);
 				}
-				
+
 				tempFile.delete();
 				zIn.closeEntry();
 			}
-		} catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			if (zIn != null) {
 				zIn.close();
 			}

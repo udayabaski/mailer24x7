@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.nervytech.mailer24x7.common.enums.MailgunSyncStatusEnum;
+import com.nervytech.mailer24x7.domain.model.CampaignStatus;
 import com.nervytech.mailer24x7.mailgun.CampaignStatsVO;
 import com.nervytech.mailer24x7.model.dao.interfaces.ICampaignStatusDAO;
 
@@ -29,7 +30,7 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(CampaignStatusDAO.class);
-	
+
 	public void updateCampaignStatus(long campaignId, int status,
 			String sentTime) {
 		String udateQuery = "update CAMPAIGN_STATUS set STATUS='" + status
@@ -104,7 +105,7 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 		getJdbcTemplate().execute(updateStatsQuery);
 
 	}
-	
+
 	public int getCampaignEventFetchCount(long campaignId) {
 		String selectQuery = "SELECT TOTAL_EVENT_FETCHED FROM CAMPAIGN_STATUS WHERE CAMPAIGN_ID = "
 				+ campaignId;
@@ -113,7 +114,7 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 
 		return getJdbcTemplate().queryForInt(selectQuery);
 	}
-	
+
 	public void updateLatestCampaignSubscriberId(long campaignId,
 			long subscriberId) {
 		String insertQuery = "UPDATE CAMPAIGN_STATUS SET LATEST_UPDATED_SUBSCRIBERID="
@@ -135,7 +136,7 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 		System.out.println("UPDATE Query ===>>> " + insertQuery);
 		getJdbcTemplate().execute(insertQuery);
 	}
-	
+
 	public void updateCampaignStatus(CampaignStatsVO cmpnStatusVO) {
 		String updateStatsQuery = "UPDATE CAMPAIGN_STATUS SET TOTAL_SUBSCRIBER_SENT="
 				+ cmpnStatusVO.getDelivered()
@@ -158,9 +159,70 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 		getJdbcTemplate().execute(updateStatsQuery);
 	}
 
+	public void saveCampaignStatus(CampaignStatus cmpnStatus) {
+
+		String insertQuery = "INSERT INTO CAMPAIGN_STATUS (CAMPAIGN_ID,ORG_ID,USER_ID,SUBSCRIBER_LIST_ID,SENDER_ID,"
+				+ " SCHEDULED_ON,STATUS,LATEST_SUBSCRIBER_COUNT,SYNC_STATUS,S3_PATH,LAST_UPDATED_TIME,LATEST_UPDATED_SUBSCRIBERID) "
+				+ " VALUES('"
+				+ cmpnStatus.getCampaignId()
+				+ "','"
+				+ cmpnStatus.getOrgId()
+				+ "','"
+				+ cmpnStatus.getUserId()
+				+ "','"
+				+ cmpnStatus.getSubscriberListId()
+				+ "','"
+				+ cmpnStatus.getSenderId()
+				+ "','"
+				+ cmpnStatus.getScheduledOn()
+				+ "','"
+				+ cmpnStatus.getStatus()
+				+ "','"
+				+ cmpnStatus.getLatestSubscriberCount()
+				+ "','"
+				+ cmpnStatus.getSyncStatus()
+				+ "','"
+				+ cmpnStatus.getS3Path()
+				+ "','"
+				+ cmpnStatus.getLastUpdatedTime()
+				+ "','"
+				+ cmpnStatus.getLatestUpdatedSubscriberId() + "')";
+
+		logger.debug("Save Campaign Status Query : " + insertQuery);
+
+		getJdbcTemplate().execute(insertQuery);
+
+	}
+
+	@Override
+	public void updateCampaignStatusSender(CampaignStatus cmpnStatus) {
+		String updateQuery = "UPDATE CAMPAIGN_STATUS SET SENDER_ID="
+				+ cmpnStatus.getSenderId() + " LAST_UPDATED_TIME='"
+				+ cmpnStatus.getLastUpdatedTime() + "' WHERE CAMPAIGN_ID="
+				+ cmpnStatus.getCampaignId();
+
+		System.out.println("UPDATE QUERYYYYYYYYY " + updateQuery);
+		logger.debug("Update Campaign Status Query : " + updateQuery);
+
+		getJdbcTemplate().execute(updateQuery);
+	}
+
+	@Override
+	public void updateS3Path(String s3Path, long campaignId, String time) {
+		String updateQuery = "UPDATE CAMPAIGN_STATUS SET S3_PATH='" + s3Path
+				+ "' LAST_UPDATED_TIME='" + time + "' WHERE CAMPAIGN_ID="
+				+ campaignId;
+
+		System.out.println("UPDATE QUERYYYYYYYYY " + updateQuery);
+		logger.debug("Update Campaign Status Query : " + updateQuery);
+
+		getJdbcTemplate().execute(updateQuery);
+
+	}
 
 	public static CampaignStatusDAO getFromApplicationContext(
 			ApplicationContext ctx) {
 		return (CampaignStatusDAO) ctx.getBean("CampaignStatusDAO");
 	}
+
 }

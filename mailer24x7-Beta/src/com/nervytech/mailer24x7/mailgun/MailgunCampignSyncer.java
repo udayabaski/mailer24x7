@@ -24,6 +24,7 @@ import com.nervytech.mailer24x7.common.enums.SubscriberCampaignStatusEnum;
 import com.nervytech.mailer24x7.common.enums.SubscriberStatusEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
 import com.nervytech.mailer24x7.domain.model.Campaign;
+import com.nervytech.mailer24x7.domain.model.CampaignSchedulerModel;
 import com.nervytech.mailer24x7.domain.model.CampaignStatus;
 import com.nervytech.mailer24x7.domain.model.SubscriberIdStatus;
 import com.nervytech.mailer24x7.model.service.api.ICampaignStatusService;
@@ -150,7 +151,7 @@ public class MailgunCampignSyncer {
 		System.out.println("Update Campaign Stats Completed : ");
 	}
 
-	public void updateCampaignInMailgun(Campaign cmpn,CampaignStatus cmpnStatus) throws JSONException,
+	public void updateCampaignInMailgun(CampaignSchedulerModel cmpn) throws JSONException,
 			MailerException {
 		
 		System.out.println("Update Campaign in Mailgun Started : "+cmpn.getCampaignId());
@@ -158,7 +159,7 @@ public class MailgunCampignSyncer {
 		logger.info("Synching Campaign in Mailgun Started : "
 				+ cmpn.getCampaignId());
 
-		MailgunSyncStatusEnum status = getEnumStatus(cmpnStatus.getSyncStatus());
+		MailgunSyncStatusEnum status = getEnumStatus(cmpn.getSyncStatus());
 
 		switch (status) {
 		case NONE:
@@ -169,28 +170,28 @@ public class MailgunCampignSyncer {
 					MailgunSyncStatusEnum.CAMPAIGN_CREATED);
 			// TODO. Domain we are hardcoding here
 			MailgunSubscriberUtil.createMailingList(
-					"sl_" + cmpnStatus.getSubscriberListId(), "sungod.mailgun.org",
-					"Subscriber List - " + cmpnStatus.getSubscriberListId(), "sl_"
-							+ cmpnStatus.getSubscriberListId()
+					"sl_" + cmpn.getSubscriberListId(), "sungod.mailgun.org",
+					"Subscriber List - " + cmpn.getSubscriberListId(), "sl_"
+							+ cmpn.getSubscriberListId()
 							+ "@sungod.mailgun.org");
 			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_IN_PROGRESS);
 
-			syncSubscribers(cmpn.getCampaignId(),cmpnStatus.getSubscriberListId());
+			syncSubscribers(cmpn.getCampaignId(),cmpn.getSubscriberListId());
 
 			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_COMPLETED);
 			break;
 		case CAMPAIGN_CREATED:
 			MailgunSubscriberUtil.createMailingList(
-					"sl_" + cmpnStatus.getSubscriberListId(), "sungod.mailgun.org",
-					"Subscriber List - " + cmpnStatus.getSubscriberListId(), "sl_"
-							+ cmpnStatus.getSubscriberListId()
+					"sl_" + cmpn.getSubscriberListId(), "sungod.mailgun.org",
+					"Subscriber List - " + cmpn.getSubscriberListId(), "sl_"
+							+ cmpn.getSubscriberListId()
 							+ "@sungod.mailgun.org");
 			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_IN_PROGRESS);
 
-			syncSubscribers(cmpn.getCampaignId(),cmpnStatus.getSubscriberListId());
+			syncSubscribers(cmpn.getCampaignId(),cmpn.getSubscriberListId());
 
 			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_COMPLETED);
@@ -199,14 +200,14 @@ public class MailgunCampignSyncer {
 			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_IN_PROGRESS);
 
-			syncSubscribers(cmpn.getCampaignId(),cmpnStatus.getSubscriberListId());
+			syncSubscribers(cmpn.getCampaignId(),cmpn.getSubscriberListId());
 
 			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_COMPLETED);
 			break;
 		case SUBSCRIBER_UPDATE_IN_PROGRESS:
 
-			syncSubscribers(cmpn.getCampaignId(),cmpnStatus.getSubscriberListId());
+			syncSubscribers(cmpn.getCampaignId(),cmpn.getSubscriberListId());
 
 			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_COMPLETED);

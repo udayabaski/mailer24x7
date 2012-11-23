@@ -15,8 +15,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import com.nervytech.mailer24x7.campaign.job.task.CampaignTaskExecutor;
 import com.nervytech.mailer24x7.common.enums.CampaignStatusEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
-import com.nervytech.mailer24x7.model.dao.CampaignDAO;
-import com.nervytech.mailer24x7.model.domains.Campaign;
+import com.nervytech.mailer24x7.domain.model.CampaignSchedulerModel;
+import com.nervytech.mailer24x7.model.service.api.ICampaignService;
 
 /**
  * @author bsikkaya
@@ -32,10 +32,10 @@ public class CampaignLaterJob {
 	public CampaignLaterJob(ThreadPoolTaskExecutor taskExecutor) {
 		this.taskExecutor = taskExecutor;
 	}
-
-	@Autowired
-	private CampaignDAO campaignDAO;
 	
+	@Autowired
+	private ICampaignService cmpnService;
+
 	@Autowired
 	private CampaignTaskExecutor cmpnTaskExecutor;
 
@@ -50,20 +50,16 @@ public class CampaignLaterJob {
 			cal.add(Calendar.MINUTE, 30);
 
 			Date toTimeDt = cal.getTime();
-			String toTime = MailerUtil.formatter.format(toTimeDt);
+			String toTime = MailerUtil.FORMATTER_WITH_TIME.format(toTimeDt);
 
-			List<Campaign> campaignsList = campaignDAO.getScheduledCampaigns(
+			List<CampaignSchedulerModel> campaignsList = cmpnService.getScheduledCampaigns(
 					CampaignStatusEnum.SCHEDULED.getStatus(), toTime,
 					MailerUtil.ROW_FETCH_SIZE);
 
-			for (Campaign cmpn : campaignsList) {
+			for (CampaignSchedulerModel cmpn : campaignsList) {
 
 				logger.info("Sending campaign started for the campaignId : "
 						+ cmpn.getCampaignId());
-
-				System.out.println("Sending Camaign ID : "
-						+ cmpn.getCampaignId() + " Satus is : "
-						+ cmpn.getStatus());
 
 				
 				cmpnTaskExecutor.addCampaignSenderTask(cmpn,taskExecutor);
