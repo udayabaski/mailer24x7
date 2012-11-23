@@ -36,6 +36,12 @@
 		<put-attribute name="body" value="/WEB-INF/views/register.jsp" />
 	</definition>
 
+	<definition name="login" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : Login" />
+		<put-attribute name="header" value="" />
+		<put-attribute name="body" value="/WEB-INF/views/login.jsp" />
+	</definition>
+	
 	<definition name="forgotpwd" extends="baseLayout">
 		<put-attribute name="title" value="Mailer24x7 : Registration" />
 		<put-attribute name="header" value="" />
@@ -48,17 +54,46 @@
 		<put-attribute name="body" value="/WEB-INF/views/resetpassword.jsp" />
 	</definition>
 
-	<definition name="login" extends="baseLayout">
-		<put-attribute name="title" value="Mailer24x7 : Login" />
-		<put-attribute name="header" value="" />
-		<put-attribute name="body" value="/WEB-INF/views/login.jsp" />
-	</definition>
-
 	<definition name="home" extends="baseLayout">
 		<put-attribute name="title" value="Mailer24x7 : home" />
 		<put-attribute name="body" value="/WEB-INF/views/home.jsp" />
 	</definition>
-
+	
+	<definition name="campaignHome" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : home" />
+		<put-attribute name="body" value="/WEB-INF/views/campaignhome.jsp" />
+	</definition>
+	
+	<definition name="snapshot" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : home" />
+		<put-attribute name="body" value="/WEB-INF/views/campaign_snapshot.jsp" />
+	</definition>
+	
+	<definition name="campaignStep1" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : home" />
+		<put-attribute name="body" value="/WEB-INF/views/campaign_step1.jsp" />
+	</definition>
+	
+	<definition name="campaignStep2" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : home" />
+		<put-attribute name="body" value="/WEB-INF/views/campaign_step2.jsp" />
+	</definition>
+	
+	<definition name="importHtml" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : home" />
+		<put-attribute name="body" value="/WEB-INF/views/campaign_import.jsp" />
+	</definition>
+	
+	<definition name="textEditor" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : home" />
+		<put-attribute name="body" value="/WEB-INF/views/campaign_text_editor.jsp" />
+	</definition>
+	
+	<definition name="htmlEditor" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : home" />
+		<put-attribute name="body" value="/WEB-INF/views/campaign_html_editor.jsp" />
+	</definition>
+	
 	<definition name="profile" extends="baseLayout">
 		<put-attribute name="title" value="Mailer24x7 : home" />
 		<put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />

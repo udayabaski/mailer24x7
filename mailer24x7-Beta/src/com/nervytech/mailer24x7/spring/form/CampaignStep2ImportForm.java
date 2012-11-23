@@ -4,6 +4,7 @@
 package com.nervytech.mailer24x7.spring.form;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
  * @author ADMIN
@@ -12,37 +13,69 @@ import org.springframework.stereotype.Repository;
 @Repository("campaignStep2ImportForm")
 public class CampaignStep2ImportForm {
 
-	private String message;
-	private String messageType;
+	private CommonsMultipartFile htmlFileData;
+	private CommonsMultipartFile zipFileData;
+	private String nextAction;
+	private long campaignId;
 
 	/**
-	 * @return the message
+	 * @return the htmlFileData
 	 */
-	public String getMessage() {
-		return message;
+	public CommonsMultipartFile getHtmlFileData() {
+		return htmlFileData;
 	}
 
 	/**
-	 * @param message
-	 *            the message to set
+	 * @param htmlFileData
+	 *            the htmlFileData to set
 	 */
-	public void setMessage(String message) {
-		this.message = message;
+	public void setHtmlFileData(CommonsMultipartFile htmlFileData) {
+		this.htmlFileData = htmlFileData;
 	}
 
 	/**
-	 * @return the messageType
+	 * @return the zipFileData
 	 */
-	public String getMessageType() {
-		return messageType;
+	public CommonsMultipartFile getZipFileData() {
+		return zipFileData;
 	}
 
 	/**
-	 * @param messageType
-	 *            the messageType to set
+	 * @param zipFileData
+	 *            the zipFileData to set
 	 */
-	public void setMessageType(String messageType) {
-		this.messageType = messageType;
+	public void setZipFileData(CommonsMultipartFile zipFileData) {
+		this.zipFileData = zipFileData;
+	}
+
+	/**
+	 * @return the nextAction
+	 */
+	public String getNextAction() {
+		return nextAction;
+	}
+
+	/**
+	 * @param nextAction
+	 *            the nextAction to set
+	 */
+	public void setNextAction(String nextAction) {
+		this.nextAction = nextAction;
+	}
+
+	/**
+	 * @return the campaignId
+	 */
+	public long getCampaignId() {
+		return campaignId;
+	}
+
+	/**
+	 * @param campaignId
+	 *            the campaignId to set
+	 */
+	public void setCampaignId(long campaignId) {
+		this.campaignId = campaignId;
 	}
 
 }

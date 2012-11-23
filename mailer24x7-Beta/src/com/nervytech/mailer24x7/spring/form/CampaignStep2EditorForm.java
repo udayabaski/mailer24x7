@@ -12,53 +12,85 @@ import org.springframework.stereotype.Repository;
 @Repository("campaignStep2EditorForm")
 public class CampaignStep2EditorForm {
 
-	private String emailContent;
-	private String message;
-	private String messageType;
+	private String textData;
+	private String htmlData;
+	private String nextAction;
+	private long campaignId;
+	private String editorType;
 
 	/**
-	 * @return the emailContent
+	 * @return the textData
 	 */
-	public String getEmailContent() {
-		return emailContent;
+	public String getTextData() {
+		return textData;
 	}
 
 	/**
-	 * @param emailContent
-	 *            the emailContent to set
+	 * @param textData
+	 *            the textData to set
 	 */
-	public void setEmailContent(String emailContent) {
-		this.emailContent = emailContent;
+	public void setTextData(String textData) {
+		this.textData = textData;
 	}
 
 	/**
-	 * @return the message
+	 * @return the htmlData
 	 */
-	public String getMessage() {
-		return message;
+	public String getHtmlData() {
+		return htmlData;
 	}
 
 	/**
-	 * @param message
-	 *            the message to set
+	 * @param htmlData
+	 *            the htmlData to set
 	 */
-	public void setMessage(String message) {
-		this.message = message;
+	public void setHtmlData(String htmlData) {
+		this.htmlData = htmlData;
 	}
 
 	/**
-	 * @return the messageType
+	 * @return the nextAction
 	 */
-	public String getMessageType() {
-		return messageType;
+	public String getNextAction() {
+		return nextAction;
 	}
 
 	/**
-	 * @param messageType
-	 *            the messageType to set
+	 * @param nextAction
+	 *            the nextAction to set
 	 */
-	public void setMessageType(String messageType) {
-		this.messageType = messageType;
+	public void setNextAction(String nextAction) {
+		this.nextAction = nextAction;
+	}
+
+	/**
+	 * @return the campaignId
+	 */
+	public long getCampaignId() {
+		return campaignId;
+	}
+
+	/**
+	 * @param campaignId
+	 *            the campaignId to set
+	 */
+	public void setCampaignId(long campaignId) {
+		this.campaignId = campaignId;
+	}
+
+	/**
+	 * @return the editorType
+	 */
+	public String getEditorType() {
+		return editorType;
+	}
+
+	/**
+	 * @param editorType
+	 *            the editorType to set
+	 */
+	public void setEditorType(String editorType) {
+		this.editorType = editorType;
 	}
 
 }

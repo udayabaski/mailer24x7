@@ -10,7 +10,6 @@
 	
 <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/script/excanvas.js"></script><![endif]-->
-<script type="text/javascript" src="${pageContext.request.contextPath}/script/jquery-min.js"></script>
 
 </head>
 
@@ -21,28 +20,11 @@
 
 <html lang="en">
 <head>
-    
-    
-    
 	<title>Mailer247 - Registration</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />	
     <link href="${pageContext.request.contextPath}/styles/signup-style.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
     
-    function checkIfExist() {
-    /*$.getJSON("/comn/seekerregform.form?action=validateEmail", { emialId: $('#emailId').val() }, function(data) {
-        window.alert(data);
-    });*/
-   /* $.ajax({
-        url: 'regform.form?action=checkOrg',
-        data: ({orgName : $("#organization").val()}),
-        success: function(data) {
-          window.alert("Response is : "+data);
-          //$('#organization').html(data1);
-        }
-     }); */
-   }
-
   </script>
 </head>
 
@@ -59,15 +41,15 @@
 				</div>
 				<span class="activeTabArrow"><!-- --></span>
 			</li>
-			<li class="hd-right"><b class="txt">Already a member?</b> <a href="#" class="button green mar1">Login</a></li>
+			<li class="hd-right"><b class="txt">Already a member?</b> <a href="${pageContext.request.contextPath}/auth/login" class="button green mar1">Login</a></li>
 		</ul>
 
-      <form:form action="join"  commandName="regForm" method="POST" id="registration">
-      <form:hidden path="userId" />
+      <form:form action="join"  commandName="registrationForm" method="POST" id="registration">
+      <form:hidden path="uuId" />
       	
-      	<c:if test="${not empty regForm.userId}">
+      	<c:if test="${not empty registrationForm.userId}">
          <div class="info">Thanks for registration. An activation mail has been sent to your email. Please follow the mail. 
-          Click the link below to send the mail again if you have not got the mail. <a href="join/resend/usr/<c:out value="${regForm.userId}"/>">Send now.</a>
+          Click the link below to send the mail again if you have not got the mail. <a href="${pageContext.request.contextPath}/reg/join/confirm/resend/usr/<c:out value="${regForm.userId}"/>">Send now.</a>
          </div>
         </c:if>
       

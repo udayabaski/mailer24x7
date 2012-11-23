@@ -12,117 +12,53 @@ import org.springframework.stereotype.Repository;
 @Repository("campaignStep2Form")
 public class CampaignStep2Form {
 
-	private String campaignName;
-	private String senderName;
-	private String senderEmail;
-	private String replyToAddress;
-	private String subject;
-	private String message;
-	private String messageType;
+	private long campaignId;
+	private int contentType;
+	private String nextAction;
 
 	/**
-	 * @return the campaignName
+	 * @return the campaignId
 	 */
-	public String getCampaignName() {
-		return campaignName;
+	public long getCampaignId() {
+		return campaignId;
 	}
 
 	/**
-	 * @param campaignName
-	 *            the campaignName to set
+	 * @param campaignId
+	 *            the campaignId to set
 	 */
-	public void setCampaignName(String campaignName) {
-		this.campaignName = campaignName;
+	public void setCampaignId(long campaignId) {
+		this.campaignId = campaignId;
 	}
 
 	/**
-	 * @return the senderName
+	 * @return the contentType
 	 */
-	public String getSenderName() {
-		return senderName;
+	public int getContentType() {
+		return contentType;
 	}
 
 	/**
-	 * @param senderName
-	 *            the senderName to set
+	 * @param contentType
+	 *            the contentType to set
 	 */
-	public void setSenderName(String senderName) {
-		this.senderName = senderName;
+	public void setContentType(int contentType) {
+		this.contentType = contentType;
 	}
 
 	/**
-	 * @return the senderEmail
+	 * @return the nextAction
 	 */
-	public String getSenderEmail() {
-		return senderEmail;
+	public String getNextAction() {
+		return nextAction;
 	}
 
 	/**
-	 * @param senderEmail
-	 *            the senderEmail to set
+	 * @param nextAction
+	 *            the nextAction to set
 	 */
-	public void setSenderEmail(String senderEmail) {
-		this.senderEmail = senderEmail;
-	}
-
-	/**
-	 * @return the replyToAddress
-	 */
-	public String getReplyToAddress() {
-		return replyToAddress;
-	}
-
-	/**
-	 * @param replyToAddress
-	 *            the replyToAddress to set
-	 */
-	public void setReplyToAddress(String replyToAddress) {
-		this.replyToAddress = replyToAddress;
-	}
-
-	/**
-	 * @return the subject
-	 */
-	public String getSubject() {
-		return subject;
-	}
-
-	/**
-	 * @param subject
-	 *            the subject to set
-	 */
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-
-	/**
-	 * @return the message
-	 */
-	public String getMessage() {
-		return message;
-	}
-
-	/**
-	 * @param message
-	 *            the message to set
-	 */
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	/**
-	 * @return the messageType
-	 */
-	public String getMessageType() {
-		return messageType;
-	}
-
-	/**
-	 * @param messageType
-	 *            the messageType to set
-	 */
-	public void setMessageType(String messageType) {
-		this.messageType = messageType;
+	public void setNextAction(String nextAction) {
+		this.nextAction = nextAction;
 	}
 
 }
