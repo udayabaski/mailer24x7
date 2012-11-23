@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nervytech.mailer24x7.common.enums.MailgunSyncStatusEnum;
+import com.nervytech.mailer24x7.domain.model.CampaignStatus;
 import com.nervytech.mailer24x7.mailgun.CampaignStatsVO;
 import com.nervytech.mailer24x7.model.dao.interfaces.ICampaignStatusDAO;
 import com.nervytech.mailer24x7.model.service.api.ICampaignStatusService;
@@ -139,5 +140,35 @@ public class CampaignStatusService implements ICampaignStatusService {
 			throw new RuntimeException(e.getMessage());
 		}		
 		
+	}
+
+	@Override
+	public void saveCampaignStatus(CampaignStatus cmpnStatus) {
+		try {
+			cmpnStatusDAO.saveCampaignStatus(cmpnStatus);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}		
+	}
+
+	@Override
+	public void updateCampaignStatusSender(CampaignStatus cmpnStatus) {
+		try {
+			cmpnStatusDAO.updateCampaignStatusSender(cmpnStatus);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void updateS3Path(String s3Path, long campaignId, String time) {
+		try {
+			cmpnStatusDAO.updateS3Path(s3Path,campaignId,time);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}		
 	}
 }

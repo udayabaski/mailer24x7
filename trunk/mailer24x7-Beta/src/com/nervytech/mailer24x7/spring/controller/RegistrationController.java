@@ -25,9 +25,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.nervytech.mailer24x7.common.enums.MessageTypeEnum;
 import com.nervytech.mailer24x7.common.enums.OrgStatusEnum;
 import com.nervytech.mailer24x7.common.enums.UserRoleEnum;
 import com.nervytech.mailer24x7.common.enums.UserStatusEnum;
@@ -41,6 +43,7 @@ import com.nervytech.mailer24x7.mailgun.MailgunSendUtil;
 import com.nervytech.mailer24x7.model.service.api.IOrganizationService;
 import com.nervytech.mailer24x7.model.service.api.IUserService;
 import com.nervytech.mailer24x7.model.service.api.IUserUuidService;
+import com.nervytech.mailer24x7.spring.form.LoginForm;
 import com.nervytech.mailer24x7.spring.form.RegistrationForm;
 import com.nervytech.mailer24x7.spring.security.auth.user.SessionUser;
 import com.nervytech.mailer24x7.spring.validator.RegistrationValidator;
@@ -92,6 +95,93 @@ public class RegistrationController {
 
 		return "register";
 	}
+	
+	@RequestMapping(value = "/confirm/email/{emailId}/id/{uuId}",method = RequestMethod.POST)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public String confirmUser(@PathVariable String emailId,@PathVariable String uuId,
+			Map model) {
+		String userId = null;
+		try {
+			userId = usrUuidService.getUserId(uuId);
+		} catch (Exception e) {
+
+			// The confirmation URL is not a valid one ..... Could be a hacking
+			// !!!
+			logger.warn("Invalid confimration id was sent !!!");
+
+			LoginForm loginForm = new LoginForm();
+			loginForm.setMessage("Invalid request.");
+			loginForm.setMessageType(MessageTypeEnum.ERROR.name());
+			model.put("loginForm", loginForm);
+
+			return "login";
+		}
+
+		usrService.enableUser(userId);
+
+		usrUuidService.deleteUuid(userId);
+
+		logger.info("Account is activated for the user : ID : " + userId);
+
+		LoginForm loginForm = new LoginForm();
+		loginForm.setMessage(MailerUtil.ACCOUNT_ACTIVATION_MESSAGE);
+		loginForm.setMessageType(MessageTypeEnum.SUCCESS.name());
+		model.put("loginForm", loginForm);
+		return "login";
+
+	}
+	
+	@RequestMapping(value = "/confirm/resend/id/{uuId}", method = RequestMethod.GET)
+	public String reSendConfirmationMail(@PathVariable String uuId, Map model,
+			HttpServletRequest request) {
+
+		String userId = null;
+		
+		try {
+			userId = usrUuidService.getUserId(uuId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(userId == null){
+			RegistrationForm regForm = new RegistrationForm();
+			
+			regForm.setMessage("Invalid confirmation Id.");
+			regForm.setMessageType(MessageTypeEnum.ERROR.name());
+			model.put("registrationForm", regForm);
+
+			return "register";
+
+		}
+		
+		User usr = usrService.getUserByUserId(Long.parseLong(userId));
+
+		String confirmationUrl = MailerUtil.CONFIRMATION_MAIL_URL;
+		confirmationUrl = confirmationUrl.replaceAll("EMAIL_ID",
+				usr.getEmailId());
+		confirmationUrl = confirmationUrl.replaceAll("CONFIRM_ID",
+				uuId);
+
+		String content = "Hi "
+				+ usr.getFullName()
+				+ "\n Please click the following link for activating your account.\n "
+				+ confirmationUrl;
+
+		logger.debug("Sending registration confirmation mail !!!");
+
+		MailgunSendUtil.sendCampaignTestMail(-1l, -1l,
+				MailerUtil.CONFIRMATION_MAIL_FROM, usr.getEmailId(),
+				MailerUtil.CONFIRMATION_MAIL_SUBJECT, null, content, null);
+
+		RegistrationForm regForm = new RegistrationForm();
+
+		regForm.setUuId(uuId);
+
+		model.put("registrationForm", regForm);
+
+		return "register";
+	}
+
 
 	@RequestMapping(method = RequestMethod.POST)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -183,6 +273,8 @@ public class RegistrationController {
 		usrUuidService.saveUuid(uuid);
 
 		String confirmationUrl = MailerUtil.CONFIRMATION_MAIL_URL;
+		confirmationUrl = confirmationUrl.replaceAll("EMAIL_ID",
+				user.getEmailId());
 		confirmationUrl = confirmationUrl.replaceAll("CONFIRM_ID",
 				uuid.getUuid());
 
@@ -217,7 +309,7 @@ public class RegistrationController {
 		 */
 		regForm = new RegistrationForm();
 
-		regForm.setUserId(userId + "");
+		regForm.setUuId(uuid.getUuid() + "");
 
 		model.put("regForm", regForm);
 
