@@ -1,21 +1,21 @@
 package com.nervytech.mailer24x7.campaign.job.task;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.RejectedExecutionException;
 
-import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import com.nervytech.mailer24x7.aws.s3.client.MailerS3Client;
 import com.nervytech.mailer24x7.client.exception.MailerException;
 import com.nervytech.mailer24x7.common.enums.CampaignStatusEnum;
+import com.nervytech.mailer24x7.common.enums.CampaignTypeEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
 import com.nervytech.mailer24x7.domain.model.Campaign;
+import com.nervytech.mailer24x7.domain.model.CampaignSchedulerModel;
 import com.nervytech.mailer24x7.mailgun.MailgunCampignSyncer;
 import com.nervytech.mailer24x7.mailgun.MailgunSendUtil;
 import com.nervytech.mailer24x7.model.service.api.ICampaignStatusService;
@@ -32,9 +32,10 @@ public class CampaignTaskExecutor {
 	@Autowired
 	private MailgunCampignSyncer mailgunSyncer;
 
-	//private ThreadPoolTaskExecutor taskExecutor;
+	// private ThreadPoolTaskExecutor taskExecutor;
 
-	public void addCampaignSenderTask(final Campaign cmpn,ThreadPoolTaskExecutor taskExecutor) {
+	public void addCampaignSenderTask(final CampaignSchedulerModel cmpn,
+			ThreadPoolTaskExecutor taskExecutor) {
 
 		try {
 
@@ -46,10 +47,17 @@ public class CampaignTaskExecutor {
 
 						String content = null;
 						try {
-							content = FileUtils.readFileToString(new File(cmpn
-									.getImageLocation()));
 
-						} catch (IOException e) {
+							if (cmpn.getCampaignType() == CampaignTypeEnum.PLAINTEXT
+									.getType()) {
+								content = MailerS3Client.getTextObject(cmpn
+										.getS3Path());
+							} else {
+								content = MailerS3Client.getHTMLObject(cmpn
+										.getS3Path());
+							}
+
+						} catch (Exception e) {
 
 							logger.error("Unable to read the file ", e);
 
@@ -70,16 +78,16 @@ public class CampaignTaskExecutor {
 						ClientResponse response = MailgunSendUtil.sendMail(
 								cmpn.getCampaignId(), cmpn.getSenderEmailId(),
 								cmpn.getSubscriberListId(), cmpn.getOrgId(),
-								cmpn.getSubject(), null, content,null, null);
+								cmpn.getSubject(), null, content, null, null);
 
 						System.out.println("Mail Sent Status is : "
 								+ response.getClientResponseStatus().toString()
 								+ " Status ===>> " + response.getStatus());
 
-						cmpnStatusService.updateCampaignStatus(
-								cmpn.getCampaignId(),
-								CampaignStatusEnum.COMPLETED.getStatus(),
-								MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
+						cmpnStatusService.updateCampaignStatus(cmpn
+								.getCampaignId(), CampaignStatusEnum.COMPLETED
+								.getStatus(), MailerUtil.FORMATTER_WITH_TIME
+								.format(new Date()));
 
 						System.out.println("Updated Campaign Status : "
 								+ cmpn.getCampaignId());
@@ -100,7 +108,8 @@ public class CampaignTaskExecutor {
 
 	}
 
-	public void addCampaignSyncherTask(final Campaign cmpn,ThreadPoolTaskExecutor taskExecutor) {
+	public void addCampaignSyncherTask(final Campaign cmpn,
+			ThreadPoolTaskExecutor taskExecutor) {
 
 		try {
 			taskExecutor.execute(new Thread(new Runnable() {

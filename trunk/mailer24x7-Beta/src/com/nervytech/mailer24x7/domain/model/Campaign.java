@@ -21,6 +21,7 @@ public class Campaign {
 	private String campaignLink;
 	private String unsubscribeLink;
 	private String unsubscribeSubject;
+	private int campaignType;
 
 	/**
 	 * @return the campaignId
@@ -202,6 +203,21 @@ public class Campaign {
 		this.unsubscribeSubject = unsubscribeSubject;
 	}
 
+	/**
+	 * @return the campaignType
+	 */
+	public int getCampaignType() {
+		return campaignType;
+	}
+
+	/**
+	 * @param campaignType
+	 *            the campaignType to set
+	 */
+	public void setCampaignType(int campaignType) {
+		this.campaignType = campaignType;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -234,6 +250,8 @@ public class Campaign {
 		builder.append(unsubscribeLink);
 		builder.append(", unsubscribeSubject=");
 		builder.append(unsubscribeSubject);
+		builder.append(", campaignType=");
+		builder.append(campaignType);
 		builder.append("]");
 		return builder.toString();
 	}

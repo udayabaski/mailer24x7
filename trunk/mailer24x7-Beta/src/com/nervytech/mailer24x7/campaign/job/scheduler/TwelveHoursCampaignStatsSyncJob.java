@@ -14,8 +14,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import com.nervytech.mailer24x7.campaign.job.task.CampaignTaskExecutor;
 import com.nervytech.mailer24x7.common.enums.CampaignStatusEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
-import com.nervytech.mailer24x7.model.dao.CampaignDAO;
-import com.nervytech.mailer24x7.model.domains.Campaign;
+import com.nervytech.mailer24x7.domain.model.Campaign;
+import com.nervytech.mailer24x7.model.dao.impl.CampaignDAO;
 
 /**
  * @author bsikkaya
@@ -57,7 +57,7 @@ public class TwelveHoursCampaignStatsSyncJob {
 			List<Campaign> campaignsList = campaignDAO
 					.getCampaignsToSyncTwelveHoursStats(
 							CampaignStatusEnum.COMPLETED.getStatus(),
-							MailerUtil.formatter.format(new Date(time)),
+							MailerUtil.FORMATTER_WITH_TIME.format(new Date(time)),
 							lowerLimit, upperLimit);
 
 			while (campaignsList != null && campaignsList.size() > 0) {
@@ -85,7 +85,7 @@ public class TwelveHoursCampaignStatsSyncJob {
 
 					campaignsList = campaignDAO.getCampaignsToSyncBiHoursStats(
 							CampaignStatusEnum.COMPLETED.getStatus(),
-							MailerUtil.formatter.format(new Date(time)),
+							MailerUtil.FORMATTER_WITH_TIME.format(new Date(time)),
 							lowerLimit, upperLimit);
 				} else {
 					campaignsList = null;

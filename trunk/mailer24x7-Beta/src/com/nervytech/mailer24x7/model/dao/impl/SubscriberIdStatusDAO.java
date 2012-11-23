@@ -30,11 +30,12 @@ import com.nervytech.mailer24x7.model.dao.interfaces.ISubscriberIdStatusDAO;
  */
 
 @Resource(mappedName = "subscriberListDAO")
-public class SubscriberIdStatusDAO extends JdbcDaoSupport implements ISubscriberIdStatusDAO{
+public class SubscriberIdStatusDAO extends JdbcDaoSupport implements
+		ISubscriberIdStatusDAO {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(SubscriberIdStatusDAO.class);
-	
+
 	public List<SubscriberIdStatus> getNextSubscribers(Long subListId,
 			Long lastSubcriberId, int status, int limit) {
 
@@ -88,7 +89,7 @@ public class SubscriberIdStatusDAO extends JdbcDaoSupport implements ISubscriber
 
 		return getJdbcTemplate().query(selectSubscriberQuery, mapper);
 	}
-	
+
 	public void updateSubscriberStatus(long statusId, int status) {
 		String udateQuery = "update SUBSCRIBERID_STATUS set status='" + status
 				+ "' WHERE STATUS_ID =" + statusId;
@@ -135,7 +136,7 @@ public class SubscriberIdStatusDAO extends JdbcDaoSupport implements ISubscriber
 				});
 
 	}
-	
+
 	public void updateSubscriberStatus(final long subListId,
 			final List<String> emailIdList, final int status) {
 		String sqlStr = "UPDATE SUBSCRIBERID_STATUS SET STATUS = " + status
@@ -160,7 +161,21 @@ public class SubscriberIdStatusDAO extends JdbcDaoSupport implements ISubscriber
 				});
 	}
 
-	public static SubscriberIdStatusDAO getFromApplicationContext(ApplicationContext ctx) {
+	@Override
+	public int getSubscribersCount(String subscriberListId) {
+		String getSubscribersCountQuery = "SELECT COUNT(*) FROM SUBSCRIBERID_STATUS WHERE SUBSCRIBER_LIST_ID="
+				+ subscriberListId;
+
+		logger.debug("Check Subscriber List Query : "
+				+ getSubscribersCountQuery);
+
+		return getJdbcTemplate().queryForInt(getSubscribersCountQuery);
+
+	}
+
+	public static SubscriberIdStatusDAO getFromApplicationContext(
+			ApplicationContext ctx) {
 		return (SubscriberIdStatusDAO) ctx.getBean("SubscriberListDAO");
 	}
+
 }

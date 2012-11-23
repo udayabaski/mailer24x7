@@ -13,8 +13,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import com.nervytech.mailer24x7.campaign.job.task.CampaignTaskExecutor;
 import com.nervytech.mailer24x7.common.enums.CampaignStatusEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
-import com.nervytech.mailer24x7.model.dao.CampaignDAO;
-import com.nervytech.mailer24x7.model.domains.Campaign;
+import com.nervytech.mailer24x7.domain.model.CampaignSchedulerModel;
+import com.nervytech.mailer24x7.model.service.api.ICampaignService;
 
 /**
  * @author bsikkaya
@@ -32,7 +32,7 @@ public class CampaignNowJob {
 	}
 
 	@Autowired
-	private CampaignDAO campaignDAO;
+	private ICampaignService cmpnService;
 
 	@Autowired
 	private CampaignTaskExecutor cmpnTaskExecutor;
@@ -47,18 +47,14 @@ public class CampaignNowJob {
 
 			System.out.println("Started Campaign Now ....");
 
-			List<Campaign> campaignsList = campaignDAO.getScheduledCampaigns(
+			List<CampaignSchedulerModel> campaignsList = cmpnService.getScheduledCampaigns(
 					CampaignStatusEnum.NOW.getStatus(),
 					MailerUtil.ROW_FETCH_SIZE);
 
-			for (Campaign cmpn : campaignsList) {
+			for (CampaignSchedulerModel cmpn : campaignsList) {
 
 				logger.info("Sending campaign started for the campaignId : "
 						+ cmpn.getCampaignId());
-
-				System.out.println("Sending Camaign ID : "
-						+ cmpn.getCampaignId() + " Satus is : "
-						+ cmpn.getStatus());
 
 				cmpnTaskExecutor.addCampaignSenderTask(cmpn,taskExecutor);
 

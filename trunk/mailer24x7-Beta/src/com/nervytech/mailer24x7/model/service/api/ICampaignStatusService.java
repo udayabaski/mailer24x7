@@ -4,6 +4,7 @@
 package com.nervytech.mailer24x7.model.service.api;
 
 import com.nervytech.mailer24x7.common.enums.MailgunSyncStatusEnum;
+import com.nervytech.mailer24x7.domain.model.CampaignStatus;
 import com.nervytech.mailer24x7.mailgun.CampaignStatsVO;
 
 /**
@@ -34,5 +35,11 @@ public interface ICampaignStatusService {
 	public void updateCampaignEventFetchCount(long campaignId, int count);
 	
 	public void updateCampaignStatus(CampaignStatsVO cmpnStatusVO);
+	
+	public void saveCampaignStatus(CampaignStatus cmpnStatus);
+
+	public void updateCampaignStatusSender(CampaignStatus cmpnStatus);
+
+	public void updateS3Path(String s3Path, long campaignId, String time);
 
 }
