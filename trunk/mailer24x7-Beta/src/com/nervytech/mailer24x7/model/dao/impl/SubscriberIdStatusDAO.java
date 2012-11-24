@@ -3,6 +3,7 @@ package com.nervytech.mailer24x7.model.dao.impl;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -11,9 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
+import com.nervytech.mailer24x7.common.enums.SubscriberStatusEnum;
 import com.nervytech.mailer24x7.domain.model.SubscriberIdStatus;
 import com.nervytech.mailer24x7.model.dao.interfaces.ISubscriberIdStatusDAO;
 
@@ -171,6 +174,92 @@ public class SubscriberIdStatusDAO extends JdbcDaoSupport implements
 
 		return getJdbcTemplate().queryForInt(getSubscribersCountQuery);
 
+	}
+	
+	public List<List<SubscriberIdStatus>> getAllSubscribers(long subListId) {
+
+		List<List<SubscriberIdStatus>> allSubscribers = new ArrayList<List<SubscriberIdStatus>>();
+
+		final List<SubscriberIdStatus> activeSubscribers = new ArrayList<SubscriberIdStatus>();
+		final List<SubscriberIdStatus> unsubscribedSubscribers = new ArrayList<SubscriberIdStatus>();
+		final List<SubscriberIdStatus> bouncedSubscribers = new ArrayList<SubscriberIdStatus>();
+
+		String selectSubscriberQuery = "SELECT * FROM SUBSCRIBERID_STATUS WHERE SUBSCRIBER_LIST_ID="
+				+ subListId + " ORDER BY STATUS_ID ASC";
+
+		logger.debug("Select All Subscriber Query : " + selectSubscriberQuery);
+
+		getJdbcTemplate().query(selectSubscriberQuery,
+				new RowCallbackHandler() {
+					public void processRow(ResultSet rs) throws SQLException {
+						SubscriberIdStatus subStatus = new SubscriberIdStatus();
+
+						subStatus.setEmailId(rs.getString("EMAIL_ID"));
+						subStatus.setStatusId(rs.getLong("STATUS_ID"));
+
+						if (rs.getInt("STATUS") == SubscriberStatusEnum.ACTIVE
+								.getStatus()) {
+							activeSubscribers.add(subStatus);
+						} else if (rs.getInt("STATUS") == SubscriberStatusEnum.UNSUBSCRIBED
+								.getStatus()) {
+							unsubscribedSubscribers.add(subStatus);
+						} else if (rs.getInt("STATUS") == SubscriberStatusEnum.BOUNCED
+								.getStatus()) {
+							bouncedSubscribers.add(subStatus);
+						}
+
+					}
+				});
+
+		allSubscribers.add(activeSubscribers);
+		allSubscribers.add(unsubscribedSubscribers);
+		allSubscribers.add(bouncedSubscribers);
+
+		return allSubscribers;
+
+	}
+	
+	public void deleteSubGroup(long subListId) {
+
+		String deleteQuery = "DELETE FROM SUBSCRIBERID_STATUS WHERE SUBSCRIBER_LIST_ID="
+				+ subListId;
+
+		logger.debug("Delete Subscrierid status Query : " + deleteQuery);
+
+		getJdbcTemplate().execute(deleteQuery);
+
+		deleteQuery = "DELETE FROM SUBSCRIBER_REPORTS WHERE SUBSCRIBER_LIST_ID="
+				+ subListId;
+
+		logger.debug("Delete Subscriber Reports Query : " + deleteQuery);
+
+		getJdbcTemplate().execute(deleteQuery);
+
+		deleteQuery = "DELETE FROM SUBSCRIBER_LIST WHERE SUBSCRIBER_LIST_ID="
+				+ subListId;
+
+		logger.debug("Delete Subscriber list Query " + deleteQuery);
+
+		getJdbcTemplate().execute(deleteQuery);
+	}
+
+	public void deleteSubscriber(String statusIds) {
+
+		String deleteQuery = "DELETE FROM SUBSCRIBERID_STATUS WHERE STATUS_ID IN ("
+				+ statusIds + ")";
+
+		logger.debug("Delete Subscriber Query : " + deleteQuery);
+
+		getJdbcTemplate().execute(deleteQuery);
+	}
+	
+	public void updateSubscribersStatus(String statusIds, int status) {
+		String udateQuery = "update SUBSCRIBERID_STATUS set status='" + status
+				+ "' WHERE STATUS_ID in (" + statusIds + ")";
+
+		logger.debug("Update Subscribers Status Query : " + udateQuery);
+
+		getJdbcTemplate().execute(udateQuery);
 	}
 
 	public static SubscriberIdStatusDAO getFromApplicationContext(

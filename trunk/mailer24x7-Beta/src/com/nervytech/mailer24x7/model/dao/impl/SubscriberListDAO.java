@@ -1,5 +1,7 @@
 package com.nervytech.mailer24x7.model.dao.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -7,8 +9,11 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
+import com.nervytech.mailer24x7.common.enums.SubscriberStatusEnum;
+import com.nervytech.mailer24x7.domain.model.SubscriberList;
 import com.nervytech.mailer24x7.model.dao.interfaces.ISubscriberListDAO;
 
 /**
@@ -24,11 +29,12 @@ import com.nervytech.mailer24x7.model.dao.interfaces.ISubscriberListDAO;
  */
 
 @Resource(mappedName = "subscriberListDAO")
-public class SubscriberListDAO extends JdbcDaoSupport implements ISubscriberListDAO {
+public class SubscriberListDAO extends JdbcDaoSupport implements
+		ISubscriberListDAO {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(SubscriberListDAO.class);
-	
+
 	public void updateBounceCounts(final long subListId,
 			List<String> emailIdList) {
 		String udateQuery = "update SUBSCRIBER_LIST set "
@@ -40,7 +46,7 @@ public class SubscriberListDAO extends JdbcDaoSupport implements ISubscriberList
 
 		getJdbcTemplate().execute(udateQuery);
 	}
-	
+
 	public void updateUnSubscriberCounts(final long subListId,
 			List<String> emailIdList) {
 		String udateQuery = "update SUBSCRIBER_LIST set "
@@ -54,8 +60,164 @@ public class SubscriberListDAO extends JdbcDaoSupport implements ISubscriberList
 		getJdbcTemplate().execute(udateQuery);
 	}
 
+	public List<SubscriberList> getSubscriberGroups(String orgId) {
+
+		RowMapper<SubscriberList> mapper = new RowMapper<SubscriberList>() {
+			public SubscriberList mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				SubscriberList subList = new SubscriberList();
+
+				subList.setSubscriberListId(rs.getLong("SUBSCRIBER_LIST_ID"));
+				subList.setSubscriberListName(rs
+						.getString("SUBSCRIBER_LIST_NAME"));
+				subList.setActiveCount(rs.getInt("ACTIVE_COUNT"));
+				subList.setBouncedCount(rs.getInt("BOUNCE_COUNT"));
+				subList.setUnsubscriberCount(rs.getInt("UNSUBSCRIBER_COUNT"));
+
+				return subList;
+			}
+		};
+
+		String selectSubscriberGroupsQuery = "SELECT SL.SUBSCRIBER_LIST_ID,SL.SUBSCRIBER_LIST_NAME,SL.ACTIVE_COUNT,SL.BOUNCE_COUNT,SL.UNSUBSCRIBER_COUNT "
+				+ " FROM SUBSCRIBER_LIST SL " + " WHERE SL.ORG_ID=" + orgId;
+
+		logger.debug("Select Subscribers Group Query : "
+				+ selectSubscriberGroupsQuery);
+
+		return getJdbcTemplate().query(selectSubscriberGroupsQuery, mapper);
+	}
+
+	public long getSubscriberGroupByListName(String listName, long orgId) {
+
+		String checkSubscriberquery = "SELECT SUBSCRIBER_LIST_ID FROM SUBSCRIBER_LIST WHERE SUBSCRIBER_LIST_NAME='"
+				+ listName + "' AND ORG_ID =" + orgId;
+
+		logger.debug("Check Subscriber List Query : " + checkSubscriberquery);
+
+		return getJdbcTemplate().queryForLong(checkSubscriberquery);
+	}
+
+	public List<SubscriberList> getSubscriberGroup(long subListId) {
+
+		RowMapper<SubscriberList> mapper = new RowMapper<SubscriberList>() {
+			public SubscriberList mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				SubscriberList subList = new SubscriberList();
+
+				subList.setSubscriberListId(rs.getInt("SUBSCRIBER_LIST_ID"));
+				subList.setSubscriberListName(rs
+						.getString("SUBSCRIBER_LIST_NAME"));
+				subList.setActiveCount(rs.getInt("ACTIVE_COUNT"));
+				subList.setBouncedCount(rs.getInt("BOUNCE_COUNT"));
+				subList.setUnsubscriberCount(rs.getInt("UNSUBSCRIBER_COUNT"));
+
+				return subList;
+			}
+		};
+
+		String selectSubscriberQuery = "SELECT SL.SUBSCRIBER_LIST_ID,SL.SUBSCRIBER_LIST_NAME,SL.ACTIVE_COUNT,SL.BOUNCE_COUNT,SL.UNSUBSCRIBER_COUNT "
+				+ " FROM SUBSCRIBER_LIST SL "
+				+ " WHERE SL.SUBSCRIBER_LIST_ID="
+				+ subListId;
+
+		logger.debug("Select Sub group Query : " + selectSubscriberQuery);
+
+		return getJdbcTemplate().query(selectSubscriberQuery, mapper);
+	}
+
+	public long addSubGroup(SubscriberList subList) {
+
+		String insertSubGroupQuery = "INSERT INTO SUBSCRIBER_LIST(ORG_ID,SUBSCRIBER_LIST_NAME,USER_ID,CREATED_TIME,LAST_MODIFIED_TIME,ACTIVE_COUNT) "
+				+ " VALUES('"
+				+ subList.getOrgId()
+				+ "','"
+				+ subList.getSubscriberListName()
+				+ "','"
+				+ subList.getUserId()
+				+ "','"
+				+ subList.getCreatedTime()
+				+ "',"
+				+ "'"
+				+ subList.getLastModifiedTime()
+				+ "','"
+				+ subList.getActiveCount() + "')";
+
+		logger.debug("Subcriber Group insert Query : " + insertSubGroupQuery);
+
+		getJdbcTemplate().execute(insertSubGroupQuery);
+
+		String selectQuery = "SELECT SUBSCRIBER_LIST_ID FROM SUBSCRIBER_LIST WHERE SUBSCRIBER_LIST_NAME='"
+				+ subList.getSubscriberListName()
+				+ "' AND ORG_ID ="
+				+ subList.getOrgId();
+
+		logger.debug("Select Subscriber Group Query : " + selectQuery);
+
+		return getJdbcTemplate().queryForLong(selectQuery);
+	}
 	
-	public static SubscriberListDAO getFromApplicationContext(ApplicationContext ctx) {
+	public void updateActiveCount(long subscriberListId, int activeCount) {
+		String udateQuery = "update SUBSCRIBER_LIST set "
+				+ " ACTIVE_COUNT= ACTIVE_COUNT-" + activeCount
+				+ " WHERE SUBSCRIBER_LIST_ID =" + subscriberListId;
+
+		logger.debug("Update Active Count Query : " + udateQuery);
+
+		getJdbcTemplate().execute(udateQuery);
+	}
+
+	public void updateBouncedCount(long subscriberListId, int bouncedCount) {
+		String udateQuery = "update SUBSCRIBER_LIST set "
+				+ " BOUNCE_COUNT= BOUNCE_COUNT-" + bouncedCount
+				+ " WHERE SUBSCRIBER_LIST_ID =" + subscriberListId;
+
+		logger.debug("Update Bounce Count Query : " + udateQuery);
+
+		getJdbcTemplate().execute(udateQuery);
+	}
+
+	public void updateUnsubscriberCount(long subscriberListId,
+			int unsubsriberCount) {
+		String udateQuery = "update SUBSCRIBER_LIST set "
+				+ " UNSUBSCRIBER_COUNT= UNSUBSCRIBER_COUNT-" + unsubsriberCount
+				+ " WHERE SUBSCRIBER_LIST_ID =" + subscriberListId;
+
+		logger.debug("Update Unsubscriber Count Query : " + udateQuery);
+
+		getJdbcTemplate().execute(udateQuery);
+	}
+
+	public void moveSubscribers(long subscriberListId, int count, int fromType,
+			int toType) {
+
+		String getFromFiledName = getFieldName(fromType);
+		String getToFiledName = getFieldName(toType);
+
+		String moveQuery = "update SUBSCRIBER_LIST SET " + getFromFiledName
+				+ " = " + getFromFiledName + "-" + count + "," + getToFiledName
+				+ " = " + getToFiledName + "+" + count
+				+ " WHERE SUBSCRIBER_LIST_ID=" + subscriberListId;
+
+		logger.debug("Move Subsriber Query : " + moveQuery);
+
+		getJdbcTemplate().execute(moveQuery);
+	}
+
+	private String getFieldName(int subType) {
+		String toReturn = null;
+		if (subType == SubscriberStatusEnum.ACTIVE.getStatus()) {
+			toReturn = "ACTIVE_COUNT";
+		} else if (subType == SubscriberStatusEnum.BOUNCED.getStatus()) {
+			toReturn = "BOUNCE_COUNT";
+		} else if (subType == SubscriberStatusEnum.UNSUBSCRIBED.getStatus()) {
+			toReturn = "UNSUBSCRIBER_COUNT";
+		}
+
+		return toReturn;
+	}
+
+	public static SubscriberListDAO getFromApplicationContext(
+			ApplicationContext ctx) {
 		return (SubscriberListDAO) ctx.getBean("SubscriberListDAO");
 	}
 }

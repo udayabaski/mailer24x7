@@ -23,4 +23,17 @@ public interface ISubscriberIdStatusDAO {
 			final List<String> emailIdList, final int status);
 
 	public int getSubscribersCount(String subscriberListId);
+	
+	public List<List<SubscriberIdStatus>> getAllSubscribers(long subListId);
+	
+	public void addBatchSubscriber(final long subscriberListId,
+			final long userId, final long orgId, final int status,
+			final String[] subscribers);
+	
+	public void deleteSubGroup(long subListId);
+	
+	public void deleteSubscriber(String statusIds);
+	
+	public void updateSubscribersStatus(String statusIds, int status);
+	
 }

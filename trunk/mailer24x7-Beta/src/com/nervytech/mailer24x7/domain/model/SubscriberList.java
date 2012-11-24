@@ -12,11 +12,11 @@ public class SubscriberList {
 	private long subscriberListId;
 	private long orgId;
 	private String subscriberListName;
-	private String userId;
+	private long userId;
 	private String createdTime;
 	private String lastModifiedTime;
 	private int activeCount;
-	private int bounceCount;
+	private int bouncedCount;
 	private int unsubscriberCount;
 
 	/**
@@ -67,7 +67,7 @@ public class SubscriberList {
 	/**
 	 * @return the userId
 	 */
-	public String getUserId() {
+	public long getUserId() {
 		return userId;
 	}
 
@@ -75,7 +75,7 @@ public class SubscriberList {
 	 * @param userId
 	 *            the userId to set
 	 */
-	public void setUserId(String userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 
@@ -127,16 +127,16 @@ public class SubscriberList {
 	/**
 	 * @return the bounceCount
 	 */
-	public int getBounceCount() {
-		return bounceCount;
+	public int getBouncedCount() {
+		return bouncedCount;
 	}
 
 	/**
 	 * @param bounceCount
 	 *            the bounceCount to set
 	 */
-	public void setBounceCount(int bounceCount) {
-		this.bounceCount = bounceCount;
+	public void setBouncedCount(int bouncedCount) {
+		this.bouncedCount = bouncedCount;
 	}
 
 	/**
@@ -153,7 +153,9 @@ public class SubscriberList {
 	public void setUnsubscriberCount(int unsubscriberCount) {
 		this.unsubscriberCount = unsubscriberCount;
 	}
-
+	
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -176,8 +178,8 @@ public class SubscriberList {
 		builder.append(lastModifiedTime);
 		builder.append(", activeCount=");
 		builder.append(activeCount);
-		builder.append(", bounceCount=");
-		builder.append(bounceCount);
+		builder.append(", bouncedCount=");
+		builder.append(bouncedCount);
 		builder.append(", unsubscriberCount=");
 		builder.append(unsubscriberCount);
 		builder.append("]");
