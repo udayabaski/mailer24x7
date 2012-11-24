@@ -34,6 +34,7 @@ import com.nervytech.mailer24x7.model.service.api.ICampaignSenderService;
 import com.nervytech.mailer24x7.model.service.api.ICampaignService;
 import com.nervytech.mailer24x7.model.service.api.ICampaignStatusService;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberIdStatusService;
+import com.nervytech.mailer24x7.model.service.api.ISubscriberListService;
 import com.nervytech.mailer24x7.spring.bean.CampaignBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignSnapshotBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignsHomeBean;
@@ -53,7 +54,7 @@ public class CampaignController {
 
 	@Autowired
 	private ICampaignService campaignService;
-
+	
 	@Autowired
 	private ICampaignStatusService campaignStatusService;
 
@@ -105,8 +106,7 @@ public class CampaignController {
 	}
 
 	@RequestMapping(value = "/view/step1/id/{campaignId}", method = RequestMethod.GET)
-	public String showStep1Campaign(@PathVariable String campaignId, Map model,
-			HttpServletRequest request) {
+	public String showStep1Campaign(@PathVariable String campaignId, Map model) {
 
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();

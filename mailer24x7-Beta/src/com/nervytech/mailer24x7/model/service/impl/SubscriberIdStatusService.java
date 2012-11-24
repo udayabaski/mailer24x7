@@ -65,7 +65,7 @@ public class SubscriberIdStatusService implements ISubscriberIdStatusService {
 		} catch (Exception e) {
 			logger.error("Error while saving user detail.", e);
 			throw new RuntimeException(e.getMessage());
-		}		
+		}
 	}
 
 	@Override
@@ -78,5 +78,60 @@ public class SubscriberIdStatusService implements ISubscriberIdStatusService {
 			throw new RuntimeException(e.getMessage());
 		}
 		return count;
+	}
+
+	@Override
+	public List<List<SubscriberIdStatus>> getAllSubscribers(long subListId) {
+		List<List<SubscriberIdStatus>> list = null;
+		try {
+			list = subscriberIdStatusDAO.getAllSubscribers(subListId);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		return list;
+	}
+
+	@Override
+	public void addBatchSubscriber(long subscriberListId, long userId,
+			long orgId, int status, String[] subscribers) {
+		try {
+			subscriberIdStatusDAO.addBatchSubscriber(subscriberListId, userId,
+					orgId, status, subscribers);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void deleteSubGroup(long subListId) {
+		try {
+			subscriberIdStatusDAO.deleteSubGroup(subListId);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void deleteSubscriber(String statusIds) {
+		try {
+			subscriberIdStatusDAO.deleteSubscriber(statusIds);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void updateSubscribersStatus(String statusIds, int status) {
+		try {
+			subscriberIdStatusDAO.updateSubscribersStatus(statusIds, status);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+
 	}
 }

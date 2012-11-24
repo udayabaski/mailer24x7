@@ -18,6 +18,7 @@ public class CampaignStep3Form {
 	private String testMailId;
 	private String message;
 	private String messageType;
+	private String campaignId;
 
 	/**
 	 * @return the subscriberGroup
@@ -107,6 +108,21 @@ public class CampaignStep3Form {
 	 */
 	public void setMessageType(String messageType) {
 		this.messageType = messageType;
+	}
+
+	/**
+	 * @return the campaignId
+	 */
+	public String getCampaignId() {
+		return campaignId;
+	}
+
+	/**
+	 * @param campaignId
+	 *            the campaignId to set
+	 */
+	public void setCampaignId(String campaignId) {
+		this.campaignId = campaignId;
 	}
 
 }

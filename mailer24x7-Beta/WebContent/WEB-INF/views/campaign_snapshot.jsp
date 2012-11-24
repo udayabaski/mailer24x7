@@ -107,7 +107,7 @@
 				<tr>
 					<td width="100"><span class="previous"><a href="campaign_step2.jsp">Previous</a></span></td>
 					<td align="center"><a href="#" class="button green" onclick="document.forms[0].submit();return false;">Save &amp; Exit</a></td>
-					<td width="100"><span class="next1"><a href="CreateCampaignStep3.html">Next</a></span></td>
+					<td width="100"><span class="next1"><a href="campaign_step3.jsp">Next</a></span></td>
 				</tr>
 			</table>
 		</div>

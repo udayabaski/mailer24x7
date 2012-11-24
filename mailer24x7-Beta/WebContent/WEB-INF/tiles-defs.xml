@@ -79,6 +79,11 @@
 		<put-attribute name="body" value="/WEB-INF/views/campaign_step2.jsp" />
 	</definition>
 	
+	<definition name="campaignStep3" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : home" />
+		<put-attribute name="body" value="/WEB-INF/views/campaign_step3.jsp" />
+	</definition>
+	
 	<definition name="importHtml" extends="baseLayout">
 		<put-attribute name="title" value="Mailer24x7 : home" />
 		<put-attribute name="body" value="/WEB-INF/views/campaign_import.jsp" />
@@ -105,9 +110,9 @@
 		<put-attribute name="body" value="/WEB-INF/views/campaign.jsp" />
 	</definition>
 
-	<definition name="subscribergroup" extends="baseLayout">
+	<definition name="subscribergroupnew" extends="baseLayout">
 		<put-attribute name="title" value="Mailer24x7 : home" />
-		<put-attribute name="body" value="/WEB-INF/views/subscribergroup.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/subscribergroup_new.jsp" />
 	</definition>
 
 	<definition name="viewusers" extends="baseLayout">
