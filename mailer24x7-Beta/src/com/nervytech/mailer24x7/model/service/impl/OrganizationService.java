@@ -8,6 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nervytech.mailer24x7.domain.model.Organization;
 import com.nervytech.mailer24x7.model.dao.impl.UserDAO;
@@ -18,6 +19,7 @@ import com.nervytech.mailer24x7.model.service.api.IOrganizationService;
  * @author bsikkaya
  * 
  */
+@Service
 public class OrganizationService implements IOrganizationService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);

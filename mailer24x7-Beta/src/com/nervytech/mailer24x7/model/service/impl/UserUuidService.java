@@ -6,6 +6,7 @@ package com.nervytech.mailer24x7.model.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nervytech.mailer24x7.domain.model.UserUuid;
 import com.nervytech.mailer24x7.model.dao.interfaces.IUserUuidDAO;
@@ -15,6 +16,7 @@ import com.nervytech.mailer24x7.model.service.api.IUserUuidService;
  * @author bsikkaya
  * 
  */
+@Service
 public class UserUuidService implements IUserUuidService {
 
 	private static final Logger logger = LoggerFactory

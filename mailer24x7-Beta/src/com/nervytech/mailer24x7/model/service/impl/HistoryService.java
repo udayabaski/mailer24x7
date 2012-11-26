@@ -8,16 +8,17 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nervytech.mailer24x7.model.dao.interfaces.IHistoryDAO;
 import com.nervytech.mailer24x7.model.service.api.IHistoryService;
 import com.nervytech.mailer24x7.spring.bean.ActivityBean;
-import com.nervytech.mailer24x7.spring.bean.CampaignBean;
 
 /**
  * @author bsikkaya
  *
  */
+@Service
 public class HistoryService implements IHistoryService{
 	
 	private static final Logger logger = LoggerFactory
