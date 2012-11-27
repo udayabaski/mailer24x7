@@ -46,15 +46,15 @@
 										</a></li>
 										<li><a href="#tabs-2" title="content_2" class="tab">Scheduled
 												Campaigns </a></li>
-										<li><a href="#tabs-3" title="content_3" class="tab">Completed
+										<li><a href="#tabs-3" title="content_3" class="tab">Sent
 												Campaigns </a></li>
 											<li>
 
 											</li>
 									</ul>
 									<div class="right-link">
-										<a href="#" class="button grey-btn mar1" onclick="document.forms[0].submit();return false;"><img src="../images/add.png" width="16" height="15" alt="" />New Campaign</a>
-										<a href="#" class="button grey-btn mar1" onclick="document.forms[0].submit();return false;"><img src="../images/add.png" width="16" height="15" alt="" />New A/B Campaign</a>
+										<a href="${pageContext.request.contextPath}/usr/campaign/new" class="button grey-btn mar1" ><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New Campaign</a>
+										<a href="${pageContext.request.contextPath}/usr/campaign/new" class="button grey-btn mar1" ><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New A/B Campaign</a>
 									</div>
 
 									<div id="tabs-1" class="content">
@@ -65,7 +65,12 @@
        
         				<c:choose>
         				<c:when test="${draftCampaignsCount == 0}">
-       					
+       						<tr valign="top" >
+								<td class="pad1"><img src="${pageContext.request.contextPath}/images/img-campaign.png" width="75" height="72" alt="" /></td>
+								<td><h1>Design your campaign</h1>
+								<p>Get started by creating your first email campaign. We'll walk through the entire process, and you can choose how you'd like to pay before you send.</p>
+								<p><a href="${pageContext.request.contextPath}/usr/campaign/new" class="button green mar1 bg" >Create Campaign<img src="${pageContext.request.contextPath}/images/arrows.png" width="20" height="20" alt="" class="arrows" /></a></p></td>
+							</tr>
        					</c:when>
        					<c:otherwise>
 
@@ -84,7 +89,7 @@
 															class="emailcampheader odd">
 
 															<td class="tbl-btm-bdr"><a
-																href="view/detail/id/<c:out value="${campaign.campaignId}" />"><c:out value="${campaign.campaignName}" /></a></td>
+																href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" ><c:out value="${campaign.campaignName}" /></a></td>
 															<td class="tbl-btm-bdr"><c:out value="${campaign.subject}" /></td>
 															<td class="tbl-btm-bdr"><c:out value="${campaign.createdBy}" /></td>
 															<td class="tbl-btm-bdr"><c:out value="${campaign.lastModifiedTime}" /></td>
@@ -103,66 +108,105 @@
 										</table>
 										<div class="pagination">
 											<ul>
-												<li><a href="">&lt;&lt;</a></li>
-												<li><a href="" class="active">1</a></li>
-												<li><a href="">2</a></li>
-												<li><a href="">3</a></li>
-												<li><a href="">4</a></li>
-												<li><a href="">5</a></li>
-												<li><a href="">&gt;&gt;</a></li>
+												
 											</ul>
 										</div>
 									</div>
 									<div id="tabs-2" class="content">
 										<table cellpadding="0" cellspacing="0" width="100%">
-											
+											<c:set var="scheduledCampaignsCount" value="${fn:length(campaignsHomeBean.scheduledCampaigns)}"></c:set>
 												
-
-												
-													<tr>
+											<c:choose>
+        									<c:when test="${scheduledCampaignsCount == 0}">
+       											<tr>
 														<td colspan="4" class="">No Campaigns are
-															scheduled. <a href="../usr/campaign.form?action=new"><b>Schedule</b></a>
+															scheduled. <a href="${pageContext.request.contextPath}/usr/campaign/new"><b>Schedule</b></a>
 															a campaign.
 														</td>
 													</tr>
-												
-											
+       										</c:when>
+       										<c:otherwise>
+       												
+       												<tr>
+														<td class="table-heading">Name</td>
+														<td class="table-heading">Created By</td>
+														<td class="table-heading">Scheduled On</td>
+														<td class="table-heading" width="100">Actions</td>
+													</tr>
+													
+								<c:forEach items="${campaignsHomeBean.scheduledCampaigns}" var="campaign" varStatus="reStatus">
+								
+														<tr onmouseout="this.className='emailcampheader odd'"
+															onmouseover="this.className='emailcampHeaderHover'"
+															class="emailcampheader odd">
+
+															<td class="tbl-btm-bdr"><a
+																href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}"><c:out value="${campaign.campaignName}" /></a></td>
+															<td class="tbl-btm-bdr"><c:out value="${campaign.createdBy}" /></td>
+															<td class="tbl-btm-bdr"><c:out value="${campaign.scheduledOn}" /></td>
+															<td class="tbl-btm-bdr" width="100">
+															  <a href="view/detail/id/<c:out value="${campaign.campaignId}" />" class="add" title="view">View</a> 
+															  <a href="edit/id/<c:out value="${campaign.campaignId}" />" class="edit" title="edit">Edit</a> 
+															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
+															  <a href="delete/id/<c:out value="${campaign.campaignId}" />" class="delete" class="Delete">Delete</a></td>
+														</tr>
+
+
+								</c:forEach>
+       											       											       										   
+											</c:otherwise>
+											</c:choose>	
 
 										</table>
 									</div>
 									<div id="tabs-3" class="content">
 										<table cellpadding="0" cellspacing="0" width="100%">
 											
+												<c:set var="completedCampaignsCount" value="${fn:length(campaignsHomeBean.completedCampaigns)}"></c:set>
 												
-
+											<c:choose>
+        									<c:when test="${scheduledCampaignsCount == 0}">
+       											<tr>
+														<td colspan="4" class="">No Campaigns are sent.</td>
+													</tr>
+       										</c:when>
+       										<c:otherwise>
+													
 													<tr>
 														<td class="table-heading">Name</td>
 														<td class="table-heading">Created By</td>
-														<td class="table-heading">Last Modified</td>
+														<td class="table-heading">Last Updated</td>
 														<td class="table-heading">Opened</td>
 														<td class="table-heading">Clicked</td>
 														<td class="table-heading">Bounced</td>
+														<td class="table-heading" width="100">Actions</td>
 													</tr>
-
-
 													
-
-														<tr onmouseout="this.className='emailcampheader'"
+								<c:forEach items="${campaignsHomeBean.scheduledCampaigns}" var="campaign" varStatus="reStatus">
+								
+														<tr onmouseout="this.className='emailcampheader odd'"
 															onmouseover="this.className='emailcampHeaderHover'"
 															class="emailcampheader odd">
-															<td class="tbl-btm-bdr">MailerCampaign</td>
-															<td class="tbl-btm-bdr">baskar.sks@gmail.com</td>
-															<td class="tbl-btm-bdr">2012-09-08 11:44:29.0</td>
-															<td class="tbl-btm-bdr">1</td>
-															<td class="tbl-btm-bdr">0</td>
-															<td class="tbl-btm-bdr">0</td>
+
+															<td class="tbl-btm-bdr"><a
+																href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}"><c:out value="${campaign.campaignName}" /></a></td>
+															<td class="tbl-btm-bdr"><c:out value="${campaign.createdBy}" /></td>
+															<td class="tbl-btm-bdr"><c:out value="${campaign.lastModifiedTime}" /></td>
+															<td class="tbl-btm-bdr"><c:out value="${campaign.opened}" /></td>
+															<td class="tbl-btm-bdr"><c:out value="${campaign.clicked}" /></td>
+															<td class="tbl-btm-bdr"><c:out value="${campaign.bounced}" /></td>
+															<td class="tbl-btm-bdr" width="100">
+															  <a href="view/detail/id/<c:out value="${campaign.campaignId}" />" class="add" title="view">View</a> 
+															  <a href="edit/id/<c:out value="${campaign.campaignId}" />" class="edit" title="edit">Edit</a> 
+															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
+															  <a href="delete/id/<c:out value="${campaign.campaignId}" />" class="delete" class="Delete">Delete</a></td>
 														</tr>
 
+
+								</c:forEach>
 													
-
-												
-
-												
+													</c:otherwise>
+											</c:choose>	
 											
 
 										</table>
@@ -189,19 +233,5 @@
 <!--footer part starts!-->
 
 <!--footer part ends!-->
-</body>
-</html>
-
-<table cellpadding="0" cellspacing="0"  width="100%">
-<tr>
-
-<td width="10%"></td>
-<td width="80%" align="center" style="font-size:12px; color:#595959; padding:20px 0px 0px 0px">Copyright@companyname.com</td>
-<td width="10%"></td>
-
-</tr>
-</table>
-
-
 </body>
 </html>

@@ -298,12 +298,7 @@
 			<artifactId>json</artifactId>
 			<version>20090211</version>
 		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>20030203.000550</version>
-		</dependency>
-
+		
 	</dependencies>
 	<properties>
 		<org.springframework.version>3.1.2.RELEASE</org.springframework.version>

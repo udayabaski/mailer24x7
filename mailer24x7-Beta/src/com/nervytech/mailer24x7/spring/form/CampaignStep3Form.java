@@ -13,12 +13,10 @@ import org.springframework.stereotype.Repository;
 public class CampaignStep3Form {
 
 	private String subscriberGroup;
-	private String sendingOption;
-	private String scheduledDate;
-	private String testMailId;
 	private String message;
 	private String messageType;
-	private String campaignId;
+	private long campaignId;
+	private String nextAction;
 
 	/**
 	 * @return the subscriberGroup
@@ -33,51 +31,6 @@ public class CampaignStep3Form {
 	 */
 	public void setSubscriberGroup(String subscriberGroup) {
 		this.subscriberGroup = subscriberGroup;
-	}
-
-	/**
-	 * @return the sendingOption
-	 */
-	public String getSendingOption() {
-		return sendingOption;
-	}
-
-	/**
-	 * @param sendingOption
-	 *            the sendingOption to set
-	 */
-	public void setSendingOption(String sendingOption) {
-		this.sendingOption = sendingOption;
-	}
-
-	/**
-	 * @return the scheduledDate
-	 */
-	public String getScheduledDate() {
-		return scheduledDate;
-	}
-
-	/**
-	 * @param scheduledDate
-	 *            the scheduledDate to set
-	 */
-	public void setScheduledDate(String scheduledDate) {
-		this.scheduledDate = scheduledDate;
-	}
-
-	/**
-	 * @return the testMailId
-	 */
-	public String getTestMailId() {
-		return testMailId;
-	}
-
-	/**
-	 * @param testMailId
-	 *            the testMailId to set
-	 */
-	public void setTestMailId(String testMailId) {
-		this.testMailId = testMailId;
 	}
 
 	/**
@@ -113,7 +66,7 @@ public class CampaignStep3Form {
 	/**
 	 * @return the campaignId
 	 */
-	public String getCampaignId() {
+	public long getCampaignId() {
 		return campaignId;
 	}
 
@@ -121,8 +74,23 @@ public class CampaignStep3Form {
 	 * @param campaignId
 	 *            the campaignId to set
 	 */
-	public void setCampaignId(String campaignId) {
+	public void setCampaignId(long campaignId) {
 		this.campaignId = campaignId;
+	}
+
+	/**
+	 * @return the nextAction
+	 */
+	public String getNextAction() {
+		return nextAction;
+	}
+
+	/**
+	 * @param nextAction
+	 *            the nextAction to set
+	 */
+	public void setNextAction(String nextAction) {
+		this.nextAction = nextAction;
 	}
 
 }

@@ -46,20 +46,21 @@
 		</ul>
 	
 	  <form:form action="${pageContext.request.contextPath}/j_spring_security_check" name="loginForm" id="frm_login" method="POST">
-      	
+	
 		<div id="signUp" class="clearfix toggleTab">
 			
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            
+            <c:set var="message" value="${loginForm.message}"></c:set>
+    		<c:if test="${not empty message}">
+    	     <tr><td colspan="3" height="20" class="${loginForm.messageType}"><c:out value="${loginForm.message}"/></td></tr>
+             <tr><td colspan="3" height="20"></td></tr>
+		 	</c:if>
+            
             <tr>
             <td valign="top" width="70%">
             <table width="70%" cellpadding="0" cellspacing="0" style="margin-left:15%;">
 			
-			<c:if test="${not empty loginForm.message}">
-          		<div class="success"><c:out value="${loginForm.message}"/></div>
-        	</c:if>
-			            
-            <tr><td colspan="3" height="20" class="error">Invalid username or password</td></tr>
-            <tr><td colspan="3" height="20"></td></tr>
              <tr>
             <td>Email</td>
             <td width="3%"></td>

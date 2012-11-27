@@ -31,14 +31,22 @@
    	<!-- Enable annotation driven controllers, validation etc... -->
 	<context:component-scan base-package="com.nervytech.mailer24x7">
 		 <context:include-filter type="regex"
-			expression="(service|constroller)\..*" /> 
+			expression="(service|controller|resource)\..*" /> 
 	</context:component-scan>
 	
 	<mvc:annotation-driven />
 	<!-- For AJAX -->
 	<context:annotation-config />
-	<!-- <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/> 
-		<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/> -->
+	<!-- Handlers -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="alwaysUseFullPath" value="true" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="alwaysUseFullPath" value="true" />
+	</bean>
 	
    <!-- Should keep corresponding jar files in classpath, or else it wll not work -->
 	<!-- <bean id="jacksonMessageConverter"

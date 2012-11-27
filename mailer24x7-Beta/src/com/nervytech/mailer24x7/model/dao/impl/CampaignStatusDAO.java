@@ -57,8 +57,7 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 				+ cmpnStatusVO.getDelivered()
 				+ ", OPENED ="
 				+ cmpnStatusVO.getOpens()
-				+ ","
-				+ " CLICKED = "
+				+ ", CLICKED = "
 				+ cmpnStatusVO.getClicks()
 				+ ", BOUNCED = "
 				+ cmpnStatusVO.getBounced()
@@ -88,8 +87,7 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 				+ campaignStatusVO.getEventCount()
 				+ ", OPENED = OPENED + "
 				+ campaignStatusVO.getOpens()
-				+ ","
-				+ "CLICKED = CLICKED + "
+				+ ", CLICKED = CLICKED + "
 				+ campaignStatusVO.getClicks()
 				+ ", BOUNCED = BOUNCED + "
 				+ campaignStatusVO.getBounced()
@@ -161,8 +159,8 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 
 	public void saveCampaignStatus(CampaignStatus cmpnStatus) {
 
-		String insertQuery = "INSERT INTO CAMPAIGN_STATUS (CAMPAIGN_ID,ORG_ID,USER_ID,SUBSCRIBER_LIST_ID,SENDER_ID,"
-				+ " SCHEDULED_ON,STATUS,LATEST_SUBSCRIBER_COUNT,SYNC_STATUS,S3_PATH,LAST_UPDATED_TIME,LATEST_UPDATED_SUBSCRIBERID) "
+		String insertQuery = "INSERT INTO CAMPAIGN_STATUS (CAMPAIGN_ID,ORG_ID,USER_ID,SENDER_ID,"
+				+ " STATUS,LATEST_SUBSCRIBER_COUNT,SYNC_STATUS,S3_PATH,LAST_UPDATED_TIME,LATEST_UPDATED_SUBSCRIBERID) "
 				+ " VALUES('"
 				+ cmpnStatus.getCampaignId()
 				+ "','"
@@ -170,11 +168,7 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 				+ "','"
 				+ cmpnStatus.getUserId()
 				+ "','"
-				+ cmpnStatus.getSubscriberListId()
-				+ "','"
 				+ cmpnStatus.getSenderId()
-				+ "','"
-				+ cmpnStatus.getScheduledOn()
 				+ "','"
 				+ cmpnStatus.getStatus()
 				+ "','"
@@ -197,7 +191,7 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 	@Override
 	public void updateCampaignStatusSender(CampaignStatus cmpnStatus) {
 		String updateQuery = "UPDATE CAMPAIGN_STATUS SET SENDER_ID="
-				+ cmpnStatus.getSenderId() + " LAST_UPDATED_TIME='"
+				+ cmpnStatus.getSenderId() + ", LAST_UPDATED_TIME='"
 				+ cmpnStatus.getLastUpdatedTime() + "' WHERE CAMPAIGN_ID="
 				+ cmpnStatus.getCampaignId();
 
@@ -210,15 +204,26 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 	@Override
 	public void updateS3Path(String s3Path, long campaignId, String time) {
 		String updateQuery = "UPDATE CAMPAIGN_STATUS SET S3_PATH='" + s3Path
-				+ "' LAST_UPDATED_TIME='" + time + "' WHERE CAMPAIGN_ID="
+				+ "', LAST_UPDATED_TIME='" + time + "' WHERE CAMPAIGN_ID="
 				+ campaignId;
 
-		System.out.println("UPDATE QUERYYYYYYYYY " + updateQuery);
 		logger.debug("Update Campaign Status Query : " + updateQuery);
 
 		getJdbcTemplate().execute(updateQuery);
 
 	}
+	
+	@Override
+	public void updateSubscriberListId(long campaignId, String subscriberGroup) {
+		String updateQuery = "UPDATE CAMPAIGN_STATUS SET SUBSCRIBER_LIST_ID='"
+				+ subscriberGroup + "' WHERE CAMPAIGN_ID=" + campaignId;
+
+		logger.debug("Update Campaign Query : " + updateQuery);
+
+		getJdbcTemplate().execute(updateQuery);
+		
+	}
+
 
 	public static CampaignStatusDAO getFromApplicationContext(
 			ApplicationContext ctx) {

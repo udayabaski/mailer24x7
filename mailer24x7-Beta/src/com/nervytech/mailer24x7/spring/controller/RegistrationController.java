@@ -96,7 +96,7 @@ public class RegistrationController {
 		return "register";
 	}
 	
-	@RequestMapping(value = "/confirm/email/{emailId}/id/{uuId}",method = RequestMethod.POST)
+	@RequestMapping(value = "/confirm/email/{emailId}/id/{uuId}",method = RequestMethod.GET)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String confirmUser(@PathVariable String emailId,@PathVariable String uuId,
 			Map model) {
@@ -131,7 +131,7 @@ public class RegistrationController {
 
 	}
 	
-	@RequestMapping(value = "/confirm/resend/id/{uuId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/confirm/resend/usr/{uuId}", method = RequestMethod.GET)
 	public String reSendConfirmationMail(@PathVariable String uuId, Map model,
 			HttpServletRequest request) {
 
@@ -176,6 +176,8 @@ public class RegistrationController {
 		RegistrationForm regForm = new RegistrationForm();
 
 		regForm.setUuId(uuId);
+		
+		regForm.setMessageType(MessageTypeEnum.SUCCESS.name());
 
 		model.put("registrationForm", regForm);
 
@@ -197,9 +199,9 @@ public class RegistrationController {
 		Organization checkOrg = orgService.getOrganization(
 				regForm.getCompany(), regForm.getCountry());
 		if (checkOrg != null) {
-			result.rejectValue("organization",
-					"NotEmpty.registrationForm.organization",
-					"This Organization with the selected country is already registered.");
+			result.rejectValue("company",
+					"NotEmpty.registrationForm.company",
+					"This company with the selected country is already registered.");
 			return "register";
 		}
 
@@ -286,7 +288,7 @@ public class RegistrationController {
 		String content = "Hi "
 				+ regForm.getFullName()
 				+ ","
-				+ "\n Please click the following link for activating your account.\n "
+				+ "\n Please click the following lilnk for activating your account.\n "
 				+ confirmationUrl;
 
 		logger.debug("Sending registration confirmation mail : user "
@@ -310,8 +312,10 @@ public class RegistrationController {
 		regForm = new RegistrationForm();
 
 		regForm.setUuId(uuid.getUuid() + "");
+		
+		regForm.setMessageType(MessageTypeEnum.SUCCESS.name());
 
-		model.put("regForm", regForm);
+		model.put("registrationForm", regForm);
 
 		return "register";
 	}
@@ -337,7 +341,7 @@ public class RegistrationController {
 
 			SessionUser springUser = new SessionUser(username,
 					user.getPassword(), authorities, user.getOrgId(),
-					user.getUserId(), true);
+					user.getUserId(), true, user.getFullName());
 
 			Authentication authentication = new UsernamePasswordAuthenticationToken(
 					springUser, springUser.getPassword(),

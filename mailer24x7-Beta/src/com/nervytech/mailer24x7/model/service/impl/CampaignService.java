@@ -174,4 +174,17 @@ public class CampaignService implements ICampaignService {
 		}
 		return cmpnBeansList;
 	}
+
+	@Override
+	public int getCampaignType(long campaignId) {
+		int campaignType = -1;
+		try {
+			campaignType = campaignDAO.getCampaignType(campaignId);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		return campaignType;
+	}
+
 }

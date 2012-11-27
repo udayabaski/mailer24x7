@@ -43,4 +43,7 @@ public interface ICampaignService {
 	
 	public List<Campaign> getCampaignsToSyncTwelveHoursStats(int status,
 			String time, long lowerLimit, long upperLimit);
+
+	public int getCampaignType(long campaignId);
+
 }

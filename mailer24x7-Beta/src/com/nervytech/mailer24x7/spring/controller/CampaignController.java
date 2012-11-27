@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +36,6 @@ import com.nervytech.mailer24x7.model.service.api.ICampaignSenderService;
 import com.nervytech.mailer24x7.model.service.api.ICampaignService;
 import com.nervytech.mailer24x7.model.service.api.ICampaignStatusService;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberIdStatusService;
-import com.nervytech.mailer24x7.model.service.api.ISubscriberListService;
 import com.nervytech.mailer24x7.spring.bean.CampaignBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignSnapshotBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignsHomeBean;
@@ -116,7 +117,7 @@ public class CampaignController {
 		}
 
 		CampaignSnapshotBean snapshotBean = campaignService.getCampaign(Long
-				.parseLong("campaignId"));
+				.parseLong(campaignId));
 
 		CampaignStep1Form cmpnStep1Form = new CampaignStep1Form();
 		cmpnStep1Form.setCampaignId(campaignId);
@@ -130,16 +131,40 @@ public class CampaignController {
 
 		return "campaignStep1";
 	}
+	
+	
+	@RequestMapping(value = "/view/step2/id/{campaignId}", method = RequestMethod.GET)
+	public String showStep2Campaign(@PathVariable String campaignId, Map model) {
+
+		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
+		long orgId = userDetails.getOrgId();
+
+		if (!isValidCampaignId(campaignId, orgId)) {
+			return "redirect:/usr/home";
+		}
+
+		int campaignType = campaignService.getCampaignType(Long
+				.parseLong(campaignId));
+
+		CampaignStep2Form cmpnStep2Form = new CampaignStep2Form();
+		cmpnStep2Form.setCampaignId(Long.parseLong(campaignId));
+		cmpnStep2Form.setContentType(campaignType);
+		
+		model.put("campaignStep2Form", cmpnStep2Form);
+
+		return "campaignStep2";
+	}
+
 
 	@RequestMapping(value = "/save/step2", method = RequestMethod.POST)
 	public String saveCampaignStep2(CampaignStep2Form cmpnForm, Map model) {
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
 
-		campaignService.updateContentType(cmpnForm.getCampaignId(),
-				cmpnForm.getContentType());
-
 		if (cmpnForm.getNextAction().equalsIgnoreCase("next")) {
+			
+			campaignService.updateContentType(cmpnForm.getCampaignId(),
+					cmpnForm.getContentType());
 
 			if (cmpnForm.getContentType() == CampaignTypeEnum.IMPORT.getType()) {
 
@@ -176,6 +201,9 @@ public class CampaignController {
 
 			}
 		} else if (cmpnForm.getNextAction().equalsIgnoreCase("exit")) {
+			campaignService.updateContentType(cmpnForm.getCampaignId(),
+					cmpnForm.getContentType());
+
 			return "redirect:/usr/campaign/view/snapshot/id/"
 					+ cmpnForm.getCampaignId();
 		} else if (cmpnForm.getNextAction().equalsIgnoreCase("prev")) {
@@ -192,6 +220,11 @@ public class CampaignController {
 			BindingResult result, Map model) {
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
+		
+		if(cmpnForm.getNextAction().equalsIgnoreCase("prev")) {
+			return "redirect:/usr/campaign/view/step2/id/"
+					+ cmpnForm.getCampaignId();
+		}
 
 		String htmlContent = null;
 
@@ -308,30 +341,57 @@ public class CampaignController {
 		campaignStatusService.updateS3Path(s3Path, cmpnForm.getCampaignId(),
 				MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
 
-		return "redirect:/usr/campaign/view/snapshot/id/"
-				+ cmpnForm.getCampaignId();
+		if (cmpnForm.getNextAction().equalsIgnoreCase("exit")) {
+			return "redirect:/usr/campaign/view/snapshot/id/"
+					+ cmpnForm.getCampaignId();
+		} else if (cmpnForm.getNextAction().equalsIgnoreCase("next")) {
+			
+			return "redirect:/usr/subscriber/view/step3/id/"
+					+ cmpnForm.getCampaignId();
+		}
+		
+		return null;
 	}
 
 	@RequestMapping(value = "/save/text", method = RequestMethod.POST)
 	public String saveCampaignText(CampaignStep2EditorForm cmpnForm, Map model) {
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
-
+		
+		if(cmpnForm.getNextAction().equalsIgnoreCase("prev")) {
+			return "redirect:/usr/campaign/view/step2/id/"
+					+ cmpnForm.getCampaignId();
+		} 
+		
 		String s3Path = MailerS3Client.putTxtObject(orgId,
 				userDetails.getUserId(), cmpnForm.getCampaignId(),
 				cmpnForm.getTextData(), true);
 
 		campaignStatusService.updateS3Path(s3Path, cmpnForm.getCampaignId(),
 				MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
-
-		return "redirect:/usr/campaign/view/snapshot/id/"
-				+ cmpnForm.getCampaignId();
+		
+		if (cmpnForm.getNextAction().equalsIgnoreCase("exit")) {
+			return "redirect:/usr/campaign/view/snapshot/id/"
+					+ cmpnForm.getCampaignId();
+		} else if (cmpnForm.getNextAction().equalsIgnoreCase("next")) {
+			
+			return "redirect:/usr/subscriber/view/step3/id/"
+					+ cmpnForm.getCampaignId();
+		}
+		
+		return null;
+		
 	}
 
 	@RequestMapping(value = "/save/html", method = RequestMethod.POST)
 	public String saveCampaignHtml(CampaignStep2EditorForm cmpnForm, Map model) {
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
+		
+		if(cmpnForm.getNextAction().equalsIgnoreCase("prev")) {
+			return "redirect:/usr/campaign/view/step2/id/"
+					+ cmpnForm.getCampaignId();
+		}
 
 		String content = "<html><body>" + cmpnForm.getHtmlData()
 				+ "<html><body>";
@@ -343,18 +403,29 @@ public class CampaignController {
 		campaignStatusService.updateS3Path(s3Path, cmpnForm.getCampaignId(),
 				MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
 
-		return "redirect:/usr/campaign/view/snapshot/id/"
-				+ cmpnForm.getCampaignId();
+		if (cmpnForm.getNextAction().equalsIgnoreCase("exit")) {
+			return "redirect:/usr/campaign/view/snapshot/id/"
+					+ cmpnForm.getCampaignId();
+		} else if (cmpnForm.getNextAction().equalsIgnoreCase("next")) {
+			
+			return "redirect:/usr/subscriber/view/step3/id/"
+					+ cmpnForm.getCampaignId();
+		}
+		
+		return null;
 	}
 
 	@RequestMapping(value = "/save/step1", method = RequestMethod.POST)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String saveCampaignStep1(CampaignStep1Form cmpnForm, Map model) {
 
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
 
 		String campaignIdStr = cmpnForm.getCampaignId();
-
+		
+		System.out.println("CampaignStr .... "+campaignIdStr);
+		
 		CampaignSender cmpnSender = new CampaignSender();
 		cmpnSender.setOrgId(orgId);
 		cmpnSender.setDisplayName(cmpnForm.getSenderName());
@@ -393,7 +464,7 @@ public class CampaignController {
 
 		long campaignId = -1;
 
-		if (campaignIdStr != null) {
+		if (campaignIdStr != null && campaignIdStr.trim().length() > 0) {
 			campaignId = Long.parseLong(campaignIdStr);
 			campaignService.updateCampaign(cmpn);
 		} else {
@@ -409,7 +480,7 @@ public class CampaignController {
 		cmpnStatus.setLastUpdatedTime(MailerUtil.FORMATTER_WITH_TIME
 				.format(currentTime));
 
-		if (campaignIdStr != null) {
+		if (campaignIdStr != null && campaignIdStr.trim().length() > 0) {
 			campaignStatusService.updateCampaignStatusSender(cmpnStatus);
 		} else {
 			campaignStatusService.saveCampaignStatus(cmpnStatus);
@@ -418,6 +489,11 @@ public class CampaignController {
 		if (cmpnForm.getNextAction().equalsIgnoreCase("next")) {
 			CampaignStep2Form steps2Form = new CampaignStep2Form();
 			steps2Form.setCampaignId(campaignId);
+			
+			if (campaignIdStr != null && campaignIdStr.trim().length() > 0) {
+				int campaignType = campaignService.getCampaignType(campaignId);
+				steps2Form.setContentType(campaignType);
+			}
 
 			model.put("campaignStep2Form", steps2Form);
 
@@ -442,10 +518,13 @@ public class CampaignController {
 
 		CampaignSnapshotBean snapshotBean = campaignService.getCampaign(Long
 				.parseLong(campaignId));
+		
+		System.out.println("SNAPSHOTBEAN "+snapshotBean);
 
 		if (snapshotBean.getSubscriberListId() != null) {
 			int subscribersCount = subscriberIdStatusService
 					.getSubscribersCount(snapshotBean.getSubscriberListId());
+			snapshotBean.setSubscribersCount(subscribersCount);
 		}
 
 		model.put("campaignSnapshotBean", snapshotBean);

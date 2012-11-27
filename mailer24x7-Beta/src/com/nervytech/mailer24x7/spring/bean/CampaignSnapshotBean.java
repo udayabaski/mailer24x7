@@ -18,10 +18,11 @@ public class CampaignSnapshotBean {
 	private String campaignStatus;
 	private String subscriberListName;
 	private String subscriberListId;
-	private String subscribersCount;
+	private int subscribersCount;
 	private String senderId;
 	private String senderName;
 	private String senderEmailId;
+	private String campaignType;
 
 	/**
 	 * @return the campaignName
@@ -101,7 +102,7 @@ public class CampaignSnapshotBean {
 	/**
 	 * @return the subscribersCount
 	 */
-	public String getSubscribersCount() {
+	public int getSubscribersCount() {
 		return subscribersCount;
 	}
 
@@ -109,7 +110,7 @@ public class CampaignSnapshotBean {
 	 * @param subscribersCount
 	 *            the subscribersCount to set
 	 */
-	public void setSubscribersCount(String subscribersCount) {
+	public void setSubscribersCount(int subscribersCount) {
 		this.subscribersCount = subscribersCount;
 	}
 
@@ -171,6 +172,21 @@ public class CampaignSnapshotBean {
 	 */
 	public void setSenderEmailId(String senderEmailId) {
 		this.senderEmailId = senderEmailId;
+	}
+
+	/**
+	 * @return the campaignType
+	 */
+	public String getCampaignType() {
+		return campaignType;
+	}
+
+	/**
+	 * @param campaignType
+	 *            the campaignType to set
+	 */
+	public void setCampaignType(String campaignType) {
+		this.campaignType = campaignType;
 	}
 
 }

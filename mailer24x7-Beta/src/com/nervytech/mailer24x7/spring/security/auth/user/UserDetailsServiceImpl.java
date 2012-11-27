@@ -5,7 +5,6 @@ package com.nervytech.mailer24x7.spring.security.auth.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.nervytech.mailer24x7.common.enums.UserRoleEnum;
 import com.nervytech.mailer24x7.common.enums.UserStatusEnum;
 import com.nervytech.mailer24x7.domain.model.User;
-import com.nervytech.mailer24x7.model.dao.interfaces.IUserDAO;
 import com.nervytech.mailer24x7.model.service.api.IUserService;
 
 /**
@@ -78,7 +76,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 
 			springUser = new SessionUser(username, user.getPassword(),
-					authorities, user.getOrgId(), user.getUserId(), enabled);
+					authorities, user.getOrgId(), user.getUserId(), enabled, user.getFullName());
 
 		} catch (Exception e) {
 			

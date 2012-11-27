@@ -26,11 +26,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.nervytech.mailer24x7.client.exception.MailerException;
-import com.nervytech.mailer24x7.common.enums.CampaignStatusEnum;
 import com.nervytech.mailer24x7.common.enums.SubscriberStatusEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
 import com.nervytech.mailer24x7.domain.model.SubscriberIdStatus;
 import com.nervytech.mailer24x7.domain.model.SubscriberList;
+import com.nervytech.mailer24x7.model.service.api.ICampaignService;
+import com.nervytech.mailer24x7.model.service.api.ICampaignStatusService;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberIdStatusService;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberListService;
 import com.nervytech.mailer24x7.spring.bean.SubscriberHomeBean;
@@ -48,6 +49,9 @@ public class SubscriberController {
 
 	@Autowired
 	private ISubscriberListService subscriberListService;
+	
+	@Autowired
+	private ICampaignStatusService campaignStatusService;
 
 	@Autowired
 	private ISubscriberIdStatusService subscriberIdStatusService;
@@ -73,7 +77,7 @@ public class SubscriberController {
 		return this.subscriberGroupMap;
 	}
 
-	@RequestMapping(value = "/new/step3/id/{campaignId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/view/step3/id/{campaignId}", method = RequestMethod.GET)
 	public String newCampaignStep3(@PathVariable String campaignId, Map model) {
 
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
@@ -83,7 +87,7 @@ public class SubscriberController {
 
 			SubscriberForm subForm = new SubscriberForm();
 
-			subForm.setCampaignId(campaignId);
+			subForm.setCampaignId(Long.parseLong(campaignId));
 			subForm.setAddOption("CSV");
 			subForm.setToPage("step3");
 
@@ -95,15 +99,25 @@ public class SubscriberController {
 
 		CampaignStep3Form campForm = new CampaignStep3Form();
 
-		campForm.setSendingOption(CampaignStatusEnum.NOW.toString());
-		campForm.setCampaignId(campaignId);
+		campForm.setCampaignId(Long.parseLong(campaignId));
 
 		model.put("campaignStep3Form", campForm);
 
 		return "campaignStep3";
 	}
+	
+	@RequestMapping(value = "/save/step3", method = RequestMethod.GET)
+	public String saveStep3(CampaignStep3Form step3Form, BindingResult result,
+			Map model) throws MailerException {
+		
+		campaignStatusService.updateSubscriberListId(step3Form.getCampaignId(), step3Form.getSubscriberGroup());
+		
+		return "redirect:/usr/campaign/view/snapshot/id/"
+				+ step3Form.getCampaignId();
+		
+	}
 
-	@RequestMapping(value = "/save/group", method = RequestMethod.GET)
+	@RequestMapping(value = "/step3/save/group", method = RequestMethod.GET)
 	public String saveGroup(SubscriberForm subForm, BindingResult result,
 			Map model) throws MailerException {
 
@@ -221,7 +235,6 @@ public class SubscriberController {
 					+ subscibersArray.length);
 		}
 
-		if (subListId <= 0) { // This validation is only for New ...
 			SubscriberList subList = new SubscriberList();
 			subList.setCreatedTime(MailerUtil.FORMATTER_WITH_TIME
 					.format(new Date()));
@@ -234,7 +247,6 @@ public class SubscriberController {
 			subList.setActiveCount(subscibersArray.length);
 
 			subListId = subscriberListService.addSubGroup(subList);
-		}
 
 		if (subscibersArray.length > 0) {
 			int status = SubscriberStatusEnum.ACTIVE.getStatus();
@@ -244,16 +256,15 @@ public class SubscriberController {
 			logger.info("Total Subscribers added : " + subscibersArray.length
 					+ " Subscriber List Id : " + subListId);
 		}
+		
+		campaignStatusService.updateSubscriberListId(subForm.getCampaignId(), subListId+"");
 
-		if (subForm.getToPage() != null
-				&& subForm.getToPage().equals("campaign")) {
-			return "redirect:campaign.form?action=new";
-		}
+		return "redirect:/usr/campaign/view/snapshot/id/"
+		+ subForm.getCampaignId();
 
-		return "redirect:subscriber.form?action=viewSubGroups";
 	}
 
-	@RequestMapping(params = "action=viewSubGroups", method = RequestMethod.GET)
+	@RequestMapping(value = "/view/all", method = RequestMethod.GET)
 	public String viewSubGroups(Map model, HttpServletRequest request) {
 
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();

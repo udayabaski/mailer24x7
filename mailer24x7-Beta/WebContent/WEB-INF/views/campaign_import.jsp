@@ -16,17 +16,17 @@
 <script type="text/javascript">
 
 	function submitPrev(){
-	  document.forms[0].getElementById("nextAction").value="prev";
+	  document.getElementById("nextAction").value="prev";
 	  document.forms[0].submit();
 	}
 	
 	function submitNext(){
-	  document.forms[0].getElementById("nextAction").value="next";
+	  document.getElementById("nextAction").value="next";
 	  document.forms[0].submit();
 	}
 	
 	function submitExit(){
-	  document.forms[0].getElementById("nextAction").value="exit";
+	  document.getElementById("nextAction").value="exit";
 	  document.forms[0].submit();
 	}
 	
@@ -74,9 +74,6 @@
 		<li id="stepDesc2" class=""><span class="no">3</span><span>Subscriber Group</span>&nbsp;</li>
 	</ul>
 	
-	<input id="actionId" name="action" type="hidden" value="saveorupdate"/>
-	<input id="campaignId" name="campaignId" type="hidden" value="-1"/>
-	<input id="filename" name="filename" type="hidden" value=""/>
         <fieldset>
 
             
@@ -105,7 +102,7 @@
 		<div class="btn">
 			<table>
 				<tr>
-					<!-- <td width="100"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span></td> -->
+					<td width="100"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span></td>
 					<td align="center"><a href="#" class="button green" onclick="javascript:submitExit()">Save &amp; Exit</a></td>
 					<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td>
 				</tr>
