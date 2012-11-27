@@ -41,5 +41,7 @@ public interface ICampaignStatusService {
 	public void updateCampaignStatusSender(CampaignStatus cmpnStatus);
 
 	public void updateS3Path(String s3Path, long campaignId, String time);
+	
+	public void updateSubscriberListId(long campaignId, String subscriberGroup);
 
 }

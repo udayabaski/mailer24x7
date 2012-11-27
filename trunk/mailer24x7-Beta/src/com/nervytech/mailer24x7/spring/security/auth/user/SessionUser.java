@@ -37,8 +37,9 @@ public class SessionUser implements UserDetails {
 	private final boolean accountNonLocked;
 	private final boolean credentialsNonExpired;
 	private final boolean enabled;
-	private long orgId; 
+	private long orgId;
 	private long userId;
+	private String fullName;
 
 	/**
 	 * Calls the more complex constructor with all boolean arguments set to
@@ -46,14 +47,17 @@ public class SessionUser implements UserDetails {
 	 */
 
 	public SessionUser(String username, String password,
-			Collection<? extends GrantedAuthority> authorities, long orgId,long userId,boolean enabled) {
-		this(username, password, enabled, true, true, true, authorities, orgId, userId);
+			Collection<? extends GrantedAuthority> authorities, long orgId,
+			long userId, boolean enabled, String fullName) {
+		this(username, password, enabled, true, true, true, authorities, orgId,
+				userId, fullName);
 	}
 
 	public SessionUser(String username, String password, boolean enabled,
 			boolean accountNonExpired, boolean credentialsNonExpired,
 			boolean accountNonLocked,
-			Collection<? extends GrantedAuthority> authorities,long orgId,long userId) {
+			Collection<? extends GrantedAuthority> authorities, long orgId,
+			long userId, String fullName) {
 		if (((username == null) || "".equals(username)) || (password == null)) {
 			throw new IllegalArgumentException(
 					"Cannot pass null or empty values to constructor");
@@ -68,6 +72,7 @@ public class SessionUser implements UserDetails {
 				.unmodifiableSet(sortAuthorities(authorities));
 		this.orgId = orgId;
 		this.userId = userId;
+		this.fullName = fullName;
 	}
 
 	public long getOrgId() {
@@ -84,6 +89,21 @@ public class SessionUser implements UserDetails {
 
 	public void setUserId(long userId) {
 		this.userId = userId;
+	}
+
+	/**
+	 * @return the fullName
+	 */
+	public String getFullName() {
+		return fullName;
+	}
+
+	/**
+	 * @param fullName
+	 *            the fullName to set
+	 */
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	/*

@@ -7,7 +7,7 @@
 	<!--Daily rolling file appender -->
 	<appender name="FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>../logs/skillthirst.log</File>
+		<File>../logs/nervymail.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<FileNamePattern>logFile.%d{yyyy-MM-dd}.log</FileNamePattern>
 		</rollingPolicy>
@@ -23,7 +23,7 @@
 		</encoder>
 	</appender>-->
 
-	<logger name="com.skillthirst.sdc" level="TRACE">
+	<logger name="com.nervytech.mailer24x7" level="TRACE">
 		<appender-ref ref="FILE" />
 	</logger>
 

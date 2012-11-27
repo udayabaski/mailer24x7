@@ -28,12 +28,12 @@ $(document).ready(function() {
 <script type="text/javascript">
 	
 	function submitNext(){
-	  document.forms[0].getLementById("nextAction").value="next";
+	  document.getElementById("nextAction").value="next";
 	  document.forms[0].submit();
 	}
 	
 	function submitExit(){
-	  document.forms[0].getLementById("nextAction").value="exit";
+	  document.getElementById("nextAction").value="exit";
 	  document.forms[0].submit();
 	}
 	
@@ -80,9 +80,6 @@ $(document).ready(function() {
 		<li id="stepDesc2" class=""><span class="no">3</span><span>Subscriber Group</span>&nbsp;</li>
 	</ul>
 	
-	<input id="actionId" name="action" type="hidden" value="saveorupdate"/>
-	<input id="campaignId" name="campaignId" type="hidden" value="-1"/>
-	<input id="filename" name="filename" type="hidden" value=""/>
         <fieldset>
 
             <legend>Campaign Headers</legend>

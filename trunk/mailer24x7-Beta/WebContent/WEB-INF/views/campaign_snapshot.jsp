@@ -16,7 +16,7 @@
 
 <body>
 
-<form:form id="campaign" commandName="campaignSnapshot" action="snapshot" method="POST">
+<form:form id="campaign" commandName="campaignSnapshotBean" action="snapshot" method="POST">
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
@@ -32,7 +32,7 @@
 
 <table width="98%" cellpadding="0" cellspacing="0" align="center" >
 <tr>
-<td class="content-heading" colspan="4"><img src="../images/email_add.png" class="top-icon-padd" />Snapshot for <c:out value="${campaignSnapshot.campaignName}" /></td>
+<td class="content-heading" colspan="4"><img src="${pageContext.request.contextPath}/images/email_add.png" class="top-icon-padd" />Snapshot for <c:out value="${campaignSnapshot.campaignName}" /></td>
 </tr>
 
 <tr>
@@ -58,54 +58,88 @@
 
         <div class="hd">
 			<h2>Campaign and sender</h2>
-			<span  class="options"><a href="">Edit</a></span>
+			<span  class="options"><a href="${pageContext.request.contextPath}/usr/campaign/view/step1/id/${campaignSnapshot.campaignId}">Edit</a></span>
 		</div>
 		<table width="100%" cellpadding="5" cellspacing="0" class="campaign-page">
 	    <tr valign="top" class="odd">
 			<td width="30%">Campaign Name</td>
-			<td><c:out value="${campaignSnapshot.campaignName}" /></td>
+			<td><c:out value="${campaignSnapshotBean.campaignName}" /></td>
 		</tr>
 	    <tr valign="top" class="even">
 			<td width="30%">Subject</td>
-			<td><c:out value="${campaignSnapshot.subject}" /></td>
+			<td><c:out value="${campaignSnapshotBean.subject}" /></td>
 		</tr>
 	    <tr valign="top" class="odd">
 			<td width="30%">From</td>
-			<td><c:out value="${campaignSnapshot.from}" /></td>
+			<td><c:out value="${campaignSnapshotBean.senderName}" /> < <c:out value="${campaignSnapshotBean.senderEmailId}" /> ></td>
 		</tr>
 		</table>
+		
+		<c:set var="campaignType" value="${campaignSnapshotBean.campaignType}"></c:set>
+		
         <div class="hd">
 			<h2>Content</h2>
-			<span  class="options"><a href="">Edit</a></span>
+			<c:if test="${not empty campaignType}">
+			  <span  class="options"><a href="">Edit</a></span>
+			</c:if>
 		</div>
 		<table width="100%" cellpadding="5" cellspacing="0" class="campaign-page">
-	    <tr valign="top" class="odd">
-			<td width="30%">HTML Version</td>
-			<td>Using the test template (<a href="">View a preview</a> or <a href="">change template</a>)</td>
-		</tr>
-	    <tr valign="top" class="even">
-			<td width="30%">Auto-generated plain text version</td>
+		<c:choose>
+		 <c:when test="${not empty campaignType}">
+	       <tr valign="top" class="odd">
+			<td width="30%">Campaign Type</td>
+			<td><c:out value="${campaignSnapshotBean.campaignType}" /></td>
+	 	   </tr>
+	       <tr valign="top" class="even">
+			<td width="30%">Content</td>
 			<td><a href="">Preview</a> or <a href="">edit</a></td>
-		</tr>
+		   </tr>
+		  </c:when>
+		  <c:otherwise>
+		   <tr valign="top" class="odd">
+			<td>No content found in this campaign, please click below to add/import content </td>			
+	 	   </tr>
+	 	   <tr valign="top" class="odd">
+			<td><span  class="options"><a href="${pageContext.request.contextPath}/usr/campaign/view/step2/id/${campaignSnapshotBean.campaignId}">Add Content</a></span></td>			
+	 	   </tr>
+		  </c:otherwise>
+		</c:choose>
 		</table>
+		<c:set var="listName" value="${campaignSnapshotBean.subscriberListName}"></c:set>
         <div class="hd">
 			<h2>Recipients</h2>
-			<span  class="options"><a href="">Add more recipients</a></span>
+			<span  class="options">
+             <c:if test="${not empty listName}">
+			  <a href="${pageContext.request.contextPath}/usr/subscriber/view/step3/id/${campaignSnapshotBean.campaignId}">Add more recipients</a>
+			 </c:if>
+			</span>
 		</div>
 		<table width="100%" cellpadding="5" cellspacing="0" class="campaign-page">
+		<c:choose>
+		<c:when test="${not empty listName}">
 	    <tr valign="top" class="odd">
 			<td width="30%">Subscriber List</td>
-			<td><c:out value="${campaignSnapshot.subscriberListName}" /></td>
+			<td><c:out value="${campaignSnapshotBean.subscriberListName}" /></td>
 		</tr>
 	    <tr valign="top" class="even">
 			<td width="30%">Total</td>
-			<td><c:out value="${campaignSnapshot.subscribersCount}" /></td>
+			<td><c:out value="${campaignSnapshotBean.subscribersCount}" /></td>
 		</tr>
+		</c:when>
+		<c:otherwise>
+		  <tr valign="top" class="odd">
+			<td>No recipients selected for this campaign, please click below to add recipients</td>			
+	 	   </tr>
+	 	   <tr valign="top" class="odd">
+			<td><span  class="options"><a href="${pageContext.request.contextPath}/usr/subscriber/view/step3/id/${campaignSnapshotBean.campaignId}">Add Recipients</a></span></td>			
+	 	   </tr>
+		</c:otherwise>
+		</c:choose>
 		</table>
 		<div class="btn">
 			<table>
 				<tr>
-					<td width="100"><span class="previous"><a href="campaign_step2.jsp">Previous</a></span></td>
+					<!-- <td width="100"><span class="previous"><a href="campaign_step2.jsp">Previous</a></span></td> -->
 					<td align="center"><a href="#" class="button green" onclick="document.forms[0].submit();return false;">Save &amp; Exit</a></td>
 					<td width="100"><span class="next1"><a href="campaign_step3.jsp">Next</a></span></td>
 				</tr>

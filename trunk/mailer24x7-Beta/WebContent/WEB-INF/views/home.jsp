@@ -72,7 +72,7 @@
 																<ul class="list">
 																    <c:forEach items="${homeBean.campaignsList}" var="campaign" varStatus="reStatus">
 																		<li class="odd">
-																			<h4><c:out value="${campaign.campaignName}" /></h4>
+																			<h4><a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}"><c:out value="${campaign.campaignName}" /></a></h4>
 																			<p class="clearfix">is <c:out value="${campaign.campaignStatus}" />; Created on <c:out value="${campaign.createdDate}" /> ; by <c:out value="${campaign.createdBy}" /></p>
 																		</li>
 																    </c:forEach>
@@ -82,7 +82,7 @@
 																<h3>Quick Links</h3>
 																<ul>
 																	<li>Add Contacts</li>
-																	<li>Create Email Campaign</li>
+																	<li><a href="${pageContext.request.contextPath}/usr/campaign/new">Create Email Campaign</a></li>
 																</ul>
 															</td>
 														</tr>

@@ -41,7 +41,7 @@
 		correct base-package -->
 	<context:component-scan base-package="com.nervytech.mailer24x7">
 		<context:include-filter type="regex"
-			expression="(service|constroller|resource)\..*" />
+			expression="(service|controller|resource)\..*" />
 	</context:component-scan>
 
 
@@ -286,12 +286,12 @@
 		<property name="triggers">
 			<list>
 				<!-- <ref bean="cronTrigger" /> -->
-				<ref bean="campaignNowTrigger" />
+				<!-- <ref bean="campaignNowTrigger" />
 				<ref bean="campaignLaterTrigger" />
 				<ref bean="biHoursCampaignStatsSyncTrigger" />
-				<ref bean="twelveHoursCampaignStatsSyncTrigger" />
+				<ref bean="twelveHoursCampaignStatsSyncTrigger" /> -->
 			</list>
-		</property>
+		</property> 
 		<!-- <property name="dataSource" ref="dataSource"/> <property name="quartzProperties"> 
 			<props> <prop key="org.quartz.scheduler.instanceName">MailerClusteredScheduler</prop> 
 			<prop key="org.quartz.scheduler.instanceId">AUTO</prop> <prop key="org.quartz.jobStore.misfireThreshold">60000</prop> 

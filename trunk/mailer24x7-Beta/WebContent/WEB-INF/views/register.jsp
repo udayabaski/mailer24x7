@@ -47,20 +47,28 @@
       <form:form action="join"  commandName="registrationForm" method="POST" id="registration">
       <form:hidden path="uuId" />
       	
-      	<c:if test="${not empty registrationForm.userId}">
-         <div class="info">Thanks for registration. An activation mail has been sent to your email. Please follow the mail. 
-          Click the link below to send the mail again if you have not got the mail. <a href="${pageContext.request.contextPath}/reg/join/confirm/resend/usr/<c:out value="${regForm.userId}"/>">Send now.</a>
-         </div>
-        </c:if>
-      
       	
 		<div id="signUp" class="clearfix toggleTab">
 		
 			
             <table width="100%" cellpadding="0" cellspacing="0">
+            
+            
+      	
+         <div class="${registrationForm.messageType}">
+         </div>
+            
             <tr>
             <td valign="top" width="70%">
             <table width="80%" cellpadding="0" cellspacing="0">
+            
+            <c:set var="uuId" value="${registrationForm.uuId}"></c:set>
+            <c:if test="${not empty uuId}">
+            <tr><td colspan="3" height="20" class="${registrationForm.messageType}">Thanks for registration. An activation mail has been sent to your email. Please follow the mail. 
+          Click the link below to send the mail again if you have not got the mail. <a href="${pageContext.request.contextPath}/reg/join/confirm/resend/usr/<c:out value="${registrationForm.uuId}"/>">Send now.</a></td></tr>
+            <tr><td colspan="3" height="20"></td></tr>
+             </c:if>
+            
             <tr>
             <td width="45%">Full Name</td>
             <td width="3%"></td>
@@ -70,12 +78,13 @@
              </td>
             </tr>
             <tr><td colspan="3" height="20"></td></tr>
+            
              <tr>
             <td>Company</td>
             <td width="3%"></td>
              <td>
-              <form:input path="organization" id="organization" />
-              <span class="errortxt"><form:errors path="organization" /></span>
+              <form:input path="company" id="company" />
+              <span class="errortxt"><form:errors path="company" /></span>
             </td>
            </tr>
             

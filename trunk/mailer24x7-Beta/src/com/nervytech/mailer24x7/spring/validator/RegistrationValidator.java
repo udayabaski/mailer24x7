@@ -26,7 +26,7 @@ public class RegistrationValidator {
 		RegistrationForm registrationForm = (RegistrationForm) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "fullName", "NotEmpty.registrationForm.fullName","Full name must not be empty.");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "organization", "NotEmpty.registrationForm.organization","Company must not be empty.");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "company", "NotEmpty.registrationForm.company","Company must not be empty.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "website", "NotEmpty.registrationForm.website","Website must not be empty.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "country", "NotEmpty.registrationForm.country","Country must not be empty.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "emailId", "NotEmpty.registrationForm.emailId","Email must not be empty.");

@@ -173,4 +173,15 @@ public class CampaignStatusService implements ICampaignStatusService {
 			throw new RuntimeException(e.getMessage());
 		}		
 	}
+	
+	@Override
+	public void updateSubscriberListId(long campaignId, String subscriberGroup) {
+		try {
+			cmpnStatusDAO.updateSubscriberListId(campaignId, subscriberGroup);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}		
+	}
+	
 }

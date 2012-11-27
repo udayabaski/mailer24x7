@@ -37,7 +37,7 @@ public class SubscriberForm {
 
 	private int moveTo;
 
-	private String campaignId;
+	private long campaignId;
 
 	public int getMoveTo() {
 		return moveTo;
@@ -140,7 +140,7 @@ public class SubscriberForm {
 	/**
 	 * @return the campaignId
 	 */
-	public String getCampaignId() {
+	public long getCampaignId() {
 		return campaignId;
 	}
 
@@ -148,7 +148,7 @@ public class SubscriberForm {
 	 * @param campaignId
 	 *            the campaignId to set
 	 */
-	public void setCampaignId(String campaignId) {
+	public void setCampaignId(long campaignId) {
 		this.campaignId = campaignId;
 	}
 

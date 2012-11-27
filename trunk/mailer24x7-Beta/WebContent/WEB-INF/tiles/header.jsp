@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-<script type="text/javascript" src="../script/jquery-1.6.2.min.js"></script>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <script>
 (function($){
 $.fn.fixedMenu=function(){
@@ -87,8 +86,12 @@ $(this).parent().addClass('active-menu');
                 
             </li>
             <li>
-                <a href="#">Contact</a>
+                <a href="#">About Us</a>
                 
+            </li>
+            
+            <li>
+               Welcome <a href="#" class="menulink"><security:authentication property="principal.fullName"/></a>                
             </li>
         </ul>
 
@@ -124,11 +127,11 @@ $(this).parent().addClass('active-menu');
 <div class="left"></div>
 <ul id="menu">
          
-<li><a href="home.form">Home</a></li>  
-<li><a href="campaign.form?action=new">Email</a></li>
-<li><a href="subscriber.form?action=viewSubGroups">Subscribe</a></li>
-<li><a href="reports.form?action=viewReports">Reports</a></li>
-<li class="active"><a href="profile.form?action=view">Admin</a></li>
+<li><a href="${pageContext.request.contextPath}/usr/home">Home</a></li>  
+<li><a href="${pageContext.request.contextPath}/usr/campaign/view/all">Email</a></li>
+<li><a href="${pageContext.request.contextPath}/usr/subscriber/view/all">Subscribe</a></li>
+<li><a href="${pageContext.request.contextPath}/usr/reports/view/all">Reports</a></li>
+<li class="active"><a href="${pageContext.request.contextPath}/usr/admin">Admin</a></li>
 
 
 </ul>

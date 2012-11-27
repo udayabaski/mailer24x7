@@ -12,10 +12,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
-import com.nervytech.mailer24x7.common.enums.CampaignStatusEnum;
 import com.nervytech.mailer24x7.model.dao.interfaces.IHistoryDAO;
 import com.nervytech.mailer24x7.spring.bean.ActivityBean;
-import com.nervytech.mailer24x7.spring.bean.CampaignBean;
 
 /**
  * A data access object (DAO) providing persistence and search support for Users
@@ -50,11 +48,11 @@ public class HistoryDAO extends JdbcDaoSupport implements IHistoryDAO {
 			}
 		};
 
-		String selectCampaignQuery = "SELECT H.HISTORY_ID,H.SUBJECT,C.CREATED_BY,C.CREATED_TIME "
+		String selectCampaignQuery = "SELECT H.HISTORY_ID,H.SUBJECT,H.CREATED_BY,H.CREATED_TIME "
 				+ " FROM HISTORY H"
 				+ " WHERE H.ORG_ID="
 				+ orgId
-				+ " ORDER BY H.CREATED_TIME DSC LIMIT " + count;
+				+ " ORDER BY H.CREATED_TIME DESC LIMIT " + count;
 
 		logger.debug("Schedule Campaign Query : " + selectCampaignQuery);
 

@@ -13,6 +13,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.nervytech.mailer24x7.common.enums.CampaignStatusEnum;
+import com.nervytech.mailer24x7.common.enums.CampaignTypeEnum;
+import com.nervytech.mailer24x7.common.util.MailerUtil;
 import com.nervytech.mailer24x7.domain.model.Campaign;
 import com.nervytech.mailer24x7.domain.model.CampaignSchedulerModel;
 import com.nervytech.mailer24x7.model.dao.interfaces.ICampaignDAO;
@@ -87,9 +89,9 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 
 		String selectCampaignQuery = "SELECT C.CAMPAIGN_ID,C.CAMPAIGN_NAME,C.CREATED_EMAILID,C.CREATED_TIME,CS.STATUS "
 				+ " FROM CAMPAIGN C,CAMPAIGN_STATUS CS"
-				+ " WHERE C.CAMPAIGN_ID=CS.CAMPAIGN_ID C.ORG_ID="
+				+ " WHERE C.CAMPAIGN_ID=CS.CAMPAIGN_ID AND C.ORG_ID="
 				+ orgId
-				+ " ORDER BY C.CREATED_TIME DSC LIMIT " + count;
+				+ " ORDER BY C.CREATED_TIME DESC LIMIT " + count;
 
 		logger.debug("Schedule Campaign Query : " + selectCampaignQuery);
 
@@ -163,13 +165,13 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 	}
 
 	@Override
-	public List<CampaignSnapshotBean> getCampaign(long campaignId) {
+	public List<CampaignSnapshotBean> getCampaign(final long campaignId) {
 		RowMapper<CampaignSnapshotBean> mapper = new RowMapper<CampaignSnapshotBean>() {
 			public CampaignSnapshotBean mapRow(ResultSet rs, int rowNum)
 					throws SQLException {
 				CampaignSnapshotBean cmpn = new CampaignSnapshotBean();
 
-				cmpn.setCampaignId(rs.getLong("CAMPAIGN_ID"));
+				cmpn.setCampaignId(campaignId);
 				cmpn.setCampaignName(rs.getString("CAMPAIGN_NAME"));
 				cmpn.setCampaignStatus(CampaignStatusEnum.values()[rs
 						.getInt("STATUS")].name());
@@ -179,17 +181,22 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 				cmpn.setSubscriberListId(rs.getString("SUBSCRIBER_LIST_ID"));
 				cmpn.setSubscriberListName(rs.getString("SUBSCRIBER_LIST_NAME"));
 				cmpn.setSenderId(rs.getString("SENDER_ID"));
-
+				
+				System.out.println("CAMPAIGn_TYPEEEEEEE "+rs.getInt("CAMPAIGN_TYPE"));
+				if(rs.getInt("CAMPAIGN_TYPE") != -1){
+					cmpn.setCampaignType(MailerUtil.getCampaignType(rs.getInt("CAMPAIGN_TYPE")));
+				}
+				
 				return cmpn;
 			}
 		};
 
 		String selectCampaignQuery = "SELECT C.CAMPAIGN_NAME,C.SUBJECT,C.CREATED_TIME,CS.STATUS, "
-				+ " CSR.DISPLAY_NAME,CSR.EMAIL_ID, CS.SUBSCRIBER_LIST_ID, SL.SUBSCRIBER_LIST_ID,"
+				+ " C.CAMPAIGN_TYPE,CSR.DISPLAY_NAME,CSR.EMAIL_ID, CS.SUBSCRIBER_LIST_ID,"
 				+ " CS.SENDER_ID,SL.SUBSCRIBER_LIST_NAME"
-				+ " FROM CAMPAIGN C,CAMPAIGN_STATUS CS,CAMPAIGN_SENDER CSR,SUBSCRIBER_LIST SL"
+				+ " FROM CAMPAIGN C,CAMPAIGN_STATUS CS LEFT OUTER JOIN SUBSCRIBER_LIST SL ON SL.SUBSCRIBER_LIST_ID,CAMPAIGN_SENDER CSR"
 				+ " WHERE C.CAMPAIGN_ID=CS.CAMPAIGN_ID AND CS.SENDER_ID=CSR.SENDER_ID AND "
-				+ " CS.SUBSCRIBER_LIST_ID=SL.SUBSCRIBER_LIST_ID AND C.CAMPAIGN_ID="
+				+ " C.CAMPAIGN_ID="
 				+ campaignId;
 
 		logger.debug("Schedule Campaign Query : " + selectCampaignQuery);
@@ -258,7 +265,7 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 	@Override
 	public void updateContentType(long campaignId, int campaignType) {
 		String updateQuery = "UPDATE CAMPAIGN SET CAMPAIGN_TYPE='"
-				+ campaignType + "'" + "' WHERE CAMPAIGN_ID=" + campaignId;
+				+ campaignType + "' WHERE CAMPAIGN_ID=" + campaignId;
 
 		logger.debug("Update Campaign Query : " + updateQuery);
 
@@ -370,6 +377,17 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 		logger.debug("Schedule Campaign Query : " + selectCampaignQuery);
 
 		return getJdbcTemplate().query(selectCampaignQuery, mapper);
+	}
+
+	@Override
+	public int getCampaignType(long campaignId) {
+		String getCampaignQuery = "SELECT CAMPAIGN_TYPE FROM CAMPAIGN WHERE CAMPAIGN_ID="
+				+ campaignId;
+
+		logger.debug("Check Subscriber List Query : " + getCampaignQuery);
+
+		return getJdbcTemplate().queryForInt(getCampaignQuery);
+
 	}
 
 }
