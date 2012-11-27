@@ -16,17 +16,17 @@
 <script type="text/javascript">
 
 	function submitPrev(){
-	  document.forms[0].getElementById("nextAction").value="prev";
+	  document.getElementById("nextAction").value="prev";
 	  document.forms[0].submit();
 	}
 	
 	function submitNext(){
-	  document.forms[0].getElementById("nextAction").value="next";
+	  document.getElementById("nextAction").value="next";
 	  document.forms[0].submit();
 	}
 	
 	function submitExit(){
-	  document.forms[0].getElementById("nextAction").value="exit";
+	  document.getElementById("nextAction").value="exit";
 	  document.forms[0].submit();
 	}
 	
@@ -36,7 +36,7 @@
 
 <body>
 
-<form:form id="subscriberForm" commandName="subscriberForm" action="${pageContext.request.contextPath}/usr/subscribers/step3/save/group" method="POST" enctype="multipart/form-data">
+<form:form id="subscriberForm" commandName="subscriberForm" action="${pageContext.request.contextPath}/usr/subscriber/step3/save/group" method="POST" enctype="multipart/form-data">
 <form:hidden path="nextAction" id="nextAction" />
 <form:hidden path="campaignId" />
 
@@ -131,7 +131,7 @@
 				<tr>
 					<!-- <td width="100"><span class="previous"><a href="CreateCampaignStep2.html">Previous</a></span></td>  
 					<td align="center"><a href="#" class="button green" onclick="document.forms[0].submit();return false;">Save &amp; Exit</a></td> -->
-					<td width="100"><span class="next1"><a href="CreateCampaignStep3.html">Next</a></span></td>
+					<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td>
 				</tr>
 			</table>
 			
