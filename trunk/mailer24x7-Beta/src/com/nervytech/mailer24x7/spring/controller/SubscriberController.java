@@ -30,7 +30,6 @@ import com.nervytech.mailer24x7.common.enums.SubscriberStatusEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
 import com.nervytech.mailer24x7.domain.model.SubscriberIdStatus;
 import com.nervytech.mailer24x7.domain.model.SubscriberList;
-import com.nervytech.mailer24x7.model.service.api.ICampaignService;
 import com.nervytech.mailer24x7.model.service.api.ICampaignStatusService;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberIdStatusService;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberListService;
@@ -106,7 +105,7 @@ public class SubscriberController {
 		return "campaignStep3";
 	}
 	
-	@RequestMapping(value = "/save/step3", method = RequestMethod.GET)
+	@RequestMapping(value = "/save/step3", method = RequestMethod.POST)
 	public String saveStep3(CampaignStep3Form step3Form, BindingResult result,
 			Map model) throws MailerException {
 		
@@ -117,7 +116,7 @@ public class SubscriberController {
 		
 	}
 
-	@RequestMapping(value = "/step3/save/group", method = RequestMethod.GET)
+	@RequestMapping(value = "/step3/save/group", method = RequestMethod.POST)
 	public String saveGroup(SubscriberForm subForm, BindingResult result,
 			Map model) throws MailerException {
 

@@ -39,6 +39,8 @@ public class SubscriberForm {
 
 	private long campaignId;
 
+	private String nextAction;
+
 	public int getMoveTo() {
 		return moveTo;
 	}
@@ -150,6 +152,21 @@ public class SubscriberForm {
 	 */
 	public void setCampaignId(long campaignId) {
 		this.campaignId = campaignId;
+	}
+
+	/**
+	 * @return the nextAction
+	 */
+	public String getNextAction() {
+		return nextAction;
+	}
+
+	/**
+	 * @param nextAction
+	 *            the nextAction to set
+	 */
+	public void setNextAction(String nextAction) {
+		this.nextAction = nextAction;
 	}
 
 }
