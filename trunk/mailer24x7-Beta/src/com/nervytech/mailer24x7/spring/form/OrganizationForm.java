@@ -1,22 +1,21 @@
 /**
  * 
  */
-package com.nervytech.mailer24x7.domain.model;
+package com.nervytech.mailer24x7.spring.form;
+
+import org.springframework.stereotype.Repository;
 
 /**
- * @author bsikkaya
+ * @author ADMIN
  * 
  */
-public class Organization {
+@Repository("organizationForm")
+public class OrganizationForm {
 
-	private long orgId;
 	private String orgName;
 	private String displayName;
-	private int status;
-	private String createdTime;
-	private String createdEmailId;
-	private String contactEmail;
 	private String contactNo;
+	private String contactEmail;
 	private String website;
 	private String address;
 	private String country;
@@ -24,21 +23,8 @@ public class Organization {
 	private String senderEmail;
 	private String updatedTime;
 	private String updatedEmailId;
-
-	/**
-	 * @return the orgId
-	 */
-	public long getOrgId() {
-		return orgId;
-	}
-
-	/**
-	 * @param orgId
-	 *            the orgId to set
-	 */
-	public void setOrgId(long orgId) {
-		this.orgId = orgId;
-	}
+	private String message;
+	private String messagType;
 
 	/**
 	 * @return the orgName
@@ -71,48 +57,18 @@ public class Organization {
 	}
 
 	/**
-	 * @return the status
+	 * @return the contactNo
 	 */
-	public int getStatus() {
-		return status;
+	public String getContactNo() {
+		return contactNo;
 	}
 
 	/**
-	 * @param status
-	 *            the status to set
+	 * @param contactNo
+	 *            the contactNo to set
 	 */
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	/**
-	 * @return the createdTime
-	 */
-	public String getCreatedTime() {
-		return createdTime;
-	}
-
-	/**
-	 * @param createdTime
-	 *            the createdTime to set
-	 */
-	public void setCreatedTime(String createdTime) {
-		this.createdTime = createdTime;
-	}
-
-	/**
-	 * @return the createdEmailId
-	 */
-	public String getCreatedEmailId() {
-		return createdEmailId;
-	}
-
-	/**
-	 * @param createdEmailId
-	 *            the createdEmailId to set
-	 */
-	public void setCreatedEmailId(String createdEmailId) {
-		this.createdEmailId = createdEmailId;
+	public void setContactNo(String contactNo) {
+		this.contactNo = contactNo;
 	}
 
 	/**
@@ -128,21 +84,6 @@ public class Organization {
 	 */
 	public void setContactEmail(String contactEmail) {
 		this.contactEmail = contactEmail;
-	}
-
-	/**
-	 * @return the contactNo
-	 */
-	public String getContactNo() {
-		return contactNo;
-	}
-
-	/**
-	 * @param contactNo
-	 *            the contactNo to set
-	 */
-	public void setContactNo(String contactNo) {
-		this.contactNo = contactNo;
 	}
 
 	/**
@@ -250,42 +191,32 @@ public class Organization {
 		this.updatedEmailId = updatedEmailId;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
+	/**
+	 * @return the message
 	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Organization [orgId=");
-		builder.append(orgId);
-		builder.append(", orgName=");
-		builder.append(orgName);
-		builder.append(", displayName=");
-		builder.append(displayName);
-		builder.append(", status=");
-		builder.append(status);
-		builder.append(", createdTime=");
-		builder.append(createdTime);
-		builder.append(", createdEmailId=");
-		builder.append(createdEmailId);
-		builder.append(", contactEmail=");
-		builder.append(contactEmail);
-		builder.append(", contactNo=");
-		builder.append(contactNo);
-		builder.append(", website=");
-		builder.append(website);
-		builder.append(", address=");
-		builder.append(address);
-		builder.append(", country=");
-		builder.append(country);
-		builder.append(", timeZone=");
-		builder.append(timeZone);
-		builder.append(", senderEmail=");
-		builder.append(senderEmail);
-		builder.append("]");
-		return builder.toString();
+	public String getMessage() {
+		return message;
 	}
 
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * @return the messagType
+	 */
+	public String getMessagType() {
+		return messagType;
+	}
+
+	/**
+	 * @param messagType the messagType to set
+	 */
+	public void setMessagType(String messagType) {
+		this.messagType = messagType;
+	}
+	
 }

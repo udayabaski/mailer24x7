@@ -14,4 +14,8 @@ public interface IOrganizationService {
 	public Organization getOrganization(String orgName, String country) ;
 	
 	public long saveOrganization(Organization org) ;
+
+	public Organization getOrganization(long orgId);
+
+	public void updateOrganization(Organization form);
 }

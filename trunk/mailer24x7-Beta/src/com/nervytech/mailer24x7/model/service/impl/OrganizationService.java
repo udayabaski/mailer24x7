@@ -53,4 +53,29 @@ public class OrganizationService implements IOrganizationService {
 		
 	}
 
+	@Override
+	public Organization getOrganization(long orgId) {
+		Organization organization = null;
+		try {
+			List<Organization> organizations = orgDAO.getOrganization(orgId);
+			if(organizations != null && organizations.size() > 0)
+				organization = organizations.get(0);
+		} catch (Exception e) {
+			logger.error("Error while retreiving user detail.",e);
+			throw new RuntimeException(e.getMessage());
+		}
+		
+		return organization;
+	}
+
+	@Override
+	public void updateOrganization(Organization form) {
+		try {
+			 orgDAO.updateOrganization(form);
+		} catch (Exception e) {
+			logger.error("Error while retreiving user detail.",e);
+			throw new RuntimeException(e.getMessage());
+		}		
+	}
+
 }

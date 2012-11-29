@@ -97,4 +97,44 @@ public class OrganizationDAO extends JdbcDaoSupport implements IOrganizationDAO 
 			ApplicationContext ctx) {
 		return (OrganizationDAO) ctx.getBean("OrganizationDAO");
 	}
+
+	@Override
+	public List<Organization> getOrganization(long orgId) {
+		RowMapper<Organization> mapper = new RowMapper<Organization>() {
+			public Organization mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				Organization org = new Organization();
+				org.setOrgName(rs.getString("ORG_NAME"));
+				org.setContactEmail(rs.getString("CONTACT_EMAIL"));
+				org.setDisplayName(rs.getString("DISPLAYNAME"));
+				org.setContactNo(rs.getString("CONTACT_NO"));
+				org.setWebsite(rs.getString("WEBSITE"));
+				org.setCountry(rs.getString("COUNTRY"));
+				org.setAddress(rs.getString("ADDRESS"));
+				org.setTimeZone(rs.getString("TIMEZONE"));
+				org.setSenderEmail(rs.getString("SENDER_EMAIL"));
+				return org;
+			}
+		};
+		String orgSQL = "SELECT * FROM ORGANIZATION WHERE ORG_ID="+orgId;
+
+		logger.debug("Organization checking Query : " + orgSQL);
+
+		return getJdbcTemplate().query(orgSQL, mapper);
+	}
+
+	@Override
+	public void updateOrganization(Organization org) {
+		String updateOrgQuery = "UPDATE ORGANIZATION SET DISPLAYNAME='"+org.getDisplayName()+"'," +
+				" CONTACT_EMAIL='"+org.getContactEmail()+"',CONTACT_NO='"+org.getContactNo()+"'," +
+				" WEBSITE='"+org.getWebsite()+"',ADDRESS='"+org.getWebsite()+"',COUNTRY='"+org.getCountry()+"'," +
+				" TIMEZONE='"+org.getTimeZone()+"',SENDER_EMAIL='"+org.getSenderEmail()+"'," +
+				" UPDATED_TIME='"+org.getUpdatedTime()+"',UPDATED_EMAILID='"+org.getUpdatedEmailId()+"' " +
+						" WHERE ORG_ID="+org.getOrgId();
+
+		logger.debug("Save Oraganization Query : " + updateOrgQuery);
+
+		getJdbcTemplate().execute(updateOrgQuery);
+		
+	}
 }

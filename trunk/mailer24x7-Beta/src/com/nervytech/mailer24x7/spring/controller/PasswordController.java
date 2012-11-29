@@ -1,8 +1,9 @@
 package com.nervytech.mailer24x7.spring.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -12,22 +13,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nervytech.mailer24x7.common.enums.MessageTypeEnum;
 import com.nervytech.mailer24x7.common.enums.UserStatusEnum;
 import com.nervytech.mailer24x7.common.enums.UuidTypeEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
+import com.nervytech.mailer24x7.common.util.UUIDUtil;
 import com.nervytech.mailer24x7.domain.model.User;
 import com.nervytech.mailer24x7.domain.model.UserUuid;
 import com.nervytech.mailer24x7.mailgun.MailgunSendUtil;
@@ -36,6 +36,8 @@ import com.nervytech.mailer24x7.model.service.api.IUserService;
 import com.nervytech.mailer24x7.model.service.api.IUserUuidService;
 import com.nervytech.mailer24x7.spring.form.LoginForm;
 import com.nervytech.mailer24x7.spring.form.RegistrationForm;
+import com.nervytech.mailer24x7.spring.form.UserForm;
+import com.nervytech.mailer24x7.spring.security.auth.user.SessionUser;
 
 @Controller
 @RequestMapping(value = { "/pub/pwd", "/usr/pwd" })
@@ -81,7 +83,73 @@ public class PasswordController {
 		return "forgotpwd";
 	}
 
-	@RequestMapping(params = "action=resetmail", method = RequestMethod.POST)
+	@RequestMapping(value = "/change", method = RequestMethod.GET)
+	public String changePassword(Map model, HttpServletRequest request) {
+
+		UserForm form = new UserForm();
+
+		model.put("userForm", form);
+
+		return "changepwd";
+	}
+	
+	@RequestMapping(value = "/update/new", method = RequestMethod.POST)
+	public String updateNewPwd(UserForm userForm, BindingResult result,
+			Map model, HttpServletRequest request) {
+		
+		ValidationUtils.rejectIfEmptyOrWhitespace(result, "oldPassword",
+				"NotEmpty.profileForm.oldPassword", "Old Password must not be empty.");
+		ValidationUtils.rejectIfEmptyOrWhitespace(result, "password",
+				"NotEmpty.profileForm.password", "Password must not be empty.");
+		ValidationUtils.rejectIfEmptyOrWhitespace(result, "confirmPassword",
+				"NotEmpty.profileForm.confirmPassword",
+				"Confirm password must not be empty.");
+
+		if (!(userForm.getPassword()).equals(userForm
+				.getConfirmPassword())) {
+			result.rejectValue("confirmPassword",
+					"matchingPassword.profileForm.password",
+					"Password and Confirm Password does not match.");
+		}
+
+		if (result.hasErrors()) {
+			return "resetpwd";
+		}
+		
+		String userId = userForm.getUserId();
+
+		User user = usrService.getUserByUserId(Long.parseLong(userId));
+		
+		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		SessionUser userDetails = new SessionUser(user.getEmailId(),
+				user.getPassword(), authorities, user.getOrgId(),
+				user.getUserId(), true, user.getFullName());
+
+		String oldEncodedPassword = passwordEncoder.encodePassword(userForm.getOldPassword(), saltSource.getSalt(userDetails));
+		String actualPassword = user.getPassword();
+		
+		if(!oldEncodedPassword.equals(actualPassword)){
+			result.rejectValue("oldPassword",
+					"matchingPassword.profileForm.oldPassword",
+					"Old Password does not match.");
+		}
+		
+		user.setPassword(passwordEncoder.encodePassword(
+				userForm.getPassword(), saltSource.getSalt(userDetails)));
+
+		usrService.updateEncodedPassword(user);
+		
+		UserForm form = new UserForm();
+		form.setMessage("Password updated successfully");
+		form.setMessageType(MessageTypeEnum.SUCCESS.name());
+
+		model.put("userForm", form);
+
+		return "changepwd";
+
+	}
+
+	@RequestMapping(value = "/reset", method = RequestMethod.POST)
 	public String sendResetMail(RegistrationForm regForm, BindingResult result,
 			Map model, HttpServletRequest request) {
 
@@ -107,7 +175,7 @@ public class PasswordController {
 
 		UserUuid uuid = new UserUuid();
 		uuid.setUserId(user.getUserId());
-		uuid.setUuid(UUID.randomUUID().toString() + "-"
+		uuid.setUuid(UUIDUtil.getTimeUUID().toString() + "-"
 				+ System.currentTimeMillis());
 		uuid.setCreatedTime(MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
 		uuid.setType(UuidTypeEnum.RESET.getStatus());
@@ -118,7 +186,10 @@ public class PasswordController {
 				+ user.getEmailId());
 
 		String resetUrl = MailerUtil.RESET_MAIL_URL;
-		resetUrl = resetUrl.replaceAll("RESET_ID", uuid.getUuid());
+		resetUrl = resetUrl.replaceAll("EMAIL_ID",
+				regForm.getEmailId());
+		resetUrl = resetUrl.replaceAll("RESET_ID",
+				uuid.getUuid());
 
 		String content = "Hi "
 				+ user.getFullName()
@@ -136,15 +207,13 @@ public class PasswordController {
 		return "forgotpwd";
 	}
 
-	@RequestMapping(value = "/reset", method = RequestMethod.GET)
-	public String resetPassword(@RequestParam String id,
-			RegistrationForm regForm, BindingResult result, Map model,
-			HttpServletRequest request) {
+	@RequestMapping(value = "/reset/confirm/email/{emailId}/id/{uuId}", method = RequestMethod.GET)
+	public String resetPassword(@PathVariable String emailId,@PathVariable String uuId,Map model) {
 
 		String userId = null;
 
 		try {
-			userId = usrUuidService.getUserId(id);
+			userId = usrUuidService.getUserId(uuId);
 		} catch (Exception e) {
 
 			logger.warn("Invalid reset id was sent !!!");
@@ -156,16 +225,58 @@ public class PasswordController {
 			model.put("loginForm", loginForm);
 			return "login";
 		}
+		
+		RegistrationForm form = new RegistrationForm();
+		form.setUserId(userId);
+		
+		model.put("registrationForm", form);
 
-		/*
-		 * UserForm usrForm = new UserForm();
-		 * 
-		 * usrForm.setAction("updatepwd"); usrForm.setUserId(userId);
-		 * 
-		 * model.put("profileForm", usrForm);
-		 */
 		return "resetpwd";
 	}
+	
+	@RequestMapping(value = "/update/pwd", method = RequestMethod.GET)
+	public String updatePassword(RegistrationForm regForm,BindingResult result,Map model) {
+		
+		ValidationUtils.rejectIfEmptyOrWhitespace(result, "password",
+				"NotEmpty.profileForm.password", "Password must not be empty.");
+		ValidationUtils.rejectIfEmptyOrWhitespace(result, "confirmPassword",
+				"NotEmpty.profileForm.confirmPassword",
+				"Confirm password must not be empty.");
+
+		if (!(regForm.getPassword()).equals(regForm
+				.getConfirmPassword())) {
+			result.rejectValue("confirmPassword",
+					"matchingPassword.profileForm.password",
+					"Password and Confirm Password does not match.");
+		}
+
+		if (result.hasErrors()) {
+			return "resetpwd";
+		}
+		
+		String userId = regForm.getUserId();
+
+		User user = usrService.getUserByUserId(Long.parseLong(userId));
+
+		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		SessionUser userDetails = new SessionUser(user.getEmailId(),
+				user.getPassword(), authorities, user.getOrgId(),
+				user.getUserId(), true, user.getFullName());
+
+		user.setPassword(passwordEncoder.encodePassword(
+				regForm.getPassword(), saltSource.getSalt(userDetails)));
+
+		usrService.updateEncodedPassword(user);
+
+		usrUuidService.deleteUuid(userId);
+		
+		LoginForm loginForm = new LoginForm();
+		loginForm.setMessage(MailerUtil.PASSWORD_RESET_MESSAGE);
+		loginForm.setMessageType(MessageTypeEnum.SUCCESS.name());
+		model.put("loginForm", loginForm);
+		return "login";
+	}
+
 
 /*	@RequestMapping(params = "action=updatepwd", method = RequestMethod.POST)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)

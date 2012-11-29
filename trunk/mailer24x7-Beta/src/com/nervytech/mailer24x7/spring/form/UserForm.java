@@ -7,39 +7,28 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author ADMIN
- *
+ * 
  */
 @Repository("userForm")
 public class UserForm {
-  
-    protected String userName;
+	protected String userName;
+	protected String password;
+	protected String confirmPassword;
+	protected String emailId;
+	protected String displayName;
+	protected String contactNumber;
+	protected String fullName;
+	protected String language;
+	protected String timeZone;
+	private String orgId;
+	private String userId;
+	private String role;
+	private String oldPassword;
+	private String action;
+	private String updatedTime;
+	private String message;
+	private String messageType;
 
-    protected String password;
-	
-    protected String confirmPassword;
-    
-    protected String emailId;
-    
-    protected String displayName;
-    
-    protected String contactNumber;
-    
-    protected String fullName;
-    
-    protected String language;
-    
-    protected String timeZone;
-    
-    private String orgId;
-    
-    private String userId;
-    
-    private String role;
-    
-    private String oldPassword;
-    
-    private String action;
-    
 	public String getAction() {
 		return action;
 	}
@@ -150,6 +139,51 @@ public class UserForm {
 
 	public void setTimeZone(String timeZone) {
 		this.timeZone = timeZone;
+	}
+
+	/**
+	 * @return the updatedTime
+	 */
+	public String getUpdatedTime() {
+		return updatedTime;
+	}
+
+	/**
+	 * @param updatedTime
+	 *            the updatedTime to set
+	 */
+	public void setUpdatedTime(String updatedTime) {
+		this.updatedTime = updatedTime;
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * @param message
+	 *            the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * @return the messageType
+	 */
+	public String getMessageType() {
+		return messageType;
+	}
+
+	/**
+	 * @param messageType
+	 *            the messageType to set
+	 */
+	public void setMessageType(String messageType) {
+		this.messageType = messageType;
 	}
 
 }

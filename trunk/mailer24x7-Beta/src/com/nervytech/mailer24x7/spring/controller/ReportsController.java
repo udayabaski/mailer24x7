@@ -1,5 +1,10 @@
 package com.nervytech.mailer24x7.spring.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,9 +17,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nervytech.mailer24x7.common.enums.CampaignStatusEnum;
+import com.nervytech.mailer24x7.common.enums.SubscriberCampaignStatusEnum;
 import com.nervytech.mailer24x7.model.service.api.ICampaignService;
+import com.nervytech.mailer24x7.model.service.api.ISubscriberIdStatusService;
+import com.nervytech.mailer24x7.model.service.api.ISubscriberReportsService;
 import com.nervytech.mailer24x7.spring.bean.CampaignBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignReportsBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignsHomeBean;
@@ -30,6 +40,9 @@ public class ReportsController {
 
 	@Autowired
 	private ICampaignService campaignService;
+	
+	@Autowired
+	private ISubscriberReportsService reportsService;
 
 	@RequestMapping(value = "/view/all", method = RequestMethod.GET)
 	public String showCampaigns(Map model, HttpServletRequest request) {
@@ -73,6 +86,79 @@ public class ReportsController {
 		model.put("campaignReportsBean", bean);
 
 		return "campaignReport";
+	}
+	
+	@RequestMapping(value = "/view/campaign/id/{campaignId}/type/campaignopens/time", method = RequestMethod.GET)
+	public @ResponseBody
+	String viewCampaignOpens(@PathVariable String campaignId, Map model,
+			HttpServletRequest request) {
+
+		long campaignIdLong = -1;
+
+		try {
+			campaignIdLong = Long.parseLong(campaignId);
+		} catch (Exception e) {
+			logger.info("Invalid campaign Id : " + campaignId
+					+ ". Hence redirecting to home page. ");
+
+			// return "invalidrequest";
+		}
+
+		Map<Integer, List<Long>> statusMap = reportsService.getSubscriberReport(
+				campaignIdLong, SubscriberCampaignStatusEnum.OPENED.getStatus(),
+				SubscriberCampaignStatusEnum.CLICKED.getStatus());
+
+		Map<String, Integer> openedMap = new HashMap<String, Integer>();
+		Map<String, Integer> clickedMap = new HashMap<String, Integer>();
+
+		DateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+
+		Date date = new Date();
+
+		Iterator itr = statusMap.entrySet().iterator();
+
+		while (itr.hasNext()) {
+			Map.Entry<Integer, List<Long>> entrySet = (Map.Entry<Integer, List<Long>>) itr
+					.next();
+			int status = entrySet.getKey();
+			List<Long> timesList = entrySet.getValue();
+
+			if (status == SubscriberCampaignStatusEnum.OPENED.getStatus()) {
+
+				for (Long time : timesList) {
+					date.setTime(time);
+					String dateStr = formatter.format(date);
+					if (openedMap.get(dateStr) == null) {
+						openedMap.put(dateStr, 1);
+					} else {
+						int count = openedMap.get(dateStr);
+						openedMap.put(dateStr, (count += 1));
+					}
+				}
+			} else if (status == SubscriberCampaignStatusEnum.CLICKED
+					.getStatus()) {
+
+				for (Long time : timesList) {
+					date.setTime(time);
+					String dateStr = formatter.format(date);
+					if (clickedMap.get(dateStr) == null) {
+						clickedMap.put(dateStr, 1);
+					} else {
+						int count = clickedMap.get(dateStr);
+						clickedMap.put(dateStr, (count += 1));
+					}
+				}
+			}
+		}
+
+		return openedMap.toString() + "##" + clickedMap.toString();
+	}
+
+	
+	@RequestMapping(value = "/view/campaign/id/{campaignId}/type/region", method = RequestMethod.GET)
+	public String campaignReportsByRegion(@PathVariable String campaignId, Map model, HttpServletRequest request) {
+		
+		return "campaignRegionReports";
 	}
 
 

@@ -199,7 +199,6 @@ $(document).ready(function() {
 		</div>
 
         </fieldset>
-        </form>
 
     </div>
     

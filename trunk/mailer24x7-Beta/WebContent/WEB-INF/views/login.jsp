@@ -85,7 +85,7 @@
            <tr>    
             <td></td>        
             <td colspan="2"  align="left"  style="padding-left:20px;"> <a onclick="document.forms[0].submit();return false;" class="button green" href="#">Login</a> 
-			<a href="" class="forgot">Forgot Password</a>
+			<a href="${pageContext.request.contextPath}/pub/pwd/forgot" class="forgot">Forgot Password</a>
 			</td>            
             </tr>
             

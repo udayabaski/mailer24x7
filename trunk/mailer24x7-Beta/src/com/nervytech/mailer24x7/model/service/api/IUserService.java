@@ -3,6 +3,8 @@
  */
 package com.nervytech.mailer24x7.model.service.api;
 
+import java.util.List;
+
 import com.nervytech.mailer24x7.domain.model.User;
 
 /**
@@ -20,5 +22,9 @@ public interface IUserService {
 	public void updateEncodedPassword(User user) ;
 	
 	public void enableUser(String userId) ;
+
+	public void updateUser(User form);
+	
+	public List<User> getUsers(String orgId);
 
 }
