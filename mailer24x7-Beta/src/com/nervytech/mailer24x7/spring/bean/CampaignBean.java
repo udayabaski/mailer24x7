@@ -23,10 +23,14 @@ public class CampaignBean {
 	private String subject;
 	private String lastModifiedTime;
 	private String scheduledOn;
+	private int unsubscribed;
 	private long subscriberListId;
+	private String subscriberListName;
+	private int totalEmailsSent;
 	private long latestSubscriberId;
 	private String unsubscribeLink;
 	private String unsubscribeSubject;
+	private String sentTime;
 
 	/**
 	 * @return the campaignName
@@ -251,6 +255,66 @@ public class CampaignBean {
 	 */
 	public void setUnsubscribeSubject(String unsubscribeSubject) {
 		this.unsubscribeSubject = unsubscribeSubject;
+	}
+
+	/**
+	 * @return the unsubscribed
+	 */
+	public int getUnsubscribed() {
+		return unsubscribed;
+	}
+
+	/**
+	 * @param unsubscribed
+	 *            the unsubscribed to set
+	 */
+	public void setUnsubscribed(int unsubscribed) {
+		this.unsubscribed = unsubscribed;
+	}
+
+	/**
+	 * @return the subscriberListName
+	 */
+	public String getSubscriberListName() {
+		return subscriberListName;
+	}
+
+	/**
+	 * @param subscriberListName
+	 *            the subscriberListName to set
+	 */
+	public void setSubscriberListName(String subscriberListName) {
+		this.subscriberListName = subscriberListName;
+	}
+
+	/**
+	 * @return the totalEmailsSent
+	 */
+	public int getTotalEmailsSent() {
+		return totalEmailsSent;
+	}
+
+	/**
+	 * @param totalEmailsSent
+	 *            the totalEmailsSent to set
+	 */
+	public void setTotalEmailsSent(int totalEmailsSent) {
+		this.totalEmailsSent = totalEmailsSent;
+	}
+
+	/**
+	 * @return the sentTime
+	 */
+	public String getSentTime() {
+		return sentTime;
+	}
+
+	/**
+	 * @param sentTime
+	 *            the sentTime to set
+	 */
+	public void setSentTime(String sentTime) {
+		this.sentTime = sentTime;
 	}
 
 }

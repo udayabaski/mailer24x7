@@ -24,6 +24,7 @@ import com.amazonaws.auth.PropertiesCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.AccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.GroupGrantee;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -159,6 +160,18 @@ public class MailerS3Client {
 		// result.getETag();
 
 		return key;
+	}
+
+	public static void deleteObject(String key) {
+		DeleteObjectRequest request = null;
+
+		try {
+			request = new DeleteObjectRequest(BUCKET_NAME, key);
+			s3Client.deleteObject(request);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public static String getTextObject(String key) {

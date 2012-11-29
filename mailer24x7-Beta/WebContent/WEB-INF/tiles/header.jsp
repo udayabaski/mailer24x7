@@ -129,7 +129,7 @@ $(this).parent().addClass('active-menu');
          
 <li><a href="${pageContext.request.contextPath}/usr/home">Home</a></li>  
 <li><a href="${pageContext.request.contextPath}/usr/campaign/view/all">Email</a></li>
-<li><a href="${pageContext.request.contextPath}/usr/subscriber/view/all">Subscribe</a></li>
+<li><a href="${pageContext.request.contextPath}/usr/subscriber/view/all/groups">Subscribers</a></li>
 <li><a href="${pageContext.request.contextPath}/usr/reports/view/all">Reports</a></li>
 <li class="active"><a href="${pageContext.request.contextPath}/usr/admin">Admin</a></li>
 

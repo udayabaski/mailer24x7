@@ -17,6 +17,7 @@ public class CampaignStep2ImportForm {
 	private CommonsMultipartFile zipFileData;
 	private String nextAction;
 	private long campaignId;
+	private String toPage;
 
 	/**
 	 * @return the htmlFileData
@@ -76,6 +77,21 @@ public class CampaignStep2ImportForm {
 	 */
 	public void setCampaignId(long campaignId) {
 		this.campaignId = campaignId;
+	}
+
+	/**
+	 * @return the toPage
+	 */
+	public String getToPage() {
+		return toPage;
+	}
+
+	/**
+	 * @param toPage
+	 *            the toPage to set
+	 */
+	public void setToPage(String toPage) {
+		this.toPage = toPage;
 	}
 
 }

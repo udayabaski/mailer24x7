@@ -30,6 +30,12 @@
 	  document.forms[0].submit();
 	}
 	
+	function submitUpdate(){
+	  document.forms[0].action = "${pageContext.request.contextPath}/usr/campaign/update/import";
+	  document.getElementById("nextAction").value="update";
+	  document.forms[0].submit();
+	}
+	
 </script>
 
 
@@ -40,6 +46,7 @@
 <form:form id="campaignImport" commandName="campaignStep2ImportForm" action="${pageContext.request.contextPath}/usr/campaign/save/import" method="POST" enctype="multipart/form-data">
 <form:hidden path="nextAction" id="nextAction" />
 <form:hidden path="campaignId" />
+<form:hidden path="toPage" />
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
@@ -102,9 +109,21 @@
 		<div class="btn">
 			<table>
 				<tr>
+					
+					<c:set var="toPage" value="${campaignStep1Form.toPage}"></c:set>
+  				
+				<c:choose>
+				   <c:when test="${not empty toPage}">
+				    <td width="100">&nbsp;</td>
+					<td align="center"><a href="#" class="button green" onclick="javascript:submitUpdate()">Update</a></td>
+				   </c:when>
+				   <c:otherwise>
 					<td width="100"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span></td>
 					<td align="center"><a href="#" class="button green" onclick="javascript:submitExit()">Save &amp; Exit</a></td>
 					<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td>
+				   </c:otherwise>
+				</c:choose>
+				
 				</tr>
 			</table>
 			

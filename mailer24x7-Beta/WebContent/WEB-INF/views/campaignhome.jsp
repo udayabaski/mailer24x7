@@ -165,7 +165,7 @@
 												<c:set var="completedCampaignsCount" value="${fn:length(campaignsHomeBean.completedCampaigns)}"></c:set>
 												
 											<c:choose>
-        									<c:when test="${scheduledCampaignsCount == 0}">
+        									<c:when test="${completedCampaignsCount == 0}">
        											<tr>
 														<td colspan="4" class="">No Campaigns are sent.</td>
 													</tr>
@@ -182,7 +182,7 @@
 														<td class="table-heading" width="100">Actions</td>
 													</tr>
 													
-								<c:forEach items="${campaignsHomeBean.scheduledCampaigns}" var="campaign" varStatus="reStatus">
+								<c:forEach items="${campaignsHomeBean.completedCampaigns}" var="campaign" varStatus="reStatus">
 								
 														<tr onmouseout="this.className='emailcampheader odd'"
 															onmouseover="this.className='emailcampHeaderHover'"

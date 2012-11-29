@@ -48,7 +48,7 @@ public class SubscriberController {
 
 	@Autowired
 	private ISubscriberListService subscriberListService;
-	
+
 	@Autowired
 	private ICampaignStatusService campaignStatusService;
 
@@ -76,8 +76,22 @@ public class SubscriberController {
 		return this.subscriberGroupMap;
 	}
 
+	@RequestMapping(value = "/new/group", method = RequestMethod.GET)
+	public String newGroup(Map model) {
+
+		SubscriberForm subForm = new SubscriberForm();
+
+		subForm.setAddOption("CSV");
+		subForm.setToPage("groups");
+
+		model.put("subscriberForm", subForm);
+
+		return "subscribergroupnew";
+
+	}
+
 	@RequestMapping(value = "/view/step3/id/{campaignId}", method = RequestMethod.GET)
-	public String newCampaignStep3(@PathVariable String campaignId, Map model) {
+	public String newSubscriberGroup(@PathVariable String campaignId, Map model) {
 
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
@@ -104,48 +118,57 @@ public class SubscriberController {
 
 		return "campaignStep3";
 	}
-	
+
 	@RequestMapping(value = "/save/step3", method = RequestMethod.POST)
 	public String saveStep3(CampaignStep3Form step3Form, BindingResult result,
 			Map model) throws MailerException {
-		
-		campaignStatusService.updateSubscriberListId(step3Form.getCampaignId(), step3Form.getSubscriberGroup());
-		
+
+		campaignStatusService.updateSubscriberListId(step3Form.getCampaignId(),
+				step3Form.getSubscriberGroup());
+
 		return "redirect:/usr/campaign/view/snapshot/id/"
 				+ step3Form.getCampaignId();
-		
+
 	}
 
-	@RequestMapping(value = "/step3/save/group", method = RequestMethod.POST)
+
+	@RequestMapping(value = {"/step3/save/group","/save/group"}, method = RequestMethod.POST)
 	public String saveGroup(SubscriberForm subForm, BindingResult result,
 			Map model) throws MailerException {
 
+
 		long subListId = 0;
 
-		if (subForm.getSubscriberName() == null
-				|| subForm.getSubscriberName().trim().length() == 0) {
-			result.rejectValue("subscriberName",
-					"NotEmpty.subscriberForm.subscriberName",
-					"Subscriber Name must not be empty.");
+		if (subForm.getSubscriberListId() == 0) {
+			if (subForm.getSubscriberName() == null
+					|| subForm.getSubscriberName().trim().length() == 0) {
+				result.rejectValue("subscriberName",
+						"NotEmpty.subscriberForm.subscriberName",
+						"Subscriber Name must not be empty.");
 
-			return "subscribergroupnew";
+				return "subscribergroupnew";
+			}
 		}
 
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
 		long userId = userDetails.getUserId();
 
-		try {
-			subListId = subscriberListService.getSubscriberGroupByListName(
-					subForm.getSubscriberName(), orgId);
+		if (subForm.getSubscriberListId() == 0) {
+			try {
+				subscriberListService.getSubscriberGroupByListName(
+						subForm.getSubscriberName(), orgId);
 
-			result.rejectValue(
-					"subscriberName",
-					"NotEmpty.registrationForm.emailId",
-					"This Subscriber group Name is already exist in your organization. Please give a unique name.");
-			return "subscribergroupnew";
-		} catch (Exception e) {
-			// This name is not taken and it is good to go.
+				result.rejectValue(
+						"subscriberName",
+						"NotEmpty.registrationForm.emailId",
+						"This Subscriber group Name is already exist in your organization. Please give a unique name.");
+				return "subscribergroupnew";
+			} catch (Exception e) {
+				// This name is not taken and it is good to go.
+			}
+		} else {
+			subListId = subForm.getSubscriberListId();
 		}
 
 		InputStream inputStream = null;
@@ -234,6 +257,7 @@ public class SubscriberController {
 					+ subscibersArray.length);
 		}
 
+		if (subListId == 0) {
 			SubscriberList subList = new SubscriberList();
 			subList.setCreatedTime(MailerUtil.FORMATTER_WITH_TIME
 					.format(new Date()));
@@ -246,6 +270,10 @@ public class SubscriberController {
 			subList.setActiveCount(subscibersArray.length);
 
 			subListId = subscriberListService.addSubGroup(subList);
+		} else {
+			subscriberListService.addActiveCount(subListId,
+					subscibersArray.length);
+		}
 
 		if (subscibersArray.length > 0) {
 			int status = SubscriberStatusEnum.ACTIVE.getStatus();
@@ -255,15 +283,20 @@ public class SubscriberController {
 			logger.info("Total Subscribers added : " + subscibersArray.length
 					+ " Subscriber List Id : " + subListId);
 		}
-		
-		campaignStatusService.updateSubscriberListId(subForm.getCampaignId(), subListId+"");
 
-		return "redirect:/usr/campaign/view/snapshot/id/"
-		+ subForm.getCampaignId();
+		campaignStatusService.updateSubscriberListId(subForm.getCampaignId(),
+				subListId + "");
+
+		if (subForm.getToPage() != null && subForm.getToPage().equals("groups")) {
+			return "redirect:/usr/subscriber/view/all/groups";
+		} else {
+			return "redirect:/usr/campaign/view/snapshot/id/"
+					+ subForm.getCampaignId();
+		}
 
 	}
 
-	@RequestMapping(value = "/view/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/view/all/groups", method = RequestMethod.GET)
 	public String viewSubGroups(Map model, HttpServletRequest request) {
 
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
@@ -286,36 +319,70 @@ public class SubscriberController {
 
 	}
 
-	@RequestMapping(params = "action=deleteGroup", method = RequestMethod.GET)
-	public String deleteSubGroups(@RequestParam String object, Map model,
+	@RequestMapping(value = "/edit/group/id/{groupId}", method = RequestMethod.GET)
+	public String editSubGroups(@PathVariable String groupId, Map model,
 			HttpServletRequest request) {
 
 		long subGroupId = -1;
 
 		try {
-			subGroupId = Long.parseLong(object);
+			subGroupId = Long.parseLong(groupId);
 		} catch (Exception e) {
-			logger.info("Invalid Subscriber Group Id : " + object
+			logger.info("Invalid Subscriber Group Id : " + groupId
 					+ ". Hence redirecting to home page. ");
 
 			return "invalidrequest";
 		}
 
-		subscriberIdStatusService.deleteSubGroup(subGroupId);
+		List<SubscriberList> subLists = subscriberListService
+				.getSubscriberGroup(subGroupId);
+		SubscriberList subList = subLists.get(0);
 
-		return "redirect:subscriber.form?action=viewSubGroups";
+		SubscriberForm subForm = new SubscriberForm();
+		subForm.setSubscriberListId(subGroupId);
+		subForm.setSubscriberName(subList.getSubscriberListName());
+
+		subForm.setAddOption("CSV");
+		subForm.setToPage("groups");
+
+		model.put("subscriberForm", subForm);
+
+		return "subscribergroupnew";
 	}
 
-	@RequestMapping(params = "action=showGroup", method = RequestMethod.GET)
-	public String showGroup(@RequestParam String object, Map model,
+	@RequestMapping(value = "/delete/group/id/{groupId}", method = RequestMethod.GET)
+	public String deleteSubGroups(@PathVariable String groupId, Map model,
 			HttpServletRequest request) {
 
 		long subGroupId = -1;
 
 		try {
-			subGroupId = Long.parseLong(object);
+			subGroupId = Long.parseLong(groupId);
 		} catch (Exception e) {
-			logger.info("Invalid Subscriber Group Id : " + object
+			logger.info("Invalid Subscriber Group Id : " + groupId
+					+ ". Hence redirecting to home page. ");
+
+			return "invalidrequest";
+		}
+
+		// TODO : Need to check if it is already asssociated with any Campaign
+		// ....
+
+		subscriberIdStatusService.deleteSubGroup(subGroupId);
+
+		return "redirect:/usr/subscriber/view/all/groups";
+	}
+
+	@RequestMapping(value = "/view/group/subscribers/id/{groupId}", method = RequestMethod.GET)
+	public String showGroup(@PathVariable String groupId, Map model,
+			HttpServletRequest request) {
+
+		long subGroupId = -1;
+
+		try {
+			subGroupId = Long.parseLong(groupId);
+		} catch (Exception e) {
+			logger.info("Invalid Subscriber Group Id : " + groupId
 					+ ". Hence redirecting to home page. ");
 
 			return "invalidrequest";
@@ -334,6 +401,8 @@ public class SubscriberController {
 		subscriberHomeBean.setActiveSubscribers(allSubscribers.get(0));
 		subscriberHomeBean.setUnsubscribedSubscribers(allSubscribers.get(1));
 		subscriberHomeBean.setBouncedSubscribers(allSubscribers.get(2));
+		
+		subscriberHomeBean.setSubscriberListId(subGroupId);
 
 		model.put("subscriberHomeBean", subscriberHomeBean);
 
@@ -342,7 +411,7 @@ public class SubscriberController {
 
 	@RequestMapping(params = "action=deleteSubscribers", method = RequestMethod.POST)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String deleteSubscribers(SubscriberForm subForm,
+	public String deleteSubscribers(SubscriberHomeBean subForm,
 			BindingResult result, Map model, HttpServletRequest request) {
 
 		String[] subscribersSelected = null;
@@ -350,13 +419,15 @@ public class SubscriberController {
 
 		if (subForm.getSubscriberType() == SubscriberStatusEnum.ACTIVE
 				.getStatus()) {
-			subscribersSelected = subForm.getActiveSubscribersSelected(); 
-			subscriberListService.updateActiveCount(subForm.getSubscriberListId(),
+			subscribersSelected = subForm.getActiveSubscribersSelected();
+			subscriberListService.updateActiveCount(
+					subForm.getSubscriberListId(),
 					subForm.getActiveSubscribersSelected().length);
 		} else if (subForm.getSubscriberType() == SubscriberStatusEnum.BOUNCED
 				.getStatus()) {
 			subscribersSelected = subForm.getBouncedSubscribersSelected();
-			subscriberListService.updateBouncedCount(subForm.getSubscriberListId(),
+			subscriberListService.updateBouncedCount(
+					subForm.getSubscriberListId(),
 					subForm.getBouncedSubscribersSelected().length);
 		} else if (subForm.getSubscriberType() == SubscriberStatusEnum.UNSUBSCRIBED
 				.getStatus()) {
@@ -365,14 +436,15 @@ public class SubscriberController {
 					subForm.getSubscriberListId(),
 					subForm.getUnsubscribedSubscribersSelected().length);
 		}
+		
+		System.out.println(" SSSSSSSSSSSSSSSSSSSSSSSS "+subscriberListId);
 
 		subscriberIdStatusService
 				.deleteSubscriber(getCommaSeparatedSubscribersList(subscribersSelected));
 
 		// TODO : Arun - Need to update subscriber_reports table ...
-
-		return "redirect:subscriber.form?action=showGroup&object="
-				+ subscriberListId;
+		
+		return "redirect:/usr/subscriber/view/group/subscribers/id/"+subscriberListId;
 	}
 
 	private String getCommaSeparatedSubscribersList(String[] subscribersSelected) {
@@ -390,35 +462,9 @@ public class SubscriberController {
 		return subBuilder.toString();
 	}
 
-	@RequestMapping(params = "action=addNewSubscribers", method = RequestMethod.GET)
-	public String addNewSubscribers(@RequestParam String object, Map model,
-			HttpServletRequest request) {
-
-		long subGroupId = -1;
-
-		try {
-			subGroupId = Long.parseLong(object);
-		} catch (Exception e) {
-			logger.info("Invalid Subscriber Group Id : " + object
-					+ ". Hence redirecting to home page. ");
-
-			return "invalidrequest";
-		}
-
-		SubscriberForm subForm = new SubscriberForm();
-
-		subForm.setAddOption("CSV");
-		subForm.setAction("saveOrUpdate");
-		subForm.setSubscriberListId(subGroupId);
-
-		model.put("subscriberForm", subForm);
-
-		return "subscribergroup";
-	}
-
-	@RequestMapping(params = "action=move", method = RequestMethod.POST)
+	@RequestMapping(params = "action=moveSubscribers",  method = RequestMethod.POST)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String moveSubscribers(SubscriberForm subForm, BindingResult result,
+	public String moveSubscribers(SubscriberHomeBean subForm, BindingResult result,
 			Map model, HttpServletRequest request) {
 
 		String[] subscribersSelected = null;
@@ -442,9 +488,8 @@ public class SubscriberController {
 		subscriberIdStatusService.updateSubscribersStatus(
 				getCommaSeparatedSubscribersList(subscribersSelected),
 				subForm.getMoveTo());
-
-		return "redirect:subscriber.form?action=showGroup&object="
-				+ subscriberListId;
+		
+		return "redirect:/usr/subscriber/view/group/subscribers/id/"+subscriberListId;
 	}
 
 	// This is for AJAX ..........
@@ -452,8 +497,8 @@ public class SubscriberController {
 	public @ResponseBody
 	String getSubscriberListPieChartData(@RequestParam String subListId) {
 		System.out.println("Received REQUESTTTTTTT ");
-		List<SubscriberList> subLists = subscriberListService.getSubscriberGroup(Long
-				.parseLong(subListId));
+		List<SubscriberList> subLists = subscriberListService
+				.getSubscriberGroup(Long.parseLong(subListId));
 		SubscriberList subList = subLists.get(0);
 		System.out.println("BEFORE RETTTTTTTTTTTTT");
 		return "[{title: Active,Counts:" + subList.getActiveCount() + "},"

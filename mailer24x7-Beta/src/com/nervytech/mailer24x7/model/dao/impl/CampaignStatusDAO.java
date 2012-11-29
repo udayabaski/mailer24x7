@@ -230,4 +230,12 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 		return (CampaignStatusDAO) ctx.getBean("CampaignStatusDAO");
 	}
 
+	@Override
+	public String getS3Path(String campaignId) {
+		String selectQuery = "SELECT S3_PATH FROM CAMPAIGN_STATUS WHERE CAMPAIGN_ID = "
+				+ campaignId;
+		System.out.println(" Campaign sync status query ===> " + selectQuery);
+		return getJdbcTemplate().queryForObject(selectQuery, String.class);
+	}
+
 }

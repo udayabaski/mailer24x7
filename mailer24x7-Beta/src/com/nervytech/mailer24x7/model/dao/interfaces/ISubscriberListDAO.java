@@ -25,7 +25,7 @@ public interface ISubscriberListDAO {
 	
 	public long addSubGroup(SubscriberList subList);
 
-	public List<SubscriberList> getSubscriberGroup(long parseLong);
+	public List<SubscriberList> getSubscriberGroup(long subscriberListId);
 
 	public void moveSubscribers(long subscriberListId, int length,
 			int subscriberType, int moveTo);
@@ -35,4 +35,7 @@ public interface ISubscriberListDAO {
 	public void updateBouncedCount(long subscriberListId, int length);
 
 	public void updateActiveCount(long subscriberListId, int length);
+	
+	public void addActiveCount(long subscriberListId, int length);
+	
 }

@@ -21,6 +21,7 @@ public class CampaignStep1Form {
 	private boolean personalizeToAddress;
 	private String nextAction;
 	private String campaignId;
+	private String toPage;
 
 	/**
 	 * @return the campaignName
@@ -155,6 +156,21 @@ public class CampaignStep1Form {
 	 */
 	public void setNextAction(String nextAction) {
 		this.nextAction = nextAction;
+	}
+
+	/**
+	 * @return the toPage
+	 */
+	public String getToPage() {
+		return toPage;
+	}
+
+	/**
+	 * @param toPage
+	 *            the toPage to set
+	 */
+	public void setToPage(String toPage) {
+		this.toPage = toPage;
 	}
 
 }

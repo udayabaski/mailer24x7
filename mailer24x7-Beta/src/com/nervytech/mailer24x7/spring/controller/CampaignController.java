@@ -55,7 +55,7 @@ public class CampaignController {
 
 	@Autowired
 	private ICampaignService campaignService;
-	
+
 	@Autowired
 	private ICampaignStatusService campaignStatusService;
 
@@ -107,7 +107,8 @@ public class CampaignController {
 	}
 
 	@RequestMapping(value = "/view/step1/id/{campaignId}", method = RequestMethod.GET)
-	public String showStep1Campaign(@PathVariable String campaignId, Map model) {
+	public String showStep1Campaign(@PathVariable String campaignId, Map model,
+			HttpServletRequest req) {
 
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
@@ -127,12 +128,16 @@ public class CampaignController {
 		cmpnStep1Form.setSubject(snapshotBean.getSubject());
 		// cmpnStep1Form.setReplyToAddress(replyToAddress);
 
+		if (req.getParameter("p") != null
+				&& req.getParameter("p").equals("snapshot")) {
+			cmpnStep1Form.setToPage("snapshot");
+		}
+
 		model.put("campaignStep1Form", cmpnStep1Form);
 
 		return "campaignStep1";
 	}
-	
-	
+
 	@RequestMapping(value = "/view/step2/id/{campaignId}", method = RequestMethod.GET)
 	public String showStep2Campaign(@PathVariable String campaignId, Map model) {
 
@@ -149,12 +154,11 @@ public class CampaignController {
 		CampaignStep2Form cmpnStep2Form = new CampaignStep2Form();
 		cmpnStep2Form.setCampaignId(Long.parseLong(campaignId));
 		cmpnStep2Form.setContentType(campaignType);
-		
+
 		model.put("campaignStep2Form", cmpnStep2Form);
 
 		return "campaignStep2";
 	}
-
 
 	@RequestMapping(value = "/save/step2", method = RequestMethod.POST)
 	public String saveCampaignStep2(CampaignStep2Form cmpnForm, Map model) {
@@ -162,10 +166,9 @@ public class CampaignController {
 		long orgId = userDetails.getOrgId();
 
 		if (cmpnForm.getNextAction().equalsIgnoreCase("next")) {
-			
+
 			campaignService.updateContentType(cmpnForm.getCampaignId(),
 					cmpnForm.getContentType());
-
 			if (cmpnForm.getContentType() == CampaignTypeEnum.IMPORT.getType()) {
 
 				CampaignStep2ImportForm form = new CampaignStep2ImportForm();
@@ -215,128 +218,65 @@ public class CampaignController {
 
 	}
 
-	@RequestMapping(value = "/save/import", method = RequestMethod.POST)
-	public String saveCampaignImport(CampaignStep2ImportForm cmpnForm,
+	@RequestMapping(value = "/update/import", method = RequestMethod.POST)
+	public String updateCampaignImport(CampaignStep2ImportForm cmpnForm,
 			BindingResult result, Map model) {
+
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
-		
-		if(cmpnForm.getNextAction().equalsIgnoreCase("prev")) {
-			return "redirect:/usr/campaign/view/step2/id/"
-					+ cmpnForm.getCampaignId();
-		}
 
 		String htmlContent = null;
+		try {
+			htmlContent = getHtmlContent(cmpnForm, result);
+		} catch (Exception e) {
+			return "importHtml";
+		}
 
-		if (cmpnForm.getHtmlFileData() != null) {
-			InputStream inputStream = null;
-			try {
-				CommonsMultipartFile file = cmpnForm.getHtmlFileData();
-				if (file.getOriginalFilename() == null
-						|| file.getOriginalFilename().trim().length() == 0) {
-					result.rejectValue("htmlFileData",
-							"NotEmpty.campaignForm.htmlFileData",
-							"File must be uploaded.");
-
-					return "importHtml";
-				}
-				if (file.getOriginalFilename().toLowerCase()
-						.lastIndexOf(".html") == -1) {
-					result.rejectValue("htmlFileData",
-							"NotEmpty.campaignForm.htmlFileData",
-							"Unsupported file type.");
-
-					return "importHtml";
-				}
-				if (file.getSize() > 0) {
-					inputStream = file.getInputStream();
-					if (file.getSize() > MailerUtil.maxFileSize) {
-						result.rejectValue(
-								"htmlFileData",
-								"NotEmpty.campaignForm.htmlFileData",
-								"File size can not be more than "
-										+ file.getSize() + " Bytes.");
-
-						return "importHtml";
-					}
-
-					logger.info("File size : " + file.getSize());
-
-					BufferedReader br = new BufferedReader(
-							new InputStreamReader(inputStream));
-
-					StringBuilder sb = new StringBuilder();
-
-					String line;
-					while ((line = br.readLine()) != null) {
-						sb.append(line);
-					}
-
-					htmlContent = sb.toString();
-
-				} else {
-					result.rejectValue("htmlFileData",
-							"NotEmpty.campaignForm.htmlFileData",
-							"File data is empty.");
-
-					return "importHtml";
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (inputStream != null) {
-					try {
-						inputStream.close();
-					} catch (IOException e) {
-						logger.error("Error while closing the input stream ", e);
-					}
-				}
-			}
+		try {
+			putZipData(cmpnForm, result, userDetails);
+		} catch (Exception e) {
+			return "importHtml";
 		}
 
 		String s3Path = MailerS3Client.putHtmlObject(orgId,
 				userDetails.getUserId(), cmpnForm.getCampaignId(), htmlContent,
 				true);
 
-		if (cmpnForm.getZipFileData() != null) {
-			InputStream inputStream = null;
-			try {
-				CommonsMultipartFile file = cmpnForm.getZipFileData();
-				if (file.getOriginalFilename() != null
-						&& file.getOriginalFilename().trim().length() > 0) {
+		campaignStatusService.updateS3Path(s3Path, cmpnForm.getCampaignId(),
+				MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
 
-					if (file.getSize() > 0) {
-						if (file.getSize() > MailerUtil.maxFileSize) {
-							result.rejectValue("zipFileData",
-									"NotEmpty.campaignForm.zipFileData",
-									"Zip File size can not be more than "
-											+ file.getSize() + " Bytes.");
+		return "redirect:/usr/campaign/view/snapshot/id/"
+				+ cmpnForm.getCampaignId();
 
-							return "importHtml";
-						}
+	}
 
-						logger.info("File size : " + file.getSize());
+	@RequestMapping(value = "/save/import", method = RequestMethod.POST)
+	public String saveCampaignImport(CampaignStep2ImportForm cmpnForm,
+			BindingResult result, Map model) {
+		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
+		long orgId = userDetails.getOrgId();
 
-						MailerS3Client.processZipFile(file, orgId,
-								userDetails.getUserId(),
-								cmpnForm.getCampaignId());
-
-					}
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (inputStream != null) {
-					try {
-						inputStream.close();
-					} catch (IOException e) {
-						logger.error("Error while closing the input stream ", e);
-					}
-				}
-			}
+		if (cmpnForm.getNextAction().equalsIgnoreCase("prev")) {
+			return "redirect:/usr/campaign/view/step2/id/"
+					+ cmpnForm.getCampaignId();
 		}
+
+		String htmlContent = null;
+		try {
+			htmlContent = getHtmlContent(cmpnForm, result);
+		} catch (Exception e) {
+			return "importHtml";
+		}
+
+		try {
+			putZipData(cmpnForm, result, userDetails);
+		} catch (Exception e) {
+			return "importHtml";
+		}
+
+		String s3Path = MailerS3Client.putHtmlObject(orgId,
+				userDetails.getUserId(), cmpnForm.getCampaignId(), htmlContent,
+				true);
 
 		campaignStatusService.updateS3Path(s3Path, cmpnForm.getCampaignId(),
 				MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
@@ -345,50 +285,87 @@ public class CampaignController {
 			return "redirect:/usr/campaign/view/snapshot/id/"
 					+ cmpnForm.getCampaignId();
 		} else if (cmpnForm.getNextAction().equalsIgnoreCase("next")) {
-			
+
 			return "redirect:/usr/subscriber/view/step3/id/"
 					+ cmpnForm.getCampaignId();
 		}
-		
+
 		return null;
 	}
 
-	@RequestMapping(value = "/save/text", method = RequestMethod.POST)
-	public String saveCampaignText(CampaignStep2EditorForm cmpnForm, Map model) {
+	@RequestMapping(value = "/update/text", method = RequestMethod.POST)
+	public String updateCampaignText(CampaignStep2EditorForm cmpnForm, Map model) {
+
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
-		
-		if(cmpnForm.getNextAction().equalsIgnoreCase("prev")) {
-			return "redirect:/usr/campaign/view/step2/id/"
-					+ cmpnForm.getCampaignId();
-		} 
-		
+
 		String s3Path = MailerS3Client.putTxtObject(orgId,
 				userDetails.getUserId(), cmpnForm.getCampaignId(),
 				cmpnForm.getTextData(), true);
 
 		campaignStatusService.updateS3Path(s3Path, cmpnForm.getCampaignId(),
 				MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
-		
+
+		return "redirect:/usr/campaign/view/snapshot/id/"
+				+ cmpnForm.getCampaignId();
+
+	}
+
+	@RequestMapping(value = "/save/text", method = RequestMethod.POST)
+	public String saveCampaignText(CampaignStep2EditorForm cmpnForm, Map model) {
+		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
+		long orgId = userDetails.getOrgId();
+
+		if (cmpnForm.getNextAction().equalsIgnoreCase("prev")) {
+			return "redirect:/usr/campaign/view/step2/id/"
+					+ cmpnForm.getCampaignId();
+		}
+
+		String s3Path = MailerS3Client.putTxtObject(orgId,
+				userDetails.getUserId(), cmpnForm.getCampaignId(),
+				cmpnForm.getTextData(), true);
+
+		campaignStatusService.updateS3Path(s3Path, cmpnForm.getCampaignId(),
+				MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
+
 		if (cmpnForm.getNextAction().equalsIgnoreCase("exit")) {
 			return "redirect:/usr/campaign/view/snapshot/id/"
 					+ cmpnForm.getCampaignId();
 		} else if (cmpnForm.getNextAction().equalsIgnoreCase("next")) {
-			
+
 			return "redirect:/usr/subscriber/view/step3/id/"
 					+ cmpnForm.getCampaignId();
 		}
-		
+
 		return null;
-		
+
+	}
+
+	@RequestMapping(value = "/update/html", method = RequestMethod.POST)
+	public String updateCampaignHtml(CampaignStep2EditorForm cmpnForm, Map model) {
+		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
+		long orgId = userDetails.getOrgId();
+
+		String content = "<html><body>" + cmpnForm.getHtmlData()
+				+ "<html><body>";
+
+		String s3Path = MailerS3Client.putTxtObject(orgId,
+				userDetails.getUserId(), cmpnForm.getCampaignId(), content,
+				true);
+
+		campaignStatusService.updateS3Path(s3Path, cmpnForm.getCampaignId(),
+				MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
+
+		return "redirect:/usr/campaign/view/snapshot/id/"
+				+ cmpnForm.getCampaignId();
 	}
 
 	@RequestMapping(value = "/save/html", method = RequestMethod.POST)
 	public String saveCampaignHtml(CampaignStep2EditorForm cmpnForm, Map model) {
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
-		
-		if(cmpnForm.getNextAction().equalsIgnoreCase("prev")) {
+
+		if (cmpnForm.getNextAction().equalsIgnoreCase("prev")) {
 			return "redirect:/usr/campaign/view/step2/id/"
 					+ cmpnForm.getCampaignId();
 		}
@@ -407,12 +384,60 @@ public class CampaignController {
 			return "redirect:/usr/campaign/view/snapshot/id/"
 					+ cmpnForm.getCampaignId();
 		} else if (cmpnForm.getNextAction().equalsIgnoreCase("next")) {
-			
+
 			return "redirect:/usr/subscriber/view/step3/id/"
 					+ cmpnForm.getCampaignId();
 		}
-		
+
 		return null;
+	}
+
+	@RequestMapping(value = "/update/step1", method = RequestMethod.POST)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public String updateCampaignStep1(CampaignStep1Form cmpnForm, Map model) {
+		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
+		long orgId = userDetails.getOrgId();
+
+		String campaignIdStr = cmpnForm.getCampaignId();
+
+		System.out.println("CampaignStr .... " + campaignIdStr);
+
+		CampaignSender cmpnSender = new CampaignSender();
+		cmpnSender.setOrgId(orgId);
+		cmpnSender.setDisplayName(cmpnForm.getSenderName());
+		cmpnSender.setEmailId(cmpnForm.getSenderEmail());
+		cmpnSender.setStatus(CampaignSenderStatusEnum.VERIFIED.getStatus());
+		long campaignSenderId = -1;
+		try {
+			campaignSenderId = campaignSenderService
+					.getCampaignSenderId(cmpnSender);
+		} catch (Exception e) {
+			// Exception will be thrown if the record is not found ....
+			campaignSenderId = campaignSenderService
+					.saveCampaignSender(cmpnSender);
+		}
+
+		Date currentTime = new Date();
+
+		Campaign cmpn = new Campaign();
+		cmpn.setCampaignName(cmpnForm.getCampaignName());
+		cmpn.setSubject(cmpnForm.getSubject());
+		cmpn.setCreatedEmailId(userDetails.getUsername());
+		cmpn.setLastModifiedTime(MailerUtil.FORMATTER_WITH_TIME
+				.format(currentTime));
+		cmpn.setCampaignId(Long.parseLong(campaignIdStr));
+		campaignService.updateCampaign(cmpn);
+
+		CampaignStatus cmpnStatus = new CampaignStatus();
+		cmpnStatus.setSenderId(campaignSenderId);
+		cmpnStatus.setLastUpdatedTime(MailerUtil.FORMATTER_WITH_TIME
+				.format(currentTime));
+		cmpnStatus.setCampaignId(Long.parseLong(campaignIdStr));
+
+		campaignStatusService.updateCampaignStatusSender(cmpnStatus);
+
+		return "redirect:/usr/campaign/view/snapshot/id/" + campaignIdStr;
+
 	}
 
 	@RequestMapping(value = "/save/step1", method = RequestMethod.POST)
@@ -423,9 +448,9 @@ public class CampaignController {
 		long orgId = userDetails.getOrgId();
 
 		String campaignIdStr = cmpnForm.getCampaignId();
-		
-		System.out.println("CampaignStr .... "+campaignIdStr);
-		
+
+		System.out.println("CampaignStr .... " + campaignIdStr);
+
 		CampaignSender cmpnSender = new CampaignSender();
 		cmpnSender.setOrgId(orgId);
 		cmpnSender.setDisplayName(cmpnForm.getSenderName());
@@ -489,7 +514,7 @@ public class CampaignController {
 		if (cmpnForm.getNextAction().equalsIgnoreCase("next")) {
 			CampaignStep2Form steps2Form = new CampaignStep2Form();
 			steps2Form.setCampaignId(campaignId);
-			
+
 			if (campaignIdStr != null && campaignIdStr.trim().length() > 0) {
 				int campaignType = campaignService.getCampaignType(campaignId);
 				steps2Form.setContentType(campaignType);
@@ -500,6 +525,63 @@ public class CampaignController {
 			return "campaignStep2";
 		} else if (cmpnForm.getNextAction().equalsIgnoreCase("exit")) {
 			return "redirect:/usr/campaign/view/snapshot/id/" + campaignId;
+		}
+
+		return null;
+	}
+
+	@RequestMapping(value = "/edit/content/type/{type}/id/{campaignId}", method = RequestMethod.GET)
+	public String editContent(@PathVariable String type,
+			@PathVariable String campaignId, Map model,
+			HttpServletRequest request) {
+
+		int typeInt = Integer.parseInt(type);
+
+		String s3Path = campaignStatusService.getS3Path(campaignId);
+
+		if (typeInt == CampaignTypeEnum.IMPORT.getType()) {
+
+			MailerS3Client.deleteObject(s3Path);
+			// TODO : Need to delete zip as well .......
+
+			CampaignStep2ImportForm form = new CampaignStep2ImportForm();
+			form.setCampaignId(Long.parseLong(s3Path));
+			form.setToPage("snapshot");
+
+			model.put("campaignStep2ImportForm", form);
+
+			return "importHtml";
+		} else if (typeInt == CampaignTypeEnum.PLAINTEXT.getType()) {
+
+			String content = MailerS3Client.getHTMLObject(s3Path);
+
+			CampaignStep2EditorForm form = new CampaignStep2EditorForm();
+			form.setCampaignId(Long.parseLong(s3Path));
+			form.setTextData(content);
+			form.setEditorType(CampaignTypeEnum.PLAINTEXT.name());
+			form.setToPage("snapshot");
+
+			model.put("campaignStep2EditorForm", form);
+			return "textEditor";
+
+		} else if (typeInt == CampaignTypeEnum.HTMLEDITOR.getType()) {
+
+			String content = MailerS3Client.getHTMLObject(s3Path);
+
+			CampaignStep2EditorForm form = new CampaignStep2EditorForm();
+			form.setCampaignId(Long.parseLong(s3Path));
+			form.setTextData(content);
+			form.setEditorType(CampaignTypeEnum.HTMLEDITOR.name());
+			form.setToPage("snapshot");
+
+			model.put("campaignStep2EditorForm", form);
+
+			return "htmlEditor";
+
+		} else if (typeInt == CampaignTypeEnum.NEWTEMPLATE.getType()) {
+
+		} else if (typeInt == CampaignTypeEnum.PREDEFINEDTEMPLATE.getType()) {
+
 		}
 
 		return null;
@@ -518,8 +600,13 @@ public class CampaignController {
 
 		CampaignSnapshotBean snapshotBean = campaignService.getCampaign(Long
 				.parseLong(campaignId));
-		
-		System.out.println("SNAPSHOTBEAN "+snapshotBean);
+
+		if (snapshotBean.getS3Path() != null) {
+			snapshotBean.setContent(MailerS3Client.getHTMLObject(snapshotBean
+					.getS3Path()));
+		}
+
+		System.out.println("SNAPSHOTBEAN " + snapshotBean);
 
 		if (snapshotBean.getSubscriberListId() != null) {
 			int subscribersCount = subscriberIdStatusService
@@ -657,6 +744,122 @@ public class CampaignController {
 		}
 
 		return toReturn;
+	}
+
+	private void putZipData(CampaignStep2ImportForm cmpnForm,
+			BindingResult result, SessionUser userDetails) {
+		if (cmpnForm.getZipFileData() != null) {
+			InputStream inputStream = null;
+			try {
+				CommonsMultipartFile file = cmpnForm.getZipFileData();
+				if (file.getOriginalFilename() != null
+						&& file.getOriginalFilename().trim().length() > 0) {
+
+					if (file.getSize() > 0) {
+						if (file.getSize() > MailerUtil.maxFileSize) {
+							result.rejectValue("zipFileData",
+									"NotEmpty.campaignForm.zipFileData",
+									"Zip File size can not be more than "
+											+ file.getSize() + " Bytes.");
+
+							throw new RuntimeException();
+						}
+
+						logger.info("File size : " + file.getSize());
+
+						MailerS3Client.processZipFile(file,
+								userDetails.getOrgId(),
+								userDetails.getUserId(),
+								cmpnForm.getCampaignId());
+
+					}
+				}
+
+			} catch (Exception e) {
+				throw new RuntimeException();
+			} finally {
+				if (inputStream != null) {
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+						logger.error("Error while closing the input stream ", e);
+					}
+				}
+			}
+		}
+
+	}
+
+	private String getHtmlContent(CampaignStep2ImportForm cmpnForm,
+			BindingResult result) {
+
+		String htmlContent = null;
+
+		InputStream inputStream = null;
+		try {
+			CommonsMultipartFile file = cmpnForm.getHtmlFileData();
+			if (file.getOriginalFilename() == null
+					|| file.getOriginalFilename().trim().length() == 0) {
+				result.rejectValue("htmlFileData",
+						"NotEmpty.campaignForm.htmlFileData",
+						"File must be uploaded.");
+
+				throw new RuntimeException();
+			}
+			if (file.getOriginalFilename().toLowerCase().lastIndexOf(".html") == -1) {
+				result.rejectValue("htmlFileData",
+						"NotEmpty.campaignForm.htmlFileData",
+						"Unsupported file type.");
+
+				throw new RuntimeException();
+			}
+			if (file.getSize() > 0) {
+				inputStream = file.getInputStream();
+				if (file.getSize() > MailerUtil.maxFileSize) {
+					result.rejectValue("htmlFileData",
+							"NotEmpty.campaignForm.htmlFileData",
+							"File size can not be more than " + file.getSize()
+									+ " Bytes.");
+
+					throw new RuntimeException();
+				}
+
+				logger.info("File size : " + file.getSize());
+
+				BufferedReader br = new BufferedReader(new InputStreamReader(
+						inputStream));
+
+				StringBuilder sb = new StringBuilder();
+
+				String line;
+				while ((line = br.readLine()) != null) {
+					sb.append(line);
+				}
+
+				htmlContent = sb.toString();
+
+			} else {
+				result.rejectValue("htmlFileData",
+						"NotEmpty.campaignForm.htmlFileData",
+						"File data is empty.");
+
+				throw new RuntimeException();
+			}
+
+		} catch (Exception e) {
+			throw new RuntimeException();
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					logger.error("Error while closing the input stream ", e);
+				}
+			}
+		}
+
+		return htmlContent;
+
 	}
 
 }
