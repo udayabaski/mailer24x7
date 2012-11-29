@@ -21,6 +21,7 @@ public class User {
 	private String language;
 	private String timeZone;
 	private String createdTime;
+	private String updatedTime;
 
 	/**
 	 * @return the userId
@@ -200,6 +201,21 @@ public class User {
 	 */
 	public void setCreatedTime(String createdTime) {
 		this.createdTime = createdTime;
+	}
+
+	/**
+	 * @return the updatedTime
+	 */
+	public String getUpdatedTime() {
+		return updatedTime;
+	}
+
+	/**
+	 * @param updatedTime
+	 *            the updatedTime to set
+	 */
+	public void setUpdatedTime(String updatedTime) {
+		this.updatedTime = updatedTime;
 	}
 
 	/*

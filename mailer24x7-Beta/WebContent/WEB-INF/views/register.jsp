@@ -9,27 +9,12 @@
 <title>Mailer247 - Registration</title>
 	
 <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/styles/signup-style.css" rel="stylesheet" type="text/css" />
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/script/excanvas.js"></script><![endif]-->
 
 </head>
 
 <body>
-
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html lang="en">
-<head>
-	<title>Mailer247 - Registration</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />	
-    <link href="${pageContext.request.contextPath}/styles/signup-style.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript">
-    
-  </script>
-</head>
-
-<body>
-
 
  <div id="pageContainer">
 	
@@ -182,18 +167,4 @@
 		</form:form> 
 	</div>
 	</body>
-</html>
-
-<table cellpadding="0" cellspacing="0"  width="100%">
-<tr>
-
-<td width="10%"></td>
-<td width="80%" align="center" style="font-size:12px; color:#595959; padding:20px 0px 0px 0px">Copyright@companyname.com</td>
-<td width="10%"></td>
-
-</tr>
-</table>
-
-
-</body>
 </html>

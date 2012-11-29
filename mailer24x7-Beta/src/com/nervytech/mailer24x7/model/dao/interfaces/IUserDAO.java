@@ -23,4 +23,8 @@ public interface IUserDAO {
 	
 	public void enableUser(String userId);
 
+	public void updateUser(User usr);
+	
+	public List<User> getUsers(String orgId);
+
 }

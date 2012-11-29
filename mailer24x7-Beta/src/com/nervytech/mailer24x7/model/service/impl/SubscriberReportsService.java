@@ -4,6 +4,7 @@
 package com.nervytech.mailer24x7.model.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,19 @@ public class SubscriberReportsService implements ISubscriberReportsService{
 			logger.error("Error while saving user detail.", e);
 			throw new RuntimeException(e.getMessage());
 		}
+	}
+
+	@Override
+	public Map<Integer, List<Long>> getSubscriberReport(long campaignId,
+			int openSatus, int clickStatus) {
+		Map<Integer, List<Long>> map = null;
+		try {
+			map = subscriberReportsDAO.getSubscriberReport(campaignId, openSatus,clickStatus);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		return map;
 	}
 
 	

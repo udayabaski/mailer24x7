@@ -16,5 +16,9 @@ public interface IOrganizationDAO {
 	public List<Organization> getOrganization(String orgName, String country);
 	
 	public long saveOrganization(Organization org);
+
+	public List<Organization> getOrganization(long orgId);
+
+	public void updateOrganization(Organization form);
 	
 }

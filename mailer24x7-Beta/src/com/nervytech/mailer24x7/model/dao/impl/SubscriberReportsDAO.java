@@ -2,7 +2,10 @@ package com.nervytech.mailer24x7.model.dao.impl;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -64,6 +67,40 @@ public class SubscriberReportsDAO extends JdbcDaoSupport implements
 						return eventList.size();
 					}
 				});
+	}
+	
+	public Map<Integer, List<Long>> getSubscriberReport(long campaignId,
+			int openSatus, int clickStatus) {
+
+		Map<Integer, List<Long>> map = new HashMap<Integer, List<Long>>();
+
+		String selectSubscriberGroupsQuery = "SELECT TIME_IN_LONG,STATUS FROM SUBSCRIBER_REPORTS where CAMPAIGN_ID="
+				+ campaignId
+				+ " AND STATUS IN ("
+				+ openSatus
+				+ ","
+				+ clickStatus + ")";
+
+		logger.debug("Campaign SubscriberReports Query : "
+				+ selectSubscriberGroupsQuery);
+
+		List<Map<String, Object>> rows = getJdbcTemplate().queryForList(
+				selectSubscriberGroupsQuery);
+
+		for (Map row : rows) {
+			if (map.get((Integer) row.get("STATUS")) == null) {
+				List<Long> list = new ArrayList<Long>();
+				list.add((Long) row.get("TIME_IN_LONG"));
+				map.put((Integer) row.get("STATUS"), list);
+			} else {
+				List<Long> list = map.get((Integer) row.get("STATUS"));
+				list.add((Long) row.get("TIME_IN_LONG"));
+				map.put((Integer) row.get("STATUS"), list);
+			}
+		}
+
+		System.out.println("MAPPPPPPPP " + map);
+		return map;
 	}
 
 	public static SubscriberReportsDAO getFromApplicationContext(
