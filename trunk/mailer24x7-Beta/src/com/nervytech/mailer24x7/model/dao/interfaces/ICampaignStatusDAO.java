@@ -44,4 +44,6 @@ public interface ICampaignStatusDAO {
 	
 	public void updateSubscriberListId(long campaignId, String subscriberGroup);
 
+	public String getS3Path(String campaignId);
+
 }

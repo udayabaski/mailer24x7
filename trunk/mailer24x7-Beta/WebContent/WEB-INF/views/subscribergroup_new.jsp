@@ -30,6 +30,13 @@
 	  document.forms[0].submit();
 	}
 	
+	function submitSave(){
+	  var ctx = "${pageContext.request.contextPath}";
+	  document.forms[0].action=ctx+"/usr/subscriber/save/group";
+	  document.getElementById("nextAction").value="save";
+	  document.forms[0].submit();
+	}
+	
 </script>
 
 </head>
@@ -39,6 +46,8 @@
 <form:form id="subscriberForm" commandName="subscriberForm" action="${pageContext.request.contextPath}/usr/subscriber/step3/save/group" method="POST" enctype="multipart/form-data">
 <form:hidden path="nextAction" id="nextAction" />
 <form:hidden path="campaignId" />
+<form:hidden path="toPage" />
+<form:hidden path="subscriberListId" />
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
@@ -66,12 +75,17 @@
 <td>
 
 <div id="main">
-
+	
+	<c:set var="toPage" value="${subscriberForm.toPage}"></c:set>
+	<c:set var="subListId" value="${subscriberForm.subscriberListId}"></c:set>
+	
+	<c:if test="${toPage != 'groups'}">
 	<ul id="steps">
 		<li id="stepDesc0" class="current"> <span class="no">1</span><span>Campaign</span>&nbsp;</li>
 		<li id="stepDesc1" class="current"><span class="no">2</span><span>Email Template</span>&nbsp;</li>
 		<li id="stepDesc2" class="current"><span class="no">3</span><span>Subscriber Group</span>&nbsp;</li>
 	</ul>
+	</c:if>
 	
         <fieldset>
 
@@ -82,9 +96,16 @@
 				<td></td>
 				<td><span class="formtext">List Name</span></td>
 				<td>
+				<c:choose>
+				   <c:when test="${subListId != 0}">
+				    <span class="formtext"><b><c:out value="${subscriberForm.subscriberName}" /></b></span>
+				   </c:when>
+				   <c:otherwise>
 				    <form:input path="subscriberName" id="subscriberName" cssClass="inputwidth" />
   					<span class="errortxt"><form:errors path="subscriberName" /></span>
-				 </td>
+				   </c:otherwise>
+				</c:choose>
+				</td>
 				<td></td>
 				</tr>
 				
@@ -129,10 +150,22 @@
           	   <div class="btn">
 			<table>
 				<tr>
+				 
+				 <c:set var="toPage" value="${subscriberForm.toPage}"></c:set>
+  				
+				<c:choose>
+				   <c:when test="${toPage eq 'groups'}">
+				    <td width="100">&nbsp;</td>
+					<td align="center"><a href="#" class="button green" onclick="javascript:submitSave()">Save</a></td>
+				   </c:when>
+				   <c:otherwise>
 					<!-- <td width="100"><span class="previous"><a href="CreateCampaignStep2.html">Previous</a></span></td>  
 					<td align="center"><a href="#" class="button green" onclick="document.forms[0].submit();return false;">Save &amp; Exit</a></td> -->
 					<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td>
-				</tr>
+				   </c:otherwise>
+				</c:choose>
+				
+			   </tr>
 			</table>
 			
 		</div>

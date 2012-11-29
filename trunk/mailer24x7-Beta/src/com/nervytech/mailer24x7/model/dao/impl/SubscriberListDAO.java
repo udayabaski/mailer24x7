@@ -73,12 +73,14 @@ public class SubscriberListDAO extends JdbcDaoSupport implements
 				subList.setActiveCount(rs.getInt("ACTIVE_COUNT"));
 				subList.setBouncedCount(rs.getInt("BOUNCE_COUNT"));
 				subList.setUnsubscriberCount(rs.getInt("UNSUBSCRIBER_COUNT"));
+				subList.setLastModifiedTime(rs.getString("LAST_MODIFIED_TIME"));
 
 				return subList;
 			}
 		};
 
-		String selectSubscriberGroupsQuery = "SELECT SL.SUBSCRIBER_LIST_ID,SL.SUBSCRIBER_LIST_NAME,SL.ACTIVE_COUNT,SL.BOUNCE_COUNT,SL.UNSUBSCRIBER_COUNT "
+		String selectSubscriberGroupsQuery = "SELECT SL.SUBSCRIBER_LIST_ID,SL.SUBSCRIBER_LIST_NAME,SL.ACTIVE_COUNT," +
+				" SL.LAST_MODIFIED_TIME,SL.BOUNCE_COUNT,SL.UNSUBSCRIBER_COUNT "
 				+ " FROM SUBSCRIBER_LIST SL " + " WHERE SL.ORG_ID=" + orgId;
 
 		logger.debug("Select Subscribers Group Query : "
@@ -110,7 +112,7 @@ public class SubscriberListDAO extends JdbcDaoSupport implements
 				subList.setActiveCount(rs.getInt("ACTIVE_COUNT"));
 				subList.setBouncedCount(rs.getInt("BOUNCE_COUNT"));
 				subList.setUnsubscriberCount(rs.getInt("UNSUBSCRIBER_COUNT"));
-
+				
 				return subList;
 			}
 		};
@@ -156,6 +158,17 @@ public class SubscriberListDAO extends JdbcDaoSupport implements
 		return getJdbcTemplate().queryForLong(selectQuery);
 	}
 	
+	public void addActiveCount(long subscriberListId, int activeCount) {
+		String udateQuery = "update SUBSCRIBER_LIST set "
+				+ " ACTIVE_COUNT= ACTIVE_COUNT+" + activeCount
+				+ " WHERE SUBSCRIBER_LIST_ID =" + subscriberListId;
+
+		logger.debug("Update Active Count Query : " + udateQuery);
+
+		getJdbcTemplate().execute(udateQuery);
+	}
+
+	
 	public void updateActiveCount(long subscriberListId, int activeCount) {
 		String udateQuery = "update SUBSCRIBER_LIST set "
 				+ " ACTIVE_COUNT= ACTIVE_COUNT-" + activeCount
@@ -198,6 +211,7 @@ public class SubscriberListDAO extends JdbcDaoSupport implements
 				+ " = " + getToFiledName + "+" + count
 				+ " WHERE SUBSCRIBER_LIST_ID=" + subscriberListId;
 
+		System.out.println("Move QUERYYYYYYYYYYYY "+moveQuery);
 		logger.debug("Move Subsriber Query : " + moveQuery);
 
 		getJdbcTemplate().execute(moveQuery);

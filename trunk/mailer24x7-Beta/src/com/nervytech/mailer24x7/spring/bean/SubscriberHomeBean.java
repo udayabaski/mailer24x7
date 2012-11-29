@@ -17,19 +17,30 @@ import com.nervytech.mailer24x7.domain.model.SubscriberList;
 @Repository("subscriberHomeBean")
 public class SubscriberHomeBean {
 
-    private List<SubscriberList> subscriberList;
-    
-    private SubscriberList subscriberGroup;
-    
-    private List<SubscriberIdStatus> activeSubscribers;
-    
-    private List<SubscriberIdStatus> unsubscribedSubscribers;
-    
-    private List<SubscriberIdStatus> bouncedSubscribers;
+	private List<SubscriberList> subscriberList;
 
-    private boolean subscriberListNotEmpty;
-    
-    
+	private SubscriberList subscriberGroup;
+
+	private List<SubscriberIdStatus> activeSubscribers;
+
+	private List<SubscriberIdStatus> unsubscribedSubscribers;
+
+	private List<SubscriberIdStatus> bouncedSubscribers;
+
+	private int subscriberType;
+
+	private String[] activeSubscribersSelected;
+
+	private String[] bouncedSubscribersSelected;
+
+	private String[] unsubscribedSubscribersSelected;
+
+	private long subscriberListId;
+
+	private int moveTo;
+
+	private boolean subscriberListNotEmpty;
+
 	public boolean isSubscriberListNotEmpty() {
 		return subscriberListNotEmpty;
 	}
@@ -75,8 +86,101 @@ public class SubscriberHomeBean {
 		return bouncedSubscribers;
 	}
 
-	public void setBouncedSubscribers(List<SubscriberIdStatus> bouncedSubscribers) {
+	public void setBouncedSubscribers(
+			List<SubscriberIdStatus> bouncedSubscribers) {
 		this.bouncedSubscribers = bouncedSubscribers;
 	}
-	
+
+	/**
+	 * @return the subscriberType
+	 */
+	public int getSubscriberType() {
+		return subscriberType;
+	}
+
+	/**
+	 * @param subscriberType
+	 *            the subscriberType to set
+	 */
+	public void setSubscriberType(int subscriberType) {
+		this.subscriberType = subscriberType;
+	}
+
+	/**
+	 * @return the activeSubscribersSelected
+	 */
+	public String[] getActiveSubscribersSelected() {
+		return activeSubscribersSelected;
+	}
+
+	/**
+	 * @param activeSubscribersSelected
+	 *            the activeSubscribersSelected to set
+	 */
+	public void setActiveSubscribersSelected(String[] activeSubscribersSelected) {
+		this.activeSubscribersSelected = activeSubscribersSelected;
+	}
+
+	/**
+	 * @return the bouncedSubscribersSelected
+	 */
+	public String[] getBouncedSubscribersSelected() {
+		return bouncedSubscribersSelected;
+	}
+
+	/**
+	 * @param bouncedSubscribersSelected
+	 *            the bouncedSubscribersSelected to set
+	 */
+	public void setBouncedSubscribersSelected(
+			String[] bouncedSubscribersSelected) {
+		this.bouncedSubscribersSelected = bouncedSubscribersSelected;
+	}
+
+	/**
+	 * @return the unsubscribedSubscribersSelected
+	 */
+	public String[] getUnsubscribedSubscribersSelected() {
+		return unsubscribedSubscribersSelected;
+	}
+
+	/**
+	 * @param unsubscribedSubscribersSelected
+	 *            the unsubscribedSubscribersSelected to set
+	 */
+	public void setUnsubscribedSubscribersSelected(
+			String[] unsubscribedSubscribersSelected) {
+		this.unsubscribedSubscribersSelected = unsubscribedSubscribersSelected;
+	}
+
+	/**
+	 * @return the subscriberListId
+	 */
+	public long getSubscriberListId() {
+		return subscriberListId;
+	}
+
+	/**
+	 * @param subscriberListId
+	 *            the subscriberListId to set
+	 */
+	public void setSubscriberListId(long subscriberListId) {
+		this.subscriberListId = subscriberListId;
+	}
+
+	/**
+	 * @return the moveTo
+	 */
+	public int getMoveTo() {
+		return moveTo;
+	}
+
+	/**
+	 * @param moveTo
+	 *            the moveTo to set
+	 */
+	public void setMoveTo(int moveTo) {
+		this.moveTo = moveTo;
+	}
+
 }

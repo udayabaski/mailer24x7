@@ -17,6 +17,7 @@ public class CampaignStep2EditorForm {
 	private String nextAction;
 	private long campaignId;
 	private String editorType;
+	private String toPage;
 
 	/**
 	 * @return the textData
@@ -91,6 +92,21 @@ public class CampaignStep2EditorForm {
 	 */
 	public void setEditorType(String editorType) {
 		this.editorType = editorType;
+	}
+
+	/**
+	 * @return the toPage
+	 */
+	public String getToPage() {
+		return toPage;
+	}
+
+	/**
+	 * @param toPage
+	 *            the toPage to set
+	 */
+	public void setToPage(String toPage) {
+		this.toPage = toPage;
 	}
 
 }

@@ -15,6 +15,7 @@ import com.nervytech.mailer24x7.domain.model.CampaignSchedulerModel;
 import com.nervytech.mailer24x7.model.dao.interfaces.ICampaignDAO;
 import com.nervytech.mailer24x7.model.service.api.ICampaignService;
 import com.nervytech.mailer24x7.spring.bean.CampaignBean;
+import com.nervytech.mailer24x7.spring.bean.CampaignReportsBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignSnapshotBean;
 
 /**
@@ -185,6 +186,21 @@ public class CampaignService implements ICampaignService {
 			throw new RuntimeException(e.getMessage());
 		}
 		return campaignType;
+	}
+
+	@Override
+	public CampaignReportsBean getCampaignBean(String campaignId) {
+		CampaignReportsBean cmpnBean = null;
+		try {
+			List<CampaignReportsBean> cmpnList = campaignDAO.getCampaignBean(campaignId);
+			if(cmpnList.size() >0){
+				cmpnBean = cmpnList.get(0);
+			}
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		return cmpnBean;
 	}
 
 }

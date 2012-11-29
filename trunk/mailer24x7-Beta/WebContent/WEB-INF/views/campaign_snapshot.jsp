@@ -12,11 +12,54 @@
 <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/script/excanvas.js"></script><![endif]-->
 
+<script type="text/javascript">
+
+    function submitPreview(){
+      if(document.getElementById("contentTypeInt").value == 1){
+        writeTextConsole(if(document.getElementById("content").value);
+      } else {
+        writeHtmlConsole(if(document.getElementById("content").value);
+      }      
+	}
+	
+	function writeHtmlConsole(content) {
+      top.consoleRef=window.open('','Preview',
+       'width=600,height=650'
+        +',menubar=0'
+   		+',toolbar=1'
+   		+',status=0'
+   		+',scrollbars=1'
+   		+',resizable=1')
+ 	 top.consoleRef.document.writeln(
+  		'<html><head><title>Preview</title></head>'
+   			+'<body bgcolor=white onLoad="self.focus()">'
+   					+content
+   		+'</body></html>'
+ 		)
+ 		top.consoleRef.document.close()
+	}
+	
+	function writeTextConsole(content) {
+      top.consoleRef=window.open('','Preview',
+       'width=600,height=650'
+        +',menubar=0'
+   		+',toolbar=1'
+   		+',status=0'
+   		+',scrollbars=1'
+   		+',resizable=1')
+ 	  top.consoleRef.document.writeln(content)
+ 	  top.consoleRef.document.close()
+	}
+	
+</script>
+
 </head>
 
 <body>
 
 <form:form id="campaign" commandName="campaignSnapshotBean" action="snapshot" method="POST">
+<form:hidden path="content" id="content"/>
+<form:hidden path="contentTypeInt" id="contentTypeInt"/>
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
@@ -51,14 +94,11 @@
 		<li id="stepDesc2" class="current"><span class="no">3</span><span>Subscriber Group</span>&nbsp;</li>
 	</ul>
 	
-	<input id="actionId" name="action" type="hidden" value="saveorupdate"/>
-	<input id="campaignId" name="campaignId" type="hidden" value="-1"/>
-	<input id="filename" name="filename" type="hidden" value=""/>
         <fieldset>
 
         <div class="hd">
 			<h2>Campaign and sender</h2>
-			<span  class="options"><a href="${pageContext.request.contextPath}/usr/campaign/view/step1/id/${campaignSnapshot.campaignId}">Edit</a></span>
+			<span  class="options"><a href="${pageContext.request.contextPath}/usr/campaign/view/step1/id/${campaignSnapshotBean.campaignId}/?p=snapshot">Edit</a></span>
 		</div>
 		<table width="100%" cellpadding="5" cellspacing="0" class="campaign-page">
 	    <tr valign="top" class="odd">
@@ -92,7 +132,32 @@
 	 	   </tr>
 	       <tr valign="top" class="even">
 			<td width="30%">Content</td>
-			<td><a href="">Preview</a> or <a href="">edit</a></td>
+			<td>
+			   <a href="#" onclick="javascript:submitPreview()">Preview</a> or 
+			   
+			   <c:set var="contentTypeInt" value="${campaignSnapshotBean.contentTypeInt}"></c:set>
+			   
+			   <c:choose>
+			     <c:when test="${contentTypeInt == '0'}">
+			        <a href="${pageContext.request.contextPath}/usr/campaign/edit/content/type/${campaignSnapshotBean.contentTypeInt}/id/${campaignSnapshotBean.campaignId}">Re Import</a>
+			     </c:when>
+			     <c:when test="${contentTypeInt == '1'}">
+			        <a href="${pageContext.request.contextPath}/usr/campaign/edit/type/${campaignSnapshotBean.contentTypeInt}/id/${campaignSnapshotBean.campaignId}">edit</a>
+			     </c:when>
+			     <c:when test="${contentTypeInt == '2'}">
+			        <a href="${pageContext.request.contextPath}/usr/campaign/edit/type/${campaignSnapshotBean.contentTypeInt}/id/${campaignSnapshotBean.campaignId}">edit</a>
+			     </c:when>
+			     <c:when test="${contentTypeInt == '3'}">
+			        <a href="${pageContext.request.contextPath}/usr/campaign/edit/type/${campaignSnapshotBean.contentTypeInt}/id/${campaignSnapshotBean.campaignId}">edit</a>
+			     </c:when>
+			     <c:when test="${contentTypeInt == '4'}">
+			        <a href="${pageContext.request.contextPath}/usr/campaign/edit/type/${campaignSnapshotBean.contentTypeInt}/id/${campaignSnapshotBean.campaignId}">edit</a>
+			     </c:when>
+			     <c:otherwise>
+			        <a href="${pageContext.request.contextPath}/usr/campaign/edit/type/${campaignSnapshotBean.contentTypeInt}/id/${campaignSnapshotBean.campaignId}">edit</a>
+			     </c:otherwise>
+			   </c:choose>
+			</td>
 		   </tr>
 		  </c:when>
 		  <c:otherwise>

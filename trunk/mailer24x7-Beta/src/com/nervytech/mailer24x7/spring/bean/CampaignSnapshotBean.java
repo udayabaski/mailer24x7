@@ -23,6 +23,9 @@ public class CampaignSnapshotBean {
 	private String senderName;
 	private String senderEmailId;
 	private String campaignType;
+	private int contentTypeInt;
+	private String content;
+	private String s3Path;
 
 	/**
 	 * @return the campaignName
@@ -187,6 +190,51 @@ public class CampaignSnapshotBean {
 	 */
 	public void setCampaignType(String campaignType) {
 		this.campaignType = campaignType;
+	}
+
+	/**
+	 * @return the content
+	 */
+	public String getContent() {
+		return content;
+	}
+
+	/**
+	 * @param content
+	 *            the content to set
+	 */
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	/**
+	 * @return the s3Path
+	 */
+	public String getS3Path() {
+		return s3Path;
+	}
+
+	/**
+	 * @param s3Path
+	 *            the s3Path to set
+	 */
+	public void setS3Path(String s3Path) {
+		this.s3Path = s3Path;
+	}
+
+	/**
+	 * @return the contentTypeInt
+	 */
+	public int getContentTypeInt() {
+		return contentTypeInt;
+	}
+
+	/**
+	 * @param contentTypeInt
+	 *            the contentTypeInt to set
+	 */
+	public void setContentTypeInt(int contentTypeInt) {
+		this.contentTypeInt = contentTypeInt;
 	}
 
 }

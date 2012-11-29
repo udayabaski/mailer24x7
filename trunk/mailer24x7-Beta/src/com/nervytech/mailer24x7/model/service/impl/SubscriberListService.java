@@ -85,10 +85,10 @@ public class SubscriberListService implements ISubscriberListService{
 	}
 
 	@Override
-	public List<SubscriberList> getSubscriberGroup(long parseLong) {
+	public List<SubscriberList> getSubscriberGroup(long subscriberListId) {
 		List<SubscriberList> list = null;
 		try {
-			list = subscriberListDAO.getSubscriberGroup(parseLong);
+			list = subscriberListDAO.getSubscriberGroup(subscriberListId);
 		} catch (Exception e) {
 			logger.error("Error while saving user detail.", e);
 			throw new RuntimeException(e.getMessage());
@@ -136,5 +136,14 @@ public class SubscriberListService implements ISubscriberListService{
 			throw new RuntimeException(e.getMessage());
 		}		
 	}
-
+	
+	@Override
+	public void addActiveCount(long subscriberListId, int length) {
+		try {
+			subscriberListDAO.addActiveCount(subscriberListId,length);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}		
+	}
 }

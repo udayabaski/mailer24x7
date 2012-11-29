@@ -37,6 +37,12 @@ $(document).ready(function() {
 	  document.forms[0].submit();
 	}
 	
+	function submitUpdate(){
+	  document.forms[0].action = "${pageContext.request.contextPath}/usr/campaign/update/step1";
+	  document.getElementById("nextAction").value="update";
+	  document.forms[0].submit();
+	}
+	
 </script>
 
 </head>
@@ -46,6 +52,7 @@ $(document).ready(function() {
 <form:form action="${pageContext.request.contextPath}/usr/campaign/save/step1"  commandName="campaignStep1Form" method="POST" id="campaignStep1Form">
 <form:hidden path="nextAction" id="nextAction" />
 <form:hidden path="campaignId" />
+<form:hidden path="toPage" />
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
@@ -55,9 +62,6 @@ $(document).ready(function() {
 <table cellpadding="0" cellspacing="0" width="100%">
 <tr>
 <td width="100%" class="contentLayer">
-
-
-
 
 <table width="98%" cellpadding="0" cellspacing="0" align="center" >
 <tr>
@@ -174,9 +178,21 @@ $(document).ready(function() {
 		<div class="btn">
 			<table>
 				<tr>
-					<td width="100">&nbsp;</td>
+					
+  				<c:set var="toPage" value="${campaignStep1Form.toPage}"></c:set>
+  				
+				<c:choose>
+				   <c:when test="${not empty toPage}">
+				    <td width="100">&nbsp;</td>
+					<td align="center"><a href="#" class="button green" onclick="javascript:submitUpdate()">Update</a></td>
+				   </c:when>
+				   <c:otherwise>
+				    <td width="100">&nbsp;</td>
 					<td align="center"><a href="#" class="button green" onclick="javascript:submitExit()">Save &amp; Exit</a></td>
-					<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td>
+					<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td> 
+				   </c:otherwise>
+				</c:choose>
+					
 				</tr>
 			</table>
 			

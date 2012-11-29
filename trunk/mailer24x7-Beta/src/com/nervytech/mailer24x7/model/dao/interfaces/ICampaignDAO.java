@@ -8,6 +8,7 @@ import java.util.List;
 import com.nervytech.mailer24x7.domain.model.Campaign;
 import com.nervytech.mailer24x7.domain.model.CampaignSchedulerModel;
 import com.nervytech.mailer24x7.spring.bean.CampaignBean;
+import com.nervytech.mailer24x7.spring.bean.CampaignReportsBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignSnapshotBean;
 
 /**
@@ -45,5 +46,7 @@ public interface ICampaignDAO {
 			String time, long lowerLimit, long upperLimit);
 
 	public int getCampaignType(long campaignId);
+
+	public List<CampaignReportsBean> getCampaignBean(String campaignId);
 
 }

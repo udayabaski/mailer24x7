@@ -183,5 +183,18 @@ public class CampaignStatusService implements ICampaignStatusService {
 			throw new RuntimeException(e.getMessage());
 		}		
 	}
+
+	@Override
+	public String getS3Path(String campaignId) {
+		String s3Path = null;
+		try {
+			s3Path = cmpnStatusDAO
+					.getS3Path(campaignId);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		return s3Path;
+	}
 	
 }
