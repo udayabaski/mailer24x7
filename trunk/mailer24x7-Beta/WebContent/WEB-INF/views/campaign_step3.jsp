@@ -16,17 +16,17 @@
 <script type="text/javascript">
 
 	function submitPrev(){
-	  document.forms[0].getElementById("nextAction").value="prev";
+	  document.getElementById("nextAction").value="prev";
 	  document.forms[0].submit();
 	}
 	
 	function submitNext(){
-	  document.forms[0].getElementById("nextAction").value="next";
+	  document.getElementById("nextAction").value="next";
 	  document.forms[0].submit();
 	}
 	
 	function submitExit(){
-	  document.forms[0].getElementById("nextAction").value="exit";
+	  document.getElementById("nextAction").value="exit";
 	  document.forms[0].submit();
 	}
 	
@@ -36,7 +36,7 @@
 
 <body>
 
-<form:form id="campaignStep3" commandName="campaignStep3Form" action="${pageContext.request.contextPath}/usr/campaign/save/step3" method="POST">
+<form:form id="campaignStep3" commandName="campaignStep3Form" action="${pageContext.request.contextPath}/usr/subscriber/save/step3" method="POST">
 <form:hidden path="nextAction" id="nextAction" />
 <form:hidden path="campaignId" />
 
@@ -91,26 +91,7 @@
 <td></td>
 </tr>
 
-<tr>
-<td></td>
-<td><span class="formtext">Sending Options</span></td>
-<td>
-<table cellpadding="0" cellspacing="0">
 
-<tr>
-<td>
-  
-  <form:radiobutton path="sendingOption" id="sendingOption" cssClass="inputradio" value="NOW" style="position:relative; top:3px;"/><span class="chk-box-paddingfont">Send Now</span>
- </td>
- <td> 
-  <form:radiobutton path="sendingOption" id="sendingOption" cssClass="inputradio" value="LATER" style="position:relative; top:3px;"/><span class="chk-box-paddingfont">Send Later</span>
- </td>
-</tr>
-
-</table>
-</td>
-<td></td>
-</tr>
 
 
 <!-- <tr>
@@ -123,27 +104,13 @@
 </tr>-->
 
 
-<tr>
-<td></td>
-<td></td>
-<td>
-  <div class="form-divtext">
-      Send Test Mail ID : <form:input id="testMailId" path="testMailId" cssClass="inputwidth" type="text" value=""/> 
-      <span class="errortxt"></span>
-      <a onclick="sendTestMail()" class="button green" href="#">Send</a>
-  </div>
- </td>
-<td></td>
-</tr>
-
-
 </table>
           	   <div class="btn">
 			<table>
 				<tr>
-					<td width="100"><span class="previous"><a href="CreateCampaignStep2.html">Previous</a></span></td>
-					<td align="center"><a href="#" class="button green" onclick="document.forms[0].submit();return false;">Save &amp; Exit</a></td>
-					<td width="100"><span class="next1"><a href="CreateCampaignStep3.html">Next</a></span></td>
+					<td width="100"><span class="previous"><a href="#">Previous</a></span></td>
+					<td align="center"><a href="#" class="button green" onclick="javascript:submitExit()">Save &amp; Exit</a></td>
+					<td width="100"><span class="next1"><a onclick="javascript:submitNext()" href="#">Next</a></span></td>
 				</tr>
 			</table>
 			
@@ -154,9 +121,6 @@
 
        
 
-        
-
-        </form>
 
     </div>
     
