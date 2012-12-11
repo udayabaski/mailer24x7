@@ -14,11 +14,21 @@
 
 <script type="text/javascript">
 
+	function submitNext(){
+	  document.getElementById("nextAction").value="next";
+	  document.forms[0].submit();
+	}
+	
+	function submitExit(){
+	  document.getElementById("nextAction").value="exit";
+	  document.forms[0].submit();
+	}
+
     function submitPreview(){
       if(document.getElementById("contentTypeInt").value == 1){
-        writeTextConsole(if(document.getElementById("content").value);
+        writeTextConsole(document.getElementById("content").value);
       } else {
-        writeHtmlConsole(if(document.getElementById("content").value);
+        writeHtmlConsole(document.getElementById("content").value);
       }      
 	}
 	
@@ -57,9 +67,11 @@
 
 <body>
 
-<form:form id="campaign" commandName="campaignSnapshotBean" action="snapshot" method="POST">
+<form:form id="campaign" commandName="campaignSnapshotBean" action="${pageContext.request.contextPath}/usr/campaign/save/snapshot" method="POST">
 <form:hidden path="content" id="content"/>
 <form:hidden path="contentTypeInt" id="contentTypeInt"/>
+<form:hidden path="nextAction" id="nextAction" />
+<form:hidden path="campaignId" />
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
@@ -204,15 +216,14 @@
 		<div class="btn">
 			<table>
 				<tr>
-					<!-- <td width="100"><span class="previous"><a href="campaign_step2.jsp">Previous</a></span></td> -->
-					<td align="center"><a href="#" class="button green" onclick="document.forms[0].submit();return false;">Save &amp; Exit</a></td>
-					<td width="100"><span class="next1"><a href="campaign_step3.jsp">Next</a></span></td>
+					<!-- <td width="100"><span class="previous"><a href="">Previous</a></span></td> -->
+					<td align="center"><a href="#" class="button green" onclick="javascript:submitExit()">Exit</a></td>
+					<td width="100"><span class="next1"><a onclick="javascript:submitNext()" href="#">Test & Deliver</a></span></td>
 				</tr>
 			</table>
 		</div>
         </fieldset>
 
-        </form>
 
     </div>
     

@@ -13,6 +13,10 @@
 <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/script/excanvas.js"></script><![endif]-->
 
+<script src="${pageContext.request.contextPath}/script/jquery-1.8.3.min.js"></script>
+<script src="${pageContext.request.contextPath}/ckeditor/ckeditor.js"></script>
+
+
 <script type="text/javascript">
 
 	function submitPrev(){
@@ -21,11 +25,13 @@
 	}
 	
 	function submitNext(){
+	   document.getElementById("htmlData").value=CKEDITOR.instances.editorContent.getData();
 	  document.getElementById("nextAction").value="next";
 	  document.forms[0].submit();
 	}
 	
 	function submitExit(){
+	  document.getElementById("htmlData").value=CKEDITOR.instances.editorContent.getData();
 	  document.getElementById("nextAction").value="exit";
 	  document.forms[0].submit();
 	}
@@ -36,7 +42,7 @@
 	  document.forms[0].submit();
 	}
 	
-	function submitPreview(){
+	function submitPreview(){	  
 	  writeConsole(CKEDITOR.instances.editorContent.getData());
 	}
 	
@@ -68,6 +74,7 @@
 <form:hidden path="campaignId" />
 <form:hidden path="editorType" />
 <form:hidden path="toPage" />
+<form:hidden path="htmlData" id="htmlData"/>
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
@@ -118,7 +125,12 @@
 		</div>
 		<table width="99%" cellpadding="0" cellspacing="0" class="campaign-page">
 	    <tr valign="top">
-			<td><form:textarea path="htmlData" id="htmlData"/>
+			<td>
+			 
+			  <textarea rows="100" cols="100" name="editorContent"></textarea>
+            <script>
+                CKEDITOR.replace( 'editorContent' );
+            </script>
 			</td>
 		</tr>
 		</table>
