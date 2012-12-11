@@ -26,6 +26,7 @@ public class CampaignSnapshotBean {
 	private int contentTypeInt;
 	private String content;
 	private String s3Path;
+	private String nextAction;
 
 	/**
 	 * @return the campaignName
@@ -235,6 +236,21 @@ public class CampaignSnapshotBean {
 	 */
 	public void setContentTypeInt(int contentTypeInt) {
 		this.contentTypeInt = contentTypeInt;
+	}
+
+	/**
+	 * @return the nextAction
+	 */
+	public String getNextAction() {
+		return nextAction;
+	}
+
+	/**
+	 * @param nextAction
+	 *            the nextAction to set
+	 */
+	public void setNextAction(String nextAction) {
+		this.nextAction = nextAction;
 	}
 
 }
