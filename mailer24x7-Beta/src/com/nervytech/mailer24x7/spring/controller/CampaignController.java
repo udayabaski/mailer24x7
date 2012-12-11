@@ -43,6 +43,7 @@ import com.nervytech.mailer24x7.spring.form.CampaignStep1Form;
 import com.nervytech.mailer24x7.spring.form.CampaignStep2EditorForm;
 import com.nervytech.mailer24x7.spring.form.CampaignStep2Form;
 import com.nervytech.mailer24x7.spring.form.CampaignStep2ImportForm;
+import com.nervytech.mailer24x7.spring.form.CampaignTestMailForm;
 import com.nervytech.mailer24x7.spring.security.auth.user.SessionUser;
 import com.nervytech.mailer24x7.spring.security.auth.user.UserDetailsServiceImpl;
 
@@ -309,6 +310,42 @@ public class CampaignController {
 		return "redirect:/usr/campaign/view/snapshot/id/"
 				+ cmpnForm.getCampaignId();
 
+	}
+	
+	@RequestMapping(value = "/deliver/test", method = RequestMethod.POST)
+	public String testCampaign(CampaignTestMailForm testForm, Map model) {
+		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
+		long orgId = userDetails.getOrgId();
+
+		if (testForm.getNextAction().equals("next")) {
+			CampaignTestMailForm form = new CampaignTestMailForm();
+			form.setTestMailId(snapshotBean.getSenderEmailId());
+			form.setCampaignId(snapshotBean.getCampaignId()+"");
+			
+			return "testcampaign";
+		} else {
+			return "redirect:/usr/campaign/view/all";
+		}
+
+		// return null;
+	}
+
+	@RequestMapping(value = "/save/text", method = RequestMethod.POST)
+	public String saveSnapshot(CampaignSnapshotBean snapshotBean, Map model) {
+		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
+		long orgId = userDetails.getOrgId();
+
+		if (snapshotBean.getNextAction().equals("next")) {
+			CampaignTestMailForm form = new CampaignTestMailForm();
+			form.setTestMailId(snapshotBean.getSenderEmailId());
+			form.setCampaignId(snapshotBean.getCampaignId()+"");
+			
+			return "testcampaign";
+		} else {
+			return "redirect:/usr/campaign/view/all";
+		}
+
+		// return null;
 	}
 
 	@RequestMapping(value = "/save/text", method = RequestMethod.POST)
