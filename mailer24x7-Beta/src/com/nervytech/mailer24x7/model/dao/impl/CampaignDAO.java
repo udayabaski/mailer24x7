@@ -178,6 +178,7 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 				cmpn.setSubject(rs.getString("SUBJECT"));
 				cmpn.setSenderEmailId(rs.getString("EMAIL_ID"));
 				cmpn.setSenderName(rs.getString("DISPLAY_NAME"));
+				cmpn.setReplyToEmailId(rs.getString("REPLYTO_MAILID"));
 				cmpn.setSubscriberListId(rs.getString("SUBSCRIBER_LIST_ID"));
 				cmpn.setSubscriberListName(rs.getString("SUBSCRIBER_LIST_NAME"));
 				cmpn.setSenderId(rs.getString("SENDER_ID"));
@@ -194,7 +195,7 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 		};
 
 		String selectCampaignQuery = "SELECT C.CAMPAIGN_NAME,C.SUBJECT,C.CREATED_TIME,CS.STATUS, "
-				+ " C.CAMPAIGN_TYPE,CSR.DISPLAY_NAME,CSR.EMAIL_ID, CS.SUBSCRIBER_LIST_ID,"
+				+ " C.REPLYTO_MAILID, C.CAMPAIGN_TYPE,CSR.DISPLAY_NAME,CSR.EMAIL_ID, CS.SUBSCRIBER_LIST_ID,"
 				+ " CS.SENDER_ID,SL.SUBSCRIBER_LIST_NAME, CS.S3_PATH"
 				+ " FROM CAMPAIGN C,CAMPAIGN_STATUS CS LEFT OUTER JOIN SUBSCRIBER_LIST SL ON SL.SUBSCRIBER_LIST_ID,CAMPAIGN_SENDER CSR"
 				+ " WHERE C.CAMPAIGN_ID=CS.CAMPAIGN_ID AND CS.SENDER_ID=CSR.SENDER_ID AND "
@@ -208,7 +209,7 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 	public long saveCampaign(Campaign cmpn) {
 
 		String insertQuery = "INSERT INTO CAMPAIGN (ORG_ID,CAMPAIGN_NAME,CREATED_EMAILID,CREATED_TIME,LAST_MODIFIED_TIME,"
-				+ "ISPOWEREDBY,SUBJECT,IMAGE_LOC,CAMPAIGN_LINK,UNSUBSCRIBE_LINK,UNSUBSCRIBE_SUBJECT) "
+				+ "ISPOWEREDBY,SUBJECT,IMAGE_LOC,CAMPAIGN_LINK,UNSUBSCRIBE_LINK,UNSUBSCRIBE_SUBJECT,REPLYTO_MAILID) "
 				+ " VALUES('"
 				+ cmpn.getOrgId()
 				+ "','"
@@ -232,7 +233,9 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 				+ "','"
 				+ cmpn.getUnsubscribeLink()
 				+ "','"
-				+ cmpn.getUnsubscribeSubject() + "')";
+				+ cmpn.getUnsubscribeSubject()
+				+ "','"
+				+ cmpn.getReplyToEmailId() + "')";
 
 		logger.debug("Save campaign Query : " + insertQuery);
 
@@ -255,6 +258,7 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 				+ cmpn.getCampaignName() + "',LAST_MODIFIED_TIME='"
 				+ cmpn.getLastModifiedTime() + "'," + "SUBJECT='"
 				+ cmpn.getSubject() + "',IMAGE_LOC='" + cmpn.getImageLoc()
+				+ "',REPLYTO_MAILID='" + cmpn.getReplyToEmailId()
 				+ "' WHERE CAMPAIGN_ID=" + cmpn.getCampaignId();
 
 		logger.debug("Update Campaign Query : " + updateQuery);

@@ -22,6 +22,7 @@ public class Campaign {
 	private String unsubscribeLink;
 	private String unsubscribeSubject;
 	private int campaignType;
+	private String replyToEmailId;
 
 	/**
 	 * @return the campaignId
@@ -218,6 +219,21 @@ public class Campaign {
 		this.campaignType = campaignType;
 	}
 
+	/**
+	 * @return the replyToEmailId
+	 */
+	public String getReplyToEmailId() {
+		return replyToEmailId;
+	}
+
+	/**
+	 * @param replyToEmailId
+	 *            the replyToEmailId to set
+	 */
+	public void setReplyToEmailId(String replyToEmailId) {
+		this.replyToEmailId = replyToEmailId;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -252,6 +268,8 @@ public class Campaign {
 		builder.append(unsubscribeSubject);
 		builder.append(", campaignType=");
 		builder.append(campaignType);
+		builder.append(", replyToEmailId=");
+		builder.append(replyToEmailId);
 		builder.append("]");
 		return builder.toString();
 	}

@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,6 +41,7 @@ import com.nervytech.mailer24x7.model.service.api.ISubscriberIdStatusService;
 import com.nervytech.mailer24x7.spring.bean.CampaignBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignSnapshotBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignsHomeBean;
+import com.nervytech.mailer24x7.spring.form.CampaignDeliveryForm;
 import com.nervytech.mailer24x7.spring.form.CampaignStep1Form;
 import com.nervytech.mailer24x7.spring.form.CampaignStep2EditorForm;
 import com.nervytech.mailer24x7.spring.form.CampaignStep2Form;
@@ -68,6 +71,30 @@ public class CampaignController {
 
 	@Autowired
 	private MailgunCampignSyncer mailgunCampaignSyncer;
+
+	@Resource(name = "timezoneDropdown")
+	private Map<String, String> timezoneMap;
+
+	@ModelAttribute("timezoneMap")
+	public Map<String, String> populateCountryMap() {
+		return this.timezoneMap;
+	}
+
+	@Resource(name = "hoursDropDown")
+	private Map<String, String> hoursMap;
+
+	@ModelAttribute("hoursMap")
+	public Map<String, String> populateHoursMap() {
+		return this.hoursMap;
+	}
+
+	@Resource(name = "minutesDropDown")
+	private Map<String, String> minutesMap;
+
+	@ModelAttribute("minutesMap")
+	public Map<String, String> populateMinutesMap() {
+		return this.minutesMap;
+	}
 
 	@RequestMapping(value = "/view/all", method = RequestMethod.GET)
 	public String showCampaigns(Map model, HttpServletRequest request) {
@@ -99,7 +126,12 @@ public class CampaignController {
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String newCampaign(Map model) {
 
+		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
+
 		CampaignStep1Form cmpnStep1Form = new CampaignStep1Form();
+		cmpnStep1Form.setSenderEmail(userDetails.getUsername());
+		cmpnStep1Form.setSenderName(userDetails.getFullName());
+		cmpnStep1Form.setReplyToAddress(userDetails.getUsername());
 
 		model.put("campaignStep1Form", cmpnStep1Form);
 
@@ -127,7 +159,7 @@ public class CampaignController {
 		cmpnStep1Form.setSenderEmail(snapshotBean.getSenderEmailId());
 		cmpnStep1Form.setSenderName(snapshotBean.getSenderName());
 		cmpnStep1Form.setSubject(snapshotBean.getSubject());
-		// cmpnStep1Form.setReplyToAddress(replyToAddress);
+		cmpnStep1Form.setReplyToAddress(snapshotBean.getReplyToEmailId());
 
 		if (req.getParameter("p") != null
 				&& req.getParameter("p").equals("snapshot")) {
@@ -311,18 +343,20 @@ public class CampaignController {
 				+ cmpnForm.getCampaignId();
 
 	}
-	
+
 	@RequestMapping(value = "/deliver/test", method = RequestMethod.POST)
 	public String testCampaign(CampaignTestMailForm testForm, Map model) {
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
 
 		if (testForm.getNextAction().equals("next")) {
-			CampaignTestMailForm form = new CampaignTestMailForm();
-			form.setTestMailId(snapshotBean.getSenderEmailId());
-			form.setCampaignId(snapshotBean.getCampaignId()+"");
-			
-			return "testcampaign";
+			CampaignDeliveryForm form = new CampaignDeliveryForm();
+			form.setConfirmationMailIdNow(userDetails.getUsername());
+			form.setConfirmationMailIdLater(userDetails.getUsername());
+			form.setCampaignId(testForm.getCampaignId() + "");
+			form.setDeliveryType("now");
+
+			return "campaigndelivery";
 		} else {
 			return "redirect:/usr/campaign/view/all";
 		}
@@ -330,7 +364,51 @@ public class CampaignController {
 		// return null;
 	}
 
-	@RequestMapping(value = "/save/text", method = RequestMethod.POST)
+	@RequestMapping(value = "/deliver/schedule", method = RequestMethod.POST)
+	public String scheduleCampaign(CampaignDeliveryForm deliveryForm, Map model) {
+		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
+		long orgId = userDetails.getOrgId();
+
+		if (deliveryForm.getNextAction().equals("schedule")) {
+			if (deliveryForm.getDeliveryType().equals("now")) {
+				campaignStatusService.scheduleCampaignNow(
+						deliveryForm.getCampaignId(),
+						CampaignStatusEnum.NOW.getStatus(),
+						deliveryForm.getConfirmationMailIdNow(),
+						MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
+
+				deliveryForm = new CampaignDeliveryForm();
+				model.put("campaignDeliveryForm", deliveryForm);
+				return "campaigndelivery";
+			} else if (deliveryForm.getDeliveryType().equals("later")) {
+				String scheduledTime = deliveryForm.getDate() + " "
+						+ deliveryForm.getTimeHour() + ":"
+						+ deliveryForm.getTimeMinute() + ":" + "00";
+				campaignStatusService.scheduleCampaignLater(
+						deliveryForm.getCampaignId(),
+						CampaignStatusEnum.SCHEDULED.getStatus(),
+						deliveryForm.getConfirmationMailIdLater(),
+						scheduledTime, deliveryForm.getTimezone(),
+						MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
+
+				deliveryForm = new CampaignDeliveryForm();
+				model.put("campaignDeliveryForm", deliveryForm);
+				return "campaigndelivery";
+			}
+		} else if (deliveryForm.getNextAction().equals("prev")) {
+			CampaignTestMailForm form = new CampaignTestMailForm();
+			form.setTestMailId(userDetails.getUsername());
+			form.setCampaignId(deliveryForm.getCampaignId() + "");
+
+			model.put("campaignTestMailForm", form);
+
+			return "testcampaign";
+		}
+
+		return null;
+	}
+
+	@RequestMapping(value = "/save/test", method = RequestMethod.POST)
 	public String saveSnapshot(CampaignSnapshotBean snapshotBean, Map model) {
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
@@ -338,8 +416,9 @@ public class CampaignController {
 		if (snapshotBean.getNextAction().equals("next")) {
 			CampaignTestMailForm form = new CampaignTestMailForm();
 			form.setTestMailId(snapshotBean.getSenderEmailId());
-			form.setCampaignId(snapshotBean.getCampaignId()+"");
-			
+			form.setCampaignId(snapshotBean.getCampaignId() + "");
+
+			model.put("campaignTestMailForm", form);
 			return "testcampaign";
 		} else {
 			return "redirect:/usr/campaign/view/all";
@@ -459,10 +538,11 @@ public class CampaignController {
 		Campaign cmpn = new Campaign();
 		cmpn.setCampaignName(cmpnForm.getCampaignName());
 		cmpn.setSubject(cmpnForm.getSubject());
-		cmpn.setCreatedEmailId(userDetails.getUsername());
+		//cmpn.setCreatedEmailId(userDetails.getUsername());
 		cmpn.setLastModifiedTime(MailerUtil.FORMATTER_WITH_TIME
 				.format(currentTime));
 		cmpn.setCampaignId(Long.parseLong(campaignIdStr));
+		cmpn.setReplyToEmailId(cmpnForm.getReplyToAddress());
 		campaignService.updateCampaign(cmpn);
 
 		CampaignStatus cmpnStatus = new CampaignStatus();
@@ -523,7 +603,8 @@ public class CampaignController {
 		cmpn.setCreatedTime(MailerUtil.FORMATTER_WITH_TIME.format(currentTime));
 		cmpn.setLastModifiedTime(MailerUtil.FORMATTER_WITH_TIME
 				.format(currentTime));
-
+		cmpn.setReplyToEmailId(cmpnForm.getReplyToAddress());
+		
 		long campaignId = -1;
 
 		if (campaignIdStr != null && campaignIdStr.trim().length() > 0) {

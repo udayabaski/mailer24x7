@@ -46,4 +46,10 @@ public interface ICampaignStatusService {
 
 	public String getS3Path(String campaignId);
 
+	public void scheduleCampaignNow(String campaignId, int status, String confirmationMail, String updatedTime);
+
+	public void scheduleCampaignLater(String campaignId, int status,
+			String confirmationMailIdLater, String scheduledTime,
+			String timezone, String updatedTime);
+
 }

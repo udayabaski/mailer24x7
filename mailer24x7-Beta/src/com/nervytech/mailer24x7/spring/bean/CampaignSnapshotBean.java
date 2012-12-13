@@ -22,6 +22,7 @@ public class CampaignSnapshotBean {
 	private String senderId;
 	private String senderName;
 	private String senderEmailId;
+	private String replyToEmailId;
 	private String campaignType;
 	private int contentTypeInt;
 	private String content;
@@ -251,6 +252,21 @@ public class CampaignSnapshotBean {
 	 */
 	public void setNextAction(String nextAction) {
 		this.nextAction = nextAction;
+	}
+
+	/**
+	 * @return the replyToEmailId
+	 */
+	public String getReplyToEmailId() {
+		return replyToEmailId;
+	}
+
+	/**
+	 * @param replyToEmailId
+	 *            the replyToEmailId to set
+	 */
+	public void setReplyToEmailId(String replyToEmailId) {
+		this.replyToEmailId = replyToEmailId;
 	}
 
 }

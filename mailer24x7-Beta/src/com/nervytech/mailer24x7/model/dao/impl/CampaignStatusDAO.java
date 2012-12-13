@@ -212,7 +212,7 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 		getJdbcTemplate().execute(updateQuery);
 
 	}
-	
+
 	@Override
 	public void updateSubscriberListId(long campaignId, String subscriberGroup) {
 		String updateQuery = "UPDATE CAMPAIGN_STATUS SET SUBSCRIBER_LIST_ID='"
@@ -221,9 +221,8 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 		logger.debug("Update Campaign Query : " + updateQuery);
 
 		getJdbcTemplate().execute(updateQuery);
-		
-	}
 
+	}
 
 	public static CampaignStatusDAO getFromApplicationContext(
 			ApplicationContext ctx) {
@@ -236,6 +235,32 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 				+ campaignId;
 		System.out.println(" Campaign sync status query ===> " + selectQuery);
 		return getJdbcTemplate().queryForObject(selectQuery, String.class);
+	}
+
+	@Override
+	public void scheduleCampaignNow(String campaignId, int status,String confirmationMail,
+			String updateTime) {
+		String udateQuery = "update CAMPAIGN_STATUS set STATUS='" + status
+				+ "',CONFIRMATION_MAILID='"+confirmationMail+"'  LAST_UPDATED_TIME='" + updateTime
+				+ "' WHERE CAMPAIGN_ID =" + campaignId;
+
+		logger.debug("Update Campaign Status Query : " + udateQuery);
+
+		getJdbcTemplate().execute(udateQuery);
+	}
+
+	@Override
+	public void scheduleCampaignLater(String campaignId, int status,
+			String confirmationMailIdLater, String scheduledTime,
+			String timezone, String updatedTime) {
+		String udateQuery = "update CAMPAIGN_STATUS set STATUS='" + status
+				+ "',CONFIRMATION_MAILID='"+confirmationMailIdLater+"'  LAST_UPDATED_TIME='" + updatedTime
+				+ "',SCHEDULED_ON='"+scheduledTime+"'  TIMEZONE='" + timezone
+				+ "' WHERE CAMPAIGN_ID =" + campaignId;
+
+		logger.debug("Update Campaign Status Query : " + udateQuery);
+
+		getJdbcTemplate().execute(udateQuery);
 	}
 
 }

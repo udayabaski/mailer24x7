@@ -46,4 +46,11 @@ public interface ICampaignStatusDAO {
 
 	public String getS3Path(String campaignId);
 
+	public void scheduleCampaignNow(String campaignId, int status, String confirmationMail,
+			String updateTime);
+
+	public void scheduleCampaignLater(String campaignId, int status,
+			String confirmationMailIdLater, String scheduledTime,
+			String timezone, String updatedTime);
+
 }
