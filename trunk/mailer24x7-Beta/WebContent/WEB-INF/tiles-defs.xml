@@ -89,6 +89,12 @@
 		<put-attribute name="body" value="/WEB-INF/views/campaign_test.jsp" />
 	</definition>
 	
+	<definition name="campaigndelivery" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : home" />
+		<put-attribute name="body" value="/WEB-INF/views/campaign_delivery.jsp" />
+	</definition>
+	
+	
 	<definition name="campaignStep1" extends="baseLayout">
 		<put-attribute name="title" value="Mailer24x7 : home" />
 		<put-attribute name="body" value="/WEB-INF/views/campaign_step1.jsp" />

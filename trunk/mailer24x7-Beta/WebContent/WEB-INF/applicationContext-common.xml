@@ -55,19 +55,20 @@
 	<bean id="applicationProperty"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
-		   <value>classpath:scheduler.properties</value>
+			<value>classpath:scheduler.properties</value>
 		</property>
 	</bean>
-	
-	<util:properties id="applicationProps" location="classpath:scheduler.properties"/>
-	
+
+	<util:properties id="applicationProps" location="classpath:scheduler.properties" />
+
 
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="/WEB-INF/messages" />
 	</bean>
 
-	<!-- <jee:jndi-lookup id="dataSource1" jndi-name="java:comp/env/jdbc/MySQLDS" />  -->
+	<!-- <jee:jndi-lookup id="dataSource1" jndi-name="java:comp/env/jdbc/MySQLDS" 
+		/> -->
 
 	<bean id="dataSource" destroy-method="close"
 		class="org.apache.commons.dbcp.BasicDataSource">
@@ -92,73 +93,78 @@
 		</property>
 	</bean>
 
-	<bean id="campaignSenderDAO" class="com.nervytech.mailer24x7.model.dao.impl.CampaignSenderDAO">
+	<bean id="campaignSenderDAO"
+		class="com.nervytech.mailer24x7.model.dao.impl.CampaignSenderDAO">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
 	</bean>
-	
-	<bean id="campaignStatusDAO" class="com.nervytech.mailer24x7.model.dao.impl.CampaignStatusDAO">
+
+	<bean id="campaignStatusDAO"
+		class="com.nervytech.mailer24x7.model.dao.impl.CampaignStatusDAO">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
 	</bean>
-	
+
 	<bean id="countryMapDAO" class="com.nervytech.mailer24x7.model.dao.impl.CountryMapDAO">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
 	</bean>
-	
+
 	<bean id="organizationDAO" class="com.nervytech.mailer24x7.model.dao.impl.OrganizationDAO">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
 	</bean>
-	
-	<bean id="subscriberIdStatusDAO" class="com.nervytech.mailer24x7.model.dao.impl.SubscriberIdStatusDAO">
+
+	<bean id="subscriberIdStatusDAO"
+		class="com.nervytech.mailer24x7.model.dao.impl.SubscriberIdStatusDAO">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
 	</bean>
-	
-	<bean id="subscriberListDAO" class="com.nervytech.mailer24x7.model.dao.impl.SubscriberListDAO">
+
+	<bean id="subscriberListDAO"
+		class="com.nervytech.mailer24x7.model.dao.impl.SubscriberListDAO">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
 	</bean>
-	
-	
-	<bean id="subscriberReportsDAO" class="com.nervytech.mailer24x7.model.dao.impl.SubscriberReportsDAO">
+
+
+	<bean id="subscriberReportsDAO"
+		class="com.nervytech.mailer24x7.model.dao.impl.SubscriberReportsDAO">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
 	</bean>
-	
+
 	<bean id="userDAO" class="com.nervytech.mailer24x7.model.dao.impl.UserDAO">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
 	</bean>
-	
+
 	<bean id="userSessionDAO" class="com.nervytech.mailer24x7.model.dao.impl.UserSessionDAO">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
 	</bean>
-	
+
 	<bean id="userUuidDAO" class="com.nervytech.mailer24x7.model.dao.impl.UserUuidDAO">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
 	</bean>
-	
+
 	<bean id="historyDAO" class="com.nervytech.mailer24x7.model.dao.impl.HistoryDAO">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
 	</bean>
-	
+
 	<bean id="mailgunCampignSyncer" class="com.nervytech.mailer24x7.mailgun.MailgunCampignSyncer" />
 	<bean id="campaignTaskExecutor"
 		class="com.nervytech.mailer24x7.campaign.job.task.CampaignTaskExecutor" />
@@ -286,12 +292,11 @@
 		<property name="triggers">
 			<list>
 				<!-- <ref bean="cronTrigger" /> -->
-				<!-- <ref bean="campaignNowTrigger" />
-				<ref bean="campaignLaterTrigger" />
-				<ref bean="biHoursCampaignStatsSyncTrigger" />
-				<ref bean="twelveHoursCampaignStatsSyncTrigger" /> -->
+				<!-- <ref bean="campaignNowTrigger" /> <ref bean="campaignLaterTrigger" 
+					/> <ref bean="biHoursCampaignStatsSyncTrigger" /> <ref bean="twelveHoursCampaignStatsSyncTrigger" 
+					/> -->
 			</list>
-		</property> 
+		</property>
 		<!-- <property name="dataSource" ref="dataSource"/> <property name="quartzProperties"> 
 			<props> <prop key="org.quartz.scheduler.instanceName">MailerClusteredScheduler</prop> 
 			<prop key="org.quartz.scheduler.instanceId">AUTO</prop> <prop key="org.quartz.jobStore.misfireThreshold">60000</prop> 
@@ -312,13 +317,162 @@
 		<entry key="0" value="USER" />
 		<entry key="1" value="ADMIN" />
 	</util:map>
-
+	
 	<util:map id="countryDropDown">
 		<entry key="" value="Select" />
 		<entry key="India" value="India" />
-		<entry key="USA" value="USA" />
-		<entry key="UK" value="UK" />
-		<entry key="Germany" value="Germany" />
+		<entry key="Canada" value="Canada" />
+	</util:map>
+	
+	<util:map id="hoursDropDown">
+		<entry key="1" value="1" />
+		<entry key="2" value="2" />
+		<entry key="3" value="3" />
+		<entry key="4" value="4" />
+		<entry key="5" value="5" />
+		<entry key="6" value="6" />
+		<entry key="7" value="7" />
+		<entry key="8" value="8" />
+		<entry key="9" value="9" />
+		<entry key="10" value="10" />
+		<entry key="11" value="11" />
+		<entry key="12" value="12" />
+		<entry key="13" value="13" />
+		<entry key="14" value="14" />
+		<entry key="15" value="15" />
+		<entry key="16" value="16" />
+		<entry key="17" value="17" />
+		<entry key="18" value="18" />
+		<entry key="19" value="19" />
+		<entry key="20" value="20" />
+		<entry key="21" value="21" />
+		<entry key="22" value="22" />
+		<entry key="23" value="23" />
+	</util:map>
+	
+	<util:map id="minutesDropDown">
+		<entry key="00" value="00" />
+		<entry key="05" value="05" />
+		<entry key="10" value="10" />
+		<entry key="15" value="15" />
+		<entry key="20" value="20" />
+		<entry key="25" value="25" />
+		<entry key="30" value="30" />
+		<entry key="35" value="35" />
+		<entry key="40" value="40" />
+		<entry key="45" value="45" />
+		<entry key="50" value="50" />
+		<entry key="55" value="55" />
+	 </util:map>
+
+	<util:map id="timezoneDropdown">
+	    <entry key="" value="Select a Time Zone" />
+		<entry key="(GMT) Casablanca" value="(GMT) Casablanca" />
+		<entry key="(GMT) Coordinated Universal Time" value="(GMT) Coordinated Universal Time" />
+		<entry key="(GMT) Dublin, Edinburgh, Lisbon, London" value="(GMT) Dublin, Edinburgh, Lisbon, London" />
+		<entry key="(GMT) Monrovia, Reykjavik" value="(GMT) Monrovia, Reykjavik" />
+		<entry key="(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
+			value="(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna" />
+		<entry key="(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague"
+			value="(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague" />
+		<entry key="(GMT+01:00) Brussels, Copenhagen, Madrid, Paris"
+			value="(GMT+01:00) Brussels, Copenhagen, Madrid, Paris" />
+		<entry key="(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb" value="(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb" />
+		<entry key="(GMT+01:00) West Central Africa" value="(GMT+01:00) West Central Africa" />
+		<entry key="(GMT+01:00) Windhoek" value="(GMT+01:00) Windhoek" />
+		<entry key="(GMT+02:00) Amman" value="(GMT+02:00) Amman" />
+		<entry key="(GMT+02:00) Athens, Bucharest" value="(GMT+02:00) Athens, Bucharest" />
+		<entry key="(GMT+02:00) Beirut" value="(GMT+02:00) Beirut" />
+		<entry key="(GMT+02:00) Cairo" value="(GMT+02:00) Cairo" />
+		<entry key="(GMT+02:00) Damascus" value="(GMT+02:00) Damascus" />
+		<entry key="(GMT+02:00) Harare, Pretoria" value="(GMT+02:00) Harare, Pretoria" />
+		<entry key="(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius"
+			value="(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius" />
+		<entry key="(GMT+02:00) Istanbul" value="(GMT+02:00) Istanbul" />
+		<entry key="(GMT+02:00) Jerusalem" value="(GMT+02:00) Jerusalem" />
+		<entry key="(GMT+02:00) Nicosia" value="(GMT+02:00) Nicosia" />
+		<entry key="(GMT+03:00) Baghdad" value="(GMT+03:00) Baghdad" />
+		<entry key="(GMT+03:00) Kaliningrad, Minsk" value="(GMT+03:00) Kaliningrad, Minsk" />
+		<entry key="(GMT+03:00) Kuwait, Riyadh" value="(GMT+03:00) Kuwait, Riyadh" />
+		<entry key="(GMT+03:00) Nairobi" value="(GMT+03:00) Nairobi" />
+		<entry key="(GMT+03:30) Tehran" value="(GMT+03:30) Tehran" />
+		<entry key="(GMT+04:00) Abu Dhabi, Muscat" value="(GMT+04:00) Abu Dhabi, Muscat" />
+		<entry key="(GMT+04:00) Baku" value="(GMT+04:00) Baku" />
+		<entry key="(GMT+04:00) Moscow, St. Petersburg, Volgograd"
+			value="(GMT+04:00) Moscow, St. Petersburg, Volgograd" />
+		<entry key="(GMT+04:00) Port Louis" value="(GMT+04:00) Port Louis" />
+		<entry key="(GMT+04:00) Tbilisi" value="(GMT+04:00) Tbilisi" />
+		<entry key="(GMT+04:00) Yerevan" value="(GMT+04:00) Yerevan" />
+		<entry key="(GMT+04:30) Kabul" value="(GMT+04:30) Kabul" />
+		<entry key="(GMT+05:00) Islamabad, Karachi" value="(GMT+05:00) Islamabad, Karachi" />
+		<entry key="(GMT+05:00) Tashkent" value="(GMT+05:00) Tashkent" />
+		<entry key="(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi" value="(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi" />
+		<entry key="(GMT+05:30) Sri Jayawardenepura" value="(GMT+05:30) Sri Jayawardenepura" />
+		<entry key="(GMT+05:45) Kathmandu" value="(GMT+05:45) Kathmandu" />
+		<entry key="(GMT+06:00) Astana" value="(GMT+06:00) Astana" />
+		<entry key="(GMT+06:00) Dhaka" value="(GMT+06:00) Dhaka" />
+		<entry key="(GMT+06:00) Ekaterinburg" value="(GMT+06:00) Ekaterinburg" />
+		<entry key="(GMT+06:30) Yangon (Rangoon)" value="(GMT+06:30) Yangon (Rangoon)" />
+		<entry key="(GMT+07:00) Bangkok, Hanoi, Jakarta" value="(GMT+07:00) Bangkok, Hanoi, Jakarta" />
+		<entry key="(GMT+07:00) Novosibirsk" value="(GMT+07:00) Novosibirsk" />
+		<entry key="(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi" value="(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi" />
+		<entry key="(GMT+08:00) Krasnoyarsk" value="(GMT+08:00) Krasnoyarsk" />
+		<entry key="(GMT+08:00) Kuala Lumpur, Singapore" value="(GMT+08:00) Kuala Lumpur, Singapore" />
+		<entry key="(GMT+08:00) Perth" value="(GMT+08:00) Perth" />
+		<entry key="(GMT+08:00) Taipei" value="(GMT+08:00) Taipei" />
+		<entry key="(GMT+08:00) Ulaanbaatar" value="(GMT+08:00) Ulaanbaatar" />
+		<entry key="(GMT+09:00) Irkutsk" value="(GMT+09:00) Irkutsk" />
+		<entry key="(GMT+09:00) Osaka, Sapporo, Tokyo" value="(GMT+09:00) Osaka, Sapporo, Tokyo" />
+		<entry key="(GMT+09:00) Seoul" value="(GMT+09:00) Seoul" />
+		<entry key="(GMT+09:30) Adelaide" value="(GMT+09:30) Adelaide" />
+		<entry key="(GMT+09:30) Darwin" value="(GMT+09:30) Darwin" />
+		<entry key="(GMT+10:00) Brisbane" value="(GMT+10:00) Brisbane" />
+		<entry key="(GMT+10:00) Canberra, Melbourne, Sydney" value="(GMT+10:00) Canberra, Melbourne, Sydney" />
+		<entry key="(GMT+10:00) Guam, Port Moresby" value="(GMT+10:00) Guam, Port Moresby" />
+		<entry key="(GMT+10:00) Hobart" value="(GMT+10:00) Hobart" />
+		<entry key="(GMT+10:00) Yakutsk" value="(GMT+10:00) Yakutsk" />
+		<entry key="(GMT+11:00) Solomon Is., New Caledonia" value="(GMT+11:00) Solomon Is., New Caledonia" />
+		<entry key="(GMT+11:00) Vladivostok" value="(GMT+11:00) Vladivostok" />
+		<entry key="(GMT+12:00) Auckland, Wellington" value="(GMT+12:00) Auckland, Wellington" />
+		<entry key="(GMT+12:00) Coordinated Universal Time+12" value="(GMT+12:00) Coordinated Universal Time+12" />
+		<entry key="(GMT+12:00) Fiji" value="(GMT+12:00) Fiji" />
+		<entry key="(GMT+12:00) Magadan" value="(GMT+12:00) Magadan" />
+		<entry key="(GMT+12:00) Petropavlovsk-Kamchatsky - Old" value="(GMT+12:00) Petropavlovsk-Kamchatsky - Old" />
+		<entry key="(GMT+13:00) Nuku'alofa" value="(GMT+13:00) Nuku'alofa" />
+		<entry key="(GMT+13:00) Samoa" value="(GMT+13:00) Samoa" />
+		<entry key="(GMT-01:00) Azores" value="(GMT-01:00) Azores" />
+		<entry key="(GMT-01:00) Cape Verde Is." value="(GMT-01:00) Cape Verde Is." />
+		<entry key="(GMT-02:00) Coordinated Universal Time-02" value="(GMT-02:00) Coordinated Universal Time-02" />
+		<entry key="(GMT-02:00) Mid-Atlantic" value="(GMT-02:00) Mid-Atlantic" />
+		<entry key="(GMT-03:00) Brasilia" value="(GMT-03:00) Brasilia" />
+		<entry key="(GMT-03:00) Buenos Aires" value="(GMT-03:00) Buenos Aires" />
+		<entry key="(GMT-03:00) Cayenne, Fortaleza" value="(GMT-03:00) Cayenne, Fortaleza" />
+		<entry key="(GMT-03:00) Greenland" value="(GMT-03:00) Greenland" />
+		<entry key="(GMT-03:00) Montevideo" value="(GMT-03:00) Montevideo" />
+		<entry key="(GMT-03:00) Salvador" value="(GMT-03:00) Salvador" />
+		<entry key="(GMT-03:30) Newfoundland" value="(GMT-03:30) Newfoundland" />
+		<entry key="(GMT-04:00) Asuncion" value="(GMT-04:00) Asuncion" />
+		<entry key="(GMT-04:00) Atlantic Time (Canada)" value="(GMT-04:00) Atlantic Time (Canada)" />
+		<entry key="(GMT-04:00) Cuiaba" value="(GMT-04:00) Cuiaba" />
+		<entry key="(GMT-04:00) Georgetown, La Paz, Manaus, San Juan" value="(GMT-04:00) Georgetown, La Paz, Manaus, San Juan" />
+		<entry key="(GMT-04:00) Santiago" value="(GMT-04:00) Santiago" />
+		<entry key="(GMT-04:30) Caracas" value="(GMT-04:30) Caracas" />
+		<entry key="(GMT-05:00) Bogota, Lima, Quito" value="(GMT-05:00) Bogota, Lima, Quito" />
+		<entry key="(GMT-05:00) Eastern Time (US &amp; Canada)" value="(GMT-05:00) Eastern Time (US &amp; Canada)" />
+		<entry key="(GMT-05:00) Indiana (East)" value="(GMT-05:00) Indiana (East)" />
+		<entry key="(GMT-06:00) Central America" value="(GMT-06:00) Central America" />
+		<entry key="(GMT-06:00) Central Time (US &amp; Canada)" value="(GMT-06:00) Central Time (US &amp; Canada)" />
+		<entry key="(GMT-06:00) Guadalajara, Mexico City, Monterrey" value="(GMT-06:00) Guadalajara, Mexico City, Monterrey" />
+		<entry key="(GMT-06:00) Saskatchewan" value="(GMT-06:00) Saskatchewan" />
+		<entry key="(GMT-07:00) Arizona" value="(GMT-07:00) Arizona" />
+		<entry key="(GMT-07:00) Chihuahua, La Paz, Mazatlan" value="(GMT-07:00) Chihuahua, La Paz, Mazatlan" />
+		<entry key="(GMT-07:00) Mountain Time (US &amp; Canada)" value="(GMT-07:00) Mountain Time (US &amp; Canada)" />
+		<entry key="(GMT-08:00) Baja California" value="(GMT-08:00) Baja California" />
+		<entry key="(GMT-08:00) Pacific Time (US &amp; Canada)" value="(GMT-08:00) Pacific Time (US &amp; Canada)" />
+		<entry key="(GMT-09:00) Alaska" value="(GMT-09:00) Alaska" />
+		<entry key="(GMT-10:00) Hawaii" value="(GMT-10:00) Hawaii" />
+		<entry key="(GMT-11:00) Coordinated Universal Time-11" value="(GMT-11:00) Coordinated Universal Time-11" />
+		<entry key="(GMT-12:00) International Date Line West" value="(GMT-12:00) International Date Line West" />
 	</util:map>
 
 </beans>

@@ -196,5 +196,27 @@ public class CampaignStatusService implements ICampaignStatusService {
 		}
 		return s3Path;
 	}
+
+	@Override
+	public void scheduleCampaignNow(String campaignId, int status,String confirmationMail, String updateTime) {
+		try {
+			cmpnStatusDAO.scheduleCampaignNow(campaignId, status, confirmationMail, updateTime);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}	
+	}
+
+	@Override
+	public void scheduleCampaignLater(String campaignId, int status,
+			String confirmationMailIdLater, String scheduledTime,
+			String timezone, String updatedTime) {
+		try {
+			cmpnStatusDAO.scheduleCampaignLater(campaignId, status, confirmationMailIdLater, scheduledTime, timezone, updatedTime);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}		
+	}
 	
 }

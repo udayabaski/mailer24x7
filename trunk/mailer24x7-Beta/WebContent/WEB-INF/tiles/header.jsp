@@ -54,17 +54,17 @@ $(this).parent().addClass('active-menu');
 
 <tr>
 <td  width="10%" style="height:60px;">
-<img src="../images/mailer-logo.png" /> 
+<img src="${pageContext.request.contextPath}/images/mailer-logo.png" /> 
 </td>
 <td align="right" valign="top">
 <div class="menu">
         <ul>
             <li>
-                <a href="#">Logout<span class="arrow"></span></a>
+                <a href="${pageContext.request.contextPath}/j_spring_security_logout">Logout<span class="arrow"></span></a>
                 
                 <ul>
 
-                    <li><a href="<c:url value="/j_spring_security_logout"/>">Logout</a></li>
+                    <li><a href="${pageContext.request.contextPath}/j_spring_security_logout">Logout</a></li>
                     <li><a href="#">Arunkumar</a></li>
                    <li><a href="#">Appadurai</a></li>
                     <li><a href="#">Arunkumar</a></li>

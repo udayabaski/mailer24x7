@@ -16,6 +16,7 @@ public class RegistrationForm {
 	private String company;
 	private String website;
 	private String country;
+	private String timezone;
 	private String emailId;
 	private String password;
 	private String confirmPassword;
