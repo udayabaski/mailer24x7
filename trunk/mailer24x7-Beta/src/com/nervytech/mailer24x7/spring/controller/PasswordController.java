@@ -180,7 +180,7 @@ public class PasswordController {
 		uuid.setCreatedTime(MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
 		uuid.setType(UuidTypeEnum.RESET.getStatus());
 
-		// usersDAO.insertUuid(reg);
+		usrUuidService.saveUuid(uuid);
 
 		logger.info("Password Reset mail UUID : " + uuid.getUuid() + " User : "
 				+ user.getEmailId());
