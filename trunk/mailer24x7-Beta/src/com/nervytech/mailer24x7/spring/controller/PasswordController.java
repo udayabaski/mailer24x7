@@ -92,21 +92,21 @@ public class PasswordController {
 
 		return "changepwd";
 	}
-	
+
 	@RequestMapping(value = "/update/new", method = RequestMethod.POST)
 	public String updateNewPwd(UserForm userForm, BindingResult result,
 			Map model, HttpServletRequest request) {
-		
+
 		ValidationUtils.rejectIfEmptyOrWhitespace(result, "oldPassword",
-				"NotEmpty.profileForm.oldPassword", "Old Password must not be empty.");
+				"NotEmpty.profileForm.oldPassword",
+				"Old Password must not be empty.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(result, "password",
 				"NotEmpty.profileForm.password", "Password must not be empty.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(result, "confirmPassword",
 				"NotEmpty.profileForm.confirmPassword",
 				"Confirm password must not be empty.");
 
-		if (!(userForm.getPassword()).equals(userForm
-				.getConfirmPassword())) {
+		if (!(userForm.getPassword()).equals(userForm.getConfirmPassword())) {
 			result.rejectValue("confirmPassword",
 					"matchingPassword.profileForm.password",
 					"Password and Confirm Password does not match.");
@@ -115,30 +115,31 @@ public class PasswordController {
 		if (result.hasErrors()) {
 			return "resetpwd";
 		}
-		
+
 		String userId = userForm.getUserId();
 
 		User user = usrService.getUserByUserId(Long.parseLong(userId));
-		
+
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		SessionUser userDetails = new SessionUser(user.getEmailId(),
 				user.getPassword(), authorities, user.getOrgId(),
 				user.getUserId(), true, user.getFullName());
 
-		String oldEncodedPassword = passwordEncoder.encodePassword(userForm.getOldPassword(), saltSource.getSalt(userDetails));
+		String oldEncodedPassword = passwordEncoder.encodePassword(
+				userForm.getOldPassword(), saltSource.getSalt(userDetails));
 		String actualPassword = user.getPassword();
-		
-		if(!oldEncodedPassword.equals(actualPassword)){
+
+		if (!oldEncodedPassword.equals(actualPassword)) {
 			result.rejectValue("oldPassword",
 					"matchingPassword.profileForm.oldPassword",
 					"Old Password does not match.");
 		}
-		
-		user.setPassword(passwordEncoder.encodePassword(
-				userForm.getPassword(), saltSource.getSalt(userDetails)));
+
+		user.setPassword(passwordEncoder.encodePassword(userForm.getPassword(),
+				saltSource.getSalt(userDetails)));
 
 		usrService.updateEncodedPassword(user);
-		
+
 		UserForm form = new UserForm();
 		form.setMessage("Password updated successfully");
 		form.setMessageType(MessageTypeEnum.SUCCESS.name());
@@ -185,11 +186,12 @@ public class PasswordController {
 		logger.info("Password Reset mail UUID : " + uuid.getUuid() + " User : "
 				+ user.getEmailId());
 
-		String resetUrl = MailerUtil.RESET_MAIL_URL;
-		resetUrl = resetUrl.replaceAll("EMAIL_ID",
-				regForm.getEmailId());
-		resetUrl = resetUrl.replaceAll("RESET_ID",
-				uuid.getUuid());
+		String resetUrl = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + "/"
+				+ request.getContextPath() + "/"
+				+ "pub/pwd/reset/confirm/email/EMAIL_ID/id/RESET_ID";
+		resetUrl = resetUrl.replaceAll("EMAIL_ID", regForm.getEmailId());
+		resetUrl = resetUrl.replaceAll("RESET_ID", uuid.getUuid());
 
 		String content = "Hi "
 				+ user.getFullName()
@@ -208,7 +210,8 @@ public class PasswordController {
 	}
 
 	@RequestMapping(value = "/reset/confirm/email/{emailId}/id/{uuId}", method = RequestMethod.GET)
-	public String resetPassword(@PathVariable String emailId,@PathVariable String uuId,Map model) {
+	public String resetPassword(@PathVariable String emailId,
+			@PathVariable String uuId, Map model) {
 
 		String userId = null;
 
@@ -225,26 +228,26 @@ public class PasswordController {
 			model.put("loginForm", loginForm);
 			return "login";
 		}
-		
+
 		RegistrationForm form = new RegistrationForm();
 		form.setUserId(userId);
-		
+
 		model.put("registrationForm", form);
 
 		return "resetpwd";
 	}
-	
-	@RequestMapping(value = "/update/pwd", method = RequestMethod.GET)
-	public String updatePassword(RegistrationForm regForm,BindingResult result,Map model) {
-		
+
+	@RequestMapping(value = "/update/pwd", method = RequestMethod.POST)
+	public String updatePassword(RegistrationForm regForm,
+			BindingResult result, Map model) {
+
 		ValidationUtils.rejectIfEmptyOrWhitespace(result, "password",
 				"NotEmpty.profileForm.password", "Password must not be empty.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(result, "confirmPassword",
 				"NotEmpty.profileForm.confirmPassword",
 				"Confirm password must not be empty.");
 
-		if (!(regForm.getPassword()).equals(regForm
-				.getConfirmPassword())) {
+		if (!(regForm.getPassword()).equals(regForm.getConfirmPassword())) {
 			result.rejectValue("confirmPassword",
 					"matchingPassword.profileForm.password",
 					"Password and Confirm Password does not match.");
@@ -253,7 +256,7 @@ public class PasswordController {
 		if (result.hasErrors()) {
 			return "resetpwd";
 		}
-		
+
 		String userId = regForm.getUserId();
 
 		User user = usrService.getUserByUserId(Long.parseLong(userId));
@@ -263,13 +266,13 @@ public class PasswordController {
 				user.getPassword(), authorities, user.getOrgId(),
 				user.getUserId(), true, user.getFullName());
 
-		user.setPassword(passwordEncoder.encodePassword(
-				regForm.getPassword(), saltSource.getSalt(userDetails)));
+		user.setPassword(passwordEncoder.encodePassword(regForm.getPassword(),
+				saltSource.getSalt(userDetails)));
 
 		usrService.updateEncodedPassword(user);
 
 		usrUuidService.deleteUuid(userId);
-		
+
 		LoginForm loginForm = new LoginForm();
 		loginForm.setMessage(MailerUtil.PASSWORD_RESET_MESSAGE);
 		loginForm.setMessageType(MessageTypeEnum.SUCCESS.name());
@@ -277,52 +280,48 @@ public class PasswordController {
 		return "login";
 	}
 
-
-/*	@RequestMapping(params = "action=updatepwd", method = RequestMethod.POST)
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String updatePwd(UserForm profileForm, BindingResult result,
-			Map model, HttpServletRequest request) {
-
-		ValidationUtils.rejectIfEmptyOrWhitespace(result, "password",
-				"NotEmpty.profileForm.password", "Password must not be empty.");
-		ValidationUtils.rejectIfEmptyOrWhitespace(result, "confirmPassword",
-				"NotEmpty.profileForm.confirmPassword",
-				"Confirm password must not be empty.");
-
-		if (!(profileForm.getPassword()).equals(profileForm
-				.getConfirmPassword())) {
-			result.rejectValue("confirmPassword",
-					"matchingPassword.profileForm.password",
-					"Password and Confirm Password does not match.");
-		}
-
-		if (result.hasErrors()) {
-			return "resetpwd";
-		}
-
-		String userId = profileForm.getUserId();
-
-		User user = usrService.getUserByUserId(Long.parseLong(userId));
-
-		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		SessionUser userDetails = new SessionUser(user.getEmailId(),
-				user.getPassword(), authorities, user.getOrgId(),
-				user.getUserId(), true);
-
-		user.setPassword(passwordEncoder.encodePassword(
-				profileForm.getPassword(), saltSource.getSalt(userDetails)));
-
-		usrService.updateEncodedPassword(user);
-
-		usrUuidService.deleteUuid(userId);
-
-		logger.info("Password is reset : User ID : " + userId);
-
-		LoginForm loginForm = new LoginForm();
-		loginForm.setMessage(MailerUtil.PASSWORD_RESET_MESSAGE);
-		loginForm.setMessageType(MessageTypeEnum.ERROR.name());
-		model.put("loginForm", loginForm);
-		return "login";
-	}*/
+	/*
+	 * @RequestMapping(params = "action=updatepwd", method = RequestMethod.POST)
+	 * 
+	 * @Transactional(propagation = Propagation.REQUIRES_NEW) public String
+	 * updatePwd(UserForm profileForm, BindingResult result, Map model,
+	 * HttpServletRequest request) {
+	 * 
+	 * ValidationUtils.rejectIfEmptyOrWhitespace(result, "password",
+	 * "NotEmpty.profileForm.password", "Password must not be empty.");
+	 * ValidationUtils.rejectIfEmptyOrWhitespace(result, "confirmPassword",
+	 * "NotEmpty.profileForm.confirmPassword",
+	 * "Confirm password must not be empty.");
+	 * 
+	 * if (!(profileForm.getPassword()).equals(profileForm
+	 * .getConfirmPassword())) { result.rejectValue("confirmPassword",
+	 * "matchingPassword.profileForm.password",
+	 * "Password and Confirm Password does not match."); }
+	 * 
+	 * if (result.hasErrors()) { return "resetpwd"; }
+	 * 
+	 * String userId = profileForm.getUserId();
+	 * 
+	 * User user = usrService.getUserByUserId(Long.parseLong(userId));
+	 * 
+	 * Collection<GrantedAuthority> authorities = new
+	 * ArrayList<GrantedAuthority>(); SessionUser userDetails = new
+	 * SessionUser(user.getEmailId(), user.getPassword(), authorities,
+	 * user.getOrgId(), user.getUserId(), true);
+	 * 
+	 * user.setPassword(passwordEncoder.encodePassword(
+	 * profileForm.getPassword(), saltSource.getSalt(userDetails)));
+	 * 
+	 * usrService.updateEncodedPassword(user);
+	 * 
+	 * usrUuidService.deleteUuid(userId);
+	 * 
+	 * logger.info("Password is reset : User ID : " + userId);
+	 * 
+	 * LoginForm loginForm = new LoginForm();
+	 * loginForm.setMessage(MailerUtil.PASSWORD_RESET_MESSAGE);
+	 * loginForm.setMessageType(MessageTypeEnum.ERROR.name());
+	 * model.put("loginForm", loginForm); return "login"; }
+	 */
 
 }

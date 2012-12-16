@@ -95,11 +95,11 @@ public class RegistrationController {
 
 		return "register";
 	}
-	
-	@RequestMapping(value = "/confirm/email/{emailId}/id/{uuId}",method = RequestMethod.GET)
+
+	@RequestMapping(value = "/confirm/email/{emailId}/id/{uuId}", method = RequestMethod.GET)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String confirmUser(@PathVariable String emailId,@PathVariable String uuId,
-			Map model) {
+	public String confirmUser(@PathVariable String emailId,
+			@PathVariable String uuId, Map model) {
 		String userId = null;
 		try {
 			userId = usrUuidService.getUserId(uuId);
@@ -130,22 +130,22 @@ public class RegistrationController {
 		return "login";
 
 	}
-	
+
 	@RequestMapping(value = "/confirm/resend/usr/{uuId}", method = RequestMethod.GET)
 	public String reSendConfirmationMail(@PathVariable String uuId, Map model,
 			HttpServletRequest request) {
 
 		String userId = null;
-		
+
 		try {
 			userId = usrUuidService.getUserId(uuId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		if(userId == null){
+
+		if (userId == null) {
 			RegistrationForm regForm = new RegistrationForm();
-			
+
 			regForm.setMessage("Invalid confirmation Id.");
 			regForm.setMessageType(MessageTypeEnum.ERROR.name());
 			model.put("registrationForm", regForm);
@@ -153,14 +153,15 @@ public class RegistrationController {
 			return "register";
 
 		}
-		
-		User usr = usrService.getUserByUserId(Long.parseLong(userId));
 
-		String confirmationUrl = MailerUtil.CONFIRMATION_MAIL_URL;
+		User usr = usrService.getUserByUserId(Long.parseLong(userId));
+		
+		String confirmationUrl = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + "/"
+				+ request.getContextPath()+"/"+"reg/join/confirm/email/EMAIL_ID/id/CONFIRM_ID";
 		confirmationUrl = confirmationUrl.replaceAll("EMAIL_ID",
 				usr.getEmailId());
-		confirmationUrl = confirmationUrl.replaceAll("CONFIRM_ID",
-				uuId);
+		confirmationUrl = confirmationUrl.replaceAll("CONFIRM_ID", uuId);
 
 		String content = "Hi "
 				+ usr.getFullName()
@@ -176,7 +177,7 @@ public class RegistrationController {
 		RegistrationForm regForm = new RegistrationForm();
 
 		regForm.setUuId(uuId);
-		
+
 		regForm.setMessageType(MessageTypeEnum.SUCCESS.name());
 
 		model.put("registrationForm", regForm);
@@ -184,11 +185,10 @@ public class RegistrationController {
 		return "register";
 	}
 
-
 	@RequestMapping(method = RequestMethod.POST)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String registerUser(RegistrationForm regForm, BindingResult result,
-			Map model) {
+			Map model, HttpServletRequest request) {
 
 		registrationValidation.validate(regForm, result);
 
@@ -199,8 +199,7 @@ public class RegistrationController {
 		Organization checkOrg = orgService.getOrganization(
 				regForm.getCompany(), regForm.getCountry());
 		if (checkOrg != null) {
-			result.rejectValue("company",
-					"NotEmpty.registrationForm.company",
+			result.rejectValue("company", "NotEmpty.registrationForm.company",
 					"This company with the selected country is already registered.");
 			return "register";
 		}
@@ -274,7 +273,9 @@ public class RegistrationController {
 
 		usrUuidService.saveUuid(uuid);
 
-		String confirmationUrl = MailerUtil.CONFIRMATION_MAIL_URL;
+		String confirmationUrl = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + "/"
+				+ request.getContextPath()+"/"+"reg/join/confirm/email/EMAIL_ID/id/CONFIRM_ID";
 		confirmationUrl = confirmationUrl.replaceAll("EMAIL_ID",
 				user.getEmailId());
 		confirmationUrl = confirmationUrl.replaceAll("CONFIRM_ID",
@@ -312,7 +313,7 @@ public class RegistrationController {
 		regForm = new RegistrationForm();
 
 		regForm.setUuId(uuid.getUuid() + "");
-		
+
 		regForm.setMessageType(MessageTypeEnum.SUCCESS.name());
 
 		model.put("registrationForm", regForm);
