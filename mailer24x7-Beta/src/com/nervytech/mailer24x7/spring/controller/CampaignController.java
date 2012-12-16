@@ -327,10 +327,17 @@ public class CampaignController {
 	}
 
 	@RequestMapping(value = "/update/text", method = RequestMethod.POST)
-	public String updateCampaignText(CampaignStep2EditorForm cmpnForm, Map model) {
+	public String updateCampaignText(CampaignStep2EditorForm cmpnForm,BindingResult result, Map model) {
 
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
+		
+		if (cmpnForm.getTextData() == null
+				|| cmpnForm.getTextData().trim().length() == 0) {
+			result.rejectValue("textData", "NotEmpty.campaignStep2EditorForm.textData",
+					"The text is empty.");
+			return "textEditor";
+		}
 
 		String s3Path = MailerS3Client.putTxtObject(orgId,
 				userDetails.getUserId(), cmpnForm.getCampaignId(),
@@ -428,9 +435,17 @@ public class CampaignController {
 	}
 
 	@RequestMapping(value = "/save/text", method = RequestMethod.POST)
-	public String saveCampaignText(CampaignStep2EditorForm cmpnForm, Map model) {
+	public String saveCampaignText(CampaignStep2EditorForm cmpnForm,
+			BindingResult result, Map model) {
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
+
+		if (cmpnForm.getTextData() == null
+				|| cmpnForm.getTextData().trim().length() == 0) {
+			result.rejectValue("textData", "NotEmpty.campaignStep2EditorForm.textData",
+					"The text is empty.");
+			return "textEditor";
+		}
 
 		if (cmpnForm.getNextAction().equalsIgnoreCase("prev")) {
 			return "redirect:/usr/campaign/view/step2/id/"
@@ -465,7 +480,7 @@ public class CampaignController {
 		String content = "<html><body>" + cmpnForm.getHtmlData()
 				+ "<html><body>";
 
-		String s3Path = MailerS3Client.putTxtObject(orgId,
+		String s3Path = MailerS3Client.putHtmlObject(orgId,
 				userDetails.getUserId(), cmpnForm.getCampaignId(), content,
 				true);
 
@@ -489,7 +504,7 @@ public class CampaignController {
 		String content = "<html><body>" + cmpnForm.getHtmlData()
 				+ "<html><body>";
 
-		String s3Path = MailerS3Client.putTxtObject(orgId,
+		String s3Path = MailerS3Client.putHtmlObject(orgId,
 				userDetails.getUserId(), cmpnForm.getCampaignId(), content,
 				true);
 
@@ -538,7 +553,7 @@ public class CampaignController {
 		Campaign cmpn = new Campaign();
 		cmpn.setCampaignName(cmpnForm.getCampaignName());
 		cmpn.setSubject(cmpnForm.getSubject());
-		//cmpn.setCreatedEmailId(userDetails.getUsername());
+		// cmpn.setCreatedEmailId(userDetails.getUsername());
 		cmpn.setLastModifiedTime(MailerUtil.FORMATTER_WITH_TIME
 				.format(currentTime));
 		cmpn.setCampaignId(Long.parseLong(campaignIdStr));
@@ -604,7 +619,7 @@ public class CampaignController {
 		cmpn.setLastModifiedTime(MailerUtil.FORMATTER_WITH_TIME
 				.format(currentTime));
 		cmpn.setReplyToEmailId(cmpnForm.getReplyToAddress());
-		
+
 		long campaignId = -1;
 
 		if (campaignIdStr != null && campaignIdStr.trim().length() > 0) {
