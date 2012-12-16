@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.IOUtil;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,7 +214,7 @@ public class SubscriberController {
 
 						return "subscribergroupnew";
 					}
-					String subscribers = IOUtil.toString(inputStream);
+					String subscribers = IOUtils.toString(inputStream);
 					subscibersArray = subscribers
 							.split(MailerUtil.subscriberSeparator);
 

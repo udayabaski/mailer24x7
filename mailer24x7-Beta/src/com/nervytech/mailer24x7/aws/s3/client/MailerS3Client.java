@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.apache.commons.io.IOUtil;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -251,7 +251,7 @@ public class MailerS3Client {
 
 				tempFile = new File(randomId + "###" + fileName);
 
-				IOUtil.copy(zIn, new FileOutputStream(tempFile));
+				IOUtils.copy(zIn, new FileOutputStream(tempFile));
 
 				if (fileName.lastIndexOf(".css") != -1) {
 					// putObject(orgId, userId, campaignId, zIn, fileName,
