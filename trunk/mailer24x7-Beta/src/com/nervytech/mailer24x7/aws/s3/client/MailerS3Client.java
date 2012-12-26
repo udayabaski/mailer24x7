@@ -80,7 +80,6 @@ public class MailerS3Client {
 			// Setting to Singapore Endpoint ...
 			// s3Client.setEndpoint(S3_ENDPOINT);
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error("Unable to read AWS property file ", e);
 			throw new MailerS3Exception("Unable to read AWS property file ", e);
 		}
