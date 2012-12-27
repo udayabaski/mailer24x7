@@ -85,7 +85,7 @@ public class ReportsController {
 		
 		model.put("campaignReportsBean", bean);
 
-		return "campaignReport";
+		return "viewcampaignreport";
 	}
 	
 	@RequestMapping(value = "/view/campaign/id/{campaignId}/type/campaignopens/time", method = RequestMethod.GET)

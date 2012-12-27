@@ -241,7 +241,7 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 	public void scheduleCampaignNow(String campaignId, int status,String confirmationMail,
 			String updateTime) {
 		String udateQuery = "update CAMPAIGN_STATUS set STATUS='" + status
-				+ "',CONFIRMATION_MAILID='"+confirmationMail+"'  LAST_UPDATED_TIME='" + updateTime
+				+ "',CONFIRMATION_MAILID='"+confirmationMail+"', LAST_UPDATED_TIME='" + updateTime
 				+ "' WHERE CAMPAIGN_ID =" + campaignId;
 
 		logger.debug("Update Campaign Status Query : " + udateQuery);
@@ -254,7 +254,7 @@ public class CampaignStatusDAO extends JdbcDaoSupport implements
 			String confirmationMailIdLater, String scheduledTime,
 			String timezone, String updatedTime) {
 		String udateQuery = "update CAMPAIGN_STATUS set STATUS='" + status
-				+ "',CONFIRMATION_MAILID='"+confirmationMailIdLater+"'  LAST_UPDATED_TIME='" + updatedTime
+				+ "',CONFIRMATION_MAILID='"+confirmationMailIdLater+"', LAST_UPDATED_TIME='" + updatedTime
 				+ "',SCHEDULED_ON='"+scheduledTime+"'  TIMEZONE='" + timezone
 				+ "' WHERE CAMPAIGN_ID =" + campaignId;
 
