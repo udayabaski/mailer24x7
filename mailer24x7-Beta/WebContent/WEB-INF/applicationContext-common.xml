@@ -292,9 +292,8 @@
 		<property name="triggers">
 			<list>
 				<!-- <ref bean="cronTrigger" /> -->
-				<!-- <ref bean="campaignNowTrigger" /> <ref bean="campaignLaterTrigger" 
-					/> <ref bean="biHoursCampaignStatsSyncTrigger" /> <ref bean="twelveHoursCampaignStatsSyncTrigger" 
-					/> -->
+				 <ref bean="campaignNowTrigger" /> <ref bean="campaignLaterTrigger" /> 
+				 <ref bean="biHoursCampaignStatsSyncTrigger" /> <ref bean="twelveHoursCampaignStatsSyncTrigger" /> 
 			</list>
 		</property>
 		<!-- <property name="dataSource" ref="dataSource"/> <property name="quartzProperties"> 
