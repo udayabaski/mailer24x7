@@ -362,7 +362,9 @@ public class CampaignController {
 			form.setConfirmationMailIdLater(userDetails.getUsername());
 			form.setCampaignId(testForm.getCampaignId() + "");
 			form.setDeliveryType("now");
-
+			
+			model.put("campaignDeliveryForm", form);
+			
 			return "campaigndelivery";
 		} else {
 			return "redirect:/usr/campaign/view/all";
@@ -427,6 +429,9 @@ public class CampaignController {
 
 			model.put("campaignTestMailForm", form);
 			return "testcampaign";
+		} else if(snapshotBean.getNextAction().equals("prev")) {
+			return "redirect:/usr/campaign/view/snapshot/id/"
+					+ snapshotBean.getCampaignId();
 		} else {
 			return "redirect:/usr/campaign/view/all";
 		}
