@@ -23,9 +23,7 @@ import com.nervytech.mailer24x7.common.enums.MailgunSyncStatusEnum;
 import com.nervytech.mailer24x7.common.enums.SubscriberCampaignStatusEnum;
 import com.nervytech.mailer24x7.common.enums.SubscriberStatusEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
-import com.nervytech.mailer24x7.domain.model.Campaign;
 import com.nervytech.mailer24x7.domain.model.CampaignSchedulerModel;
-import com.nervytech.mailer24x7.domain.model.CampaignStatus;
 import com.nervytech.mailer24x7.domain.model.SubscriberIdStatus;
 import com.nervytech.mailer24x7.model.service.api.ICampaignStatusService;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberIdStatusService;
@@ -160,6 +158,7 @@ public class MailgunCampignSyncer {
 				+ cmpn.getCampaignId());
 
 		MailgunSyncStatusEnum status = getEnumStatus(cmpn.getSyncStatus());
+		System.out.println("STATUSSSSSSSSS "+status);
 
 		switch (status) {
 		case NONE:
@@ -170,10 +169,10 @@ public class MailgunCampignSyncer {
 					MailgunSyncStatusEnum.CAMPAIGN_CREATED);
 			// TODO. Domain we are hardcoding here
 			MailgunSubscriberUtil.createMailingList(
-					"sl_" + cmpn.getSubscriberListId(), "sungod.mailgun.org",
+					"sl_" + cmpn.getSubscriberListId(), MailerUtil.MAILGUN_DOMAIN_NAME,
 					"Subscriber List - " + cmpn.getSubscriberListId(), "sl_"
 							+ cmpn.getSubscriberListId()
-							+ "@sungod.mailgun.org");
+							+ "@"+MailerUtil.MAILGUN_DOMAIN_NAME);
 			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_IN_PROGRESS);
 
@@ -184,10 +183,10 @@ public class MailgunCampignSyncer {
 			break;
 		case CAMPAIGN_CREATED:
 			MailgunSubscriberUtil.createMailingList(
-					"sl_" + cmpn.getSubscriberListId(), "sungod.mailgun.org",
+					"sl_" + cmpn.getSubscriberListId(), MailerUtil.MAILGUN_DOMAIN_NAME,
 					"Subscriber List - " + cmpn.getSubscriberListId(), "sl_"
 							+ cmpn.getSubscriberListId()
-							+ "@sungod.mailgun.org");
+							+ "@"+MailerUtil.MAILGUN_DOMAIN_NAME);
 			cmpnStatusService.updateCampaignSyncStatus(cmpn.getCampaignId(),
 					MailgunSyncStatusEnum.SUBSCRIBER_UPDATE_IN_PROGRESS);
 
@@ -423,7 +422,7 @@ public class MailgunCampignSyncer {
 			if (subscriberList != null && !subscriberList.isEmpty()) {
 				MailgunSubscriberUtil.addMutipleMembers(
 						"sl_" + subscriberListId
-								+ "@sungod.mailgun.org", subscriberList, true);
+								+ "@"+MailerUtil.MAILGUN_DOMAIN_NAME, subscriberList, true);
 				cmpnStatusService.updateLatestCampaignSubscriberId(campaignId,
 						subscriberList.get(subscriberList.size() - 1).getStatusId());
 			} else {

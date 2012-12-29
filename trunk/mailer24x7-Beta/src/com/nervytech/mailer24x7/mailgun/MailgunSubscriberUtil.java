@@ -6,6 +6,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.json.JSONException;
 
+import com.nervytech.mailer24x7.common.util.MailerUtil;
 import com.nervytech.mailer24x7.domain.model.SubscriberIdStatus;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -25,7 +26,7 @@ public class MailgunSubscriberUtil
 		cc.getClasses().add(MultiPartWriter.class);
 		Client client = Client.create(cc);
 		client.addFilter(new HTTPBasicAuthFilter("api",
-				"key-1k6eo97h--jja9t8safne-f72in8vi11"));
+				MailerUtil.MAILGUN_API_KEY));
 		WebResource webResource =
 				client.resource("https://api.mailgun.net/v2/lists");
 		return webResource;
@@ -38,7 +39,7 @@ public class MailgunSubscriberUtil
 		cc.getClasses().add(MultiPartWriter.class);
 		Client client = Client.create(cc);
 		client.addFilter(new HTTPBasicAuthFilter("api",
-				"key-1k6eo97h--jja9t8safne-f72in8vi11"));
+				MailerUtil.MAILGUN_API_KEY));
 		WebResource webResource = null;
 		if(listName != null && !listName.isEmpty()) {
 			webResource = client.resource("https://api.mailgun.net/v2/lists/"+listName+"/members");
@@ -80,7 +81,7 @@ public class MailgunSubscriberUtil
 		cc.getClasses().add(MultiPartWriter.class);
 		Client client = Client.create(cc);
 		client.addFilter(new HTTPBasicAuthFilter("api",
-				"key-1k6eo97h--jja9t8safne-f72in8vi11"));
+				MailerUtil.MAILGUN_API_KEY));
 		WebResource webResource = null;
 		if(listName != null && !listName.isEmpty()) {
 			webResource = client.resource("https://api.mailgun.net/v2/lists/"+listName+"/members.json");

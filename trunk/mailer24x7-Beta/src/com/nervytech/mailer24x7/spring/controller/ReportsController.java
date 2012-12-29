@@ -73,16 +73,12 @@ public class ReportsController {
 		
 		int totalSent = bean.getTotalEmailsSent();
 		
-		bean.setOpenedPercentage((bean.getOpened()/totalSent)*100);
-		bean.setClickedPercentage((bean.getClicked()/totalSent)*100);
-		bean.setBouncedPercentage((bean.getBounced()/totalSent)*100);
-		bean.setDroppedPercentage((bean.getDropped()/totalSent)*100);
-		bean.setUnsubscribedPercentage((bean.getUnsubscribed()/totalSent)*100);
+		bean.setOpenedPercentage(totalSent == 0?0.0f:(bean.getOpened()/totalSent)*100);
+		bean.setClickedPercentage(totalSent == 0?0.0f:(bean.getClicked()/totalSent)*100);
+		bean.setBouncedPercentage(totalSent == 0?0.0f:(bean.getBounced()/totalSent)*100);
+		bean.setDroppedPercentage(totalSent == 0?0.0f:(bean.getDropped()/totalSent)*100);
+		bean.setUnsubscribedPercentage(totalSent == 0?0.0f:(bean.getUnsubscribed()/totalSent)*100);
 
-		int status = CampaignStatusEnum.COMPLETED.getStatus();
-		List<CampaignBean> completedCampaigns = campaignService.getCampaigns(
-				orgId, status);
-		
 		model.put("campaignReportsBean", bean);
 
 		return "viewcampaignreport";
