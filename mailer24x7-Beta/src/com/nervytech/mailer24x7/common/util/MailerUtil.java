@@ -38,7 +38,8 @@ public class MailerUtil {
 																			// MB
 
 	public static final String MAILGUN_API_KEY = "key-9enhqpnvi96dfzikfpbn46bnxpnngto0";
-	public static final String MAILGUN_RESOURCE = "https://api.mailgun.net/v2/sungod.mailgun.org/campaigns";
+	public static final String MAILGUN_RESOURCE = "https://api.mailgun.net/v2/mailer24x7.mailgun.org/campaigns";
+	public static final String MAILGUN_DOMAIN_NAME = "mailer24x7.mailgun.org";
 
 	public static Properties mailProps = null;
 
