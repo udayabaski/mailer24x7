@@ -67,7 +67,7 @@
 
 <body>
 
-<form:form id="campaign" commandName="campaignSnapshotBean" action="${pageContext.request.contextPath}/usr/campaign/save/test" method="POST">
+<form:form id="campaign" commandName="campaignSnapshotBean" action="${pageContext.request.contextPath}/usr/campaign/save/snapshot" method="POST">
 <form:hidden path="content" id="content"/>
 <form:hidden path="contentTypeInt" id="contentTypeInt"/>
 <form:hidden path="nextAction" id="nextAction" />
