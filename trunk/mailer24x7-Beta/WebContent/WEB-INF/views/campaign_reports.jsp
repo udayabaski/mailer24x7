@@ -45,7 +45,7 @@
 			function() {
 			
 			
-	var campaignId = ${campaignReportsBean.campaignId};
+	var campaignId = ${campaignReortsBean.campaignId};
 
 		$.ajax({
 			//type: "POST",
@@ -169,13 +169,13 @@
 						var dataSlices = [];
 
 						dataSlices.push([ "opened",
-								parseInt("${campaignReportsBean.opened}") ]);
+								parseInt("${campaignReortsBean.opened}") ]);
 						dataSlices.push([ "clicked",
-								parseInt("${campaignReportsBean.clicked}") ]);
+								parseInt("${campaignReortsBean.clicked}") ]);
 						dataSlices.push([ "unsubscribed",
-								parseInt("${campaignReportsBean.unsubscribed}") ]);
+								parseInt("${campaignReortsBean.unsubscribed}") ]);
 						dataSlices.push([ "bounced",
-								parseInt("${campaignReportsBean.bounced}") ]);
+								parseInt("${campaignReortsBean.bounced}") ]);
 
 						$.jqplot('pieChart', [ dataSlices ], {
 							seriesDefaults : {
@@ -204,7 +204,7 @@
 
 <body>
 
-<form:form action="reports" method="POST" commandName="campaignReportsBean">
+<form:form action="reports" method="POST" commandName="campaignReortsBean">
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
@@ -235,11 +235,11 @@
         <fieldset>
 
         <div class="hd">
-			<h2><c:out value="${campaignReportsBean.campaignName}" /></h2>
+			<h2><c:out value="${campaignReortsBean.campaignName}" /></h2>
 			
 			<span  class="options"><a href="${pageContext.request.contextPath}/usr/reports/view/all">Go to Reports Home</a></span>
 			
-			<span  class="options"><a href="${pageContext.request.contextPath}/usr/campaign/id/${campaignReportsBean.campaignId}/type/region">Reports By Region</a></span>
+			<span  class="options"><a href="${pageContext.request.contextPath}/usr/campaign/id/${campaignReortsBean.campaignId}/type/region">Reports By Region</a></span>
 			
             <span  class="options"><a href="">Share on Facebook</a></span>
             
@@ -247,15 +247,15 @@
 		<table width="100%" cellpadding="5" cellspacing="0" class="campaign-page">
 	    <tr valign="top" class="odd">
 			<td width="30%">From</td>
-			<td><c:out value="${campaignReportsBean.senderName}" /> < <c:out value="${campaignReportsBean.senderEmailId}" /> ></td>
+			<td><c:out value="${campaignReortsBean.senderName}" /> < <c:out value="${campaignReortsBean.senderEmailId}" /> ></td>
 		</tr>
 	    <tr valign="top" class="even">
 			<td width="30%">Sent at</td>
-			<td><c:out value="${campaignReportsBean.sentTime}" /></td>
+			<td><c:out value="${campaignReortsBean.sentTime}" /></td>
 		</tr>
 	    <tr valign="top" class="odd">
 			<td width="30%">Sent to</td>
-			<td><a href="${pageContext.request.contextPath}/usr/subscriber/view/group/subscribers/id/${campaignReportsBean.subscriberListId}"><c:out value="${campaignReportsBean.subscriberListName}" /></a></td>
+			<td><a href="${pageContext.request.contextPath}/usr/subscriber/view/group/subscribers/id/${campaignReortsBean.subscriberListId}"><c:out value="${campaignReortsBean.subscriberListName}" /></a></td>
 		</tr>
 		</table>
       
@@ -263,33 +263,33 @@
 	    <tr valign="top" class="odd">
 			<td width="30%" height="67"><h4>Total emails sent<br />
 			    <br /> 
-			    <span class="report-green-txt"><c:out value="${campaignReportsBean.totalEmailsSent}" /></span></h4></td>
+			    <span class="report-green-txt"><c:out value="${campaignReortsBean.totalEmailsSent}" /></span></h4></td>
 			<td width="36%"><h4>Opened<br /></h4>
 			<div>
-              <div class="count"><span class="report-green-txt"><c:out value="${campaignReportsBean.openedPercentage}" />%</span></div>
-                <div class="countDetails"><img src="${pageContext.request.contextPath}/images/user.jpg" style="height:25;width:25px; margin-right:5px; margin-top:5px" /><a href="#"><c:out value="${campaignReportsBean.opened}" /></a></div>
+              <div class="count"><span class="report-green-txt"><c:out value="${campaignReortsBean.openedPercentage}" />%</span></div>
+                <div class="countDetails"><img src="${pageContext.request.contextPath}/images/user.jpg" style="height:25;width:25px; margin-right:5px; margin-top:5px" /><a href="#"><c:out value="${campaignReortsBean.opened}" /></a></div>
               </div></td>
 			<td width="34%"><h4>Clicked</h4>
             <div>
-              <div class="count"><span class="report-blue-txt"><c:out value="${campaignReportsBean.clickedPercentage}" />%</span></div>
-                <div class="countDetails"><img src="${pageContext.request.contextPath}/images/user.jpg" style="height:25;width:25px; margin-right:5px; margin-top:5px" /><a href="#"><c:out value="${campaignReportsBean.clicked}" /></a></div>
+              <div class="count"><span class="report-blue-txt"><c:out value="${campaignReortsBean.clickedPercentage}" />%</span></div>
+                <div class="countDetails"><img src="${pageContext.request.contextPath}/images/user.jpg" style="height:25;width:25px; margin-right:5px; margin-top:5px" /><a href="#"><c:out value="${campaignReortsBean.clicked}" /></a></div>
               </div>            </td>
 		</tr>
 	    <tr valign="top" class="even">
 			<td width="30%" height="69"><h4>Bounced</h4> 
             <div>
-              <div class="count"><span class="report-bounced"><c:out value="${campaignReportsBean.bouncedPercentage}" />%</span></div>
-                <div class="countDetails"><img src="${pageContext.request.contextPath}/images/user.jpg" style="height:25;width:25px; margin-right:5px; margin-top:5px" /><a href="#"><c:out value="${campaignReportsBean.bounced}" /></a></div>
+              <div class="count"><span class="report-bounced"><c:out value="${campaignReortsBean.bouncedPercentage}" />%</span></div>
+                <div class="countDetails"><img src="${pageContext.request.contextPath}/images/user.jpg" style="height:25;width:25px; margin-right:5px; margin-top:5px" /><a href="#"><c:out value="${campaignReortsBean.bounced}" /></a></div>
               </div></td>
 			<td><h4>Unsubscribed</h4> 
             <div>
-              <div class="count"><span class="report-bounced"><c:out value="${campaignReportsBean.unsubscribedPercentage}" />%</span></div>
-                <div class="countDetails"><img src="${pageContext.request.contextPath}/images/user.jpg" style="height:25;width:25px; margin-right:5px; margin-top:5px" /><a href="#"><c:out value="${campaignReportsBean.unsubscribed}" /></a></div>
+              <div class="count"><span class="report-bounced"><c:out value="${campaignReortsBean.unsubscribedPercentage}" />%</span></div>
+                <div class="countDetails"><img src="${pageContext.request.contextPath}/images/user.jpg" style="height:25;width:25px; margin-right:5px; margin-top:5px" /><a href="#"><c:out value="${campaignReortsBean.unsubscribed}" /></a></div>
               </div></td>
 			<td><h4>Dropped</h4> 
             <div>
-              <div class="count"><span class="report-bounced"><c:out value="${campaignReportsBean.droppedPercentage}" />%</span></div>
-                <div class="countDetails"><img src="${pageContext.request.contextPath}/images/user.jpg" style="height:25;width:25px; margin-right:5px; margin-top:5px" /><a href="#"><c:out value="${campaignReportsBean.dropped}" /></a></div>
+              <div class="count"><span class="report-bounced"><c:out value="${campaignReortsBean.droppedPercentage}" />%</span></div>
+                <div class="countDetails"><img src="${pageContext.request.contextPath}/images/user.jpg" style="height:25;width:25px; margin-right:5px; margin-top:5px" /><a href="#"><c:out value="${campaignReortsBean.dropped}" /></a></div>
               </div></td>
 		</tr>
 		</table>
