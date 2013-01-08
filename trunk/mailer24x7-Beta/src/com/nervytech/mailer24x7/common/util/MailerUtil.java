@@ -37,9 +37,8 @@ public class MailerUtil {
 	public static final long LATEST_SUBSCRIBER_UPDATE_COUNT_INTERVAL = 100; // 100
 																			// MB
 
-	public static final String MAILGUN_API_KEY = "key-9enhqpnvi96dfzikfpbn46bnxpnngto0";
-	public static final String MAILGUN_RESOURCE = "https://api.mailgun.net/v2/mailer24x7.mailgun.org/campaigns";
-	public static final String MAILGUN_DOMAIN_NAME = "mailer24x7.mailgun.org";
+	public static final String MAILGUN_API_KEY = "key-1k6eo97h--jja9t8safne-f72in8vi11";
+	public static final String MAILGUN_RESOURCE = "https://api.mailgun.net/v2/sungod.mailgun.org/campaigns";
 
 	public static Properties mailProps = null;
 
