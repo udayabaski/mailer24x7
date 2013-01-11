@@ -26,9 +26,10 @@
 	}
 	
 	function submitExit(){
-	  document.getElementById("nextAction").value="exit";
+	  document.getElementById("nextAction").value="schedule";
 	  document.forms[0].submit();
 	}
+	
 	
 </script>
 
@@ -131,9 +132,9 @@
 		<div class="btn">
 			<table>
 				<tr>
-					<td width="100"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span></td>
-					<td align="center"><a href="#" class="button green" onclick="javascript:submitExit()">Save &amp; Exit</a></td>
-					<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td>
+					<!-- <td width="100"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span></td>-->
+					<td align="center"><a href="#" class="button green" onclick="javascript:submitExit()">Submit</a></td>
+					<!-- <td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td> -->
 				</tr>
 			</table>
 			

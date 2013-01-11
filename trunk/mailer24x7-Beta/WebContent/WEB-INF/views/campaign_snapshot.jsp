@@ -67,11 +67,12 @@
 
 <body>
 
-<form:form id="campaign" commandName="campaignSnapshotBean" action="${pageContext.request.contextPath}/usr/campaign/save/snapshot" method="POST">
+<form:form id="campaign" commandName="campaignSnapshotBean" action="${pageContext.request.contextPath}/usr/campaign/save/test" method="POST">
 <form:hidden path="content" id="content"/>
 <form:hidden path="contentTypeInt" id="contentTypeInt"/>
 <form:hidden path="nextAction" id="nextAction" />
 <form:hidden path="campaignId" />
+
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
