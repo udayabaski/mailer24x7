@@ -167,7 +167,8 @@ public class MailerS3Client {
 
 		try {
 			request = new DeleteObjectRequest(BUCKET_NAME, key);
-			s3Client.deleteObject(request);
+			
+			getAmazonS3Client().deleteObject(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -183,7 +184,7 @@ public class MailerS3Client {
 
 		try {
 			request = new GetObjectRequest(BUCKET_NAME, key);
-			s3Object = s3Client.getObject(request);
+			s3Object = getAmazonS3Client().getObject(request);
 			s3InputStream = s3Object.getObjectContent();
 			textContent = new Scanner(s3InputStream).useDelimiter("\\A").next();
 		} finally {
@@ -210,7 +211,7 @@ public class MailerS3Client {
 
 		try {
 			request = new GetObjectRequest(BUCKET_NAME, key);
-			s3Object = s3Client.getObject(request);
+			s3Object = getAmazonS3Client().getObject(request);
 			s3InputStream = s3Object.getObjectContent();
 			htmlContent = new Scanner(s3InputStream).useDelimiter("\\A").next();
 		} finally {
