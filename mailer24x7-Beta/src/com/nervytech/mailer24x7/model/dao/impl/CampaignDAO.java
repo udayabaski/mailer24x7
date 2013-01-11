@@ -413,17 +413,18 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 				cmpn.setSentTime(rs.getString("SENT_TIME"));
 				cmpn.setSubscriberListId(rs.getString("SUBSCRIBER_LIST_ID"));
 				cmpn.setSubscriberListName(rs.getString("SUBSCRIBER_LIST_NAME"));
-				cmpn.setSenderEmailId(rs.getString("SENDER_EMAIL_ID"));
-				cmpn.setSenderName(rs.getString("SENDER_DISPLAY_NAME"));
+				cmpn.setSenderEmailId(rs.getString("EMAIL_ID"));
+				cmpn.setSenderName(rs.getString("DISPLAY_NAME"));
 
 				return cmpn;
 			}
 		};
 
+		
 		String selectCampaignQuery = "SELECT C.CAMPAIGN_ID,C.CAMPAIGN_NAME,CS.OPENED,"
 				+ "  CS.BOUNCED,CS.CLICKED,CS.DROPPED,CS.UNSUBSCRIBED,CS.TOTAL_SUBSCRIBER_SENT,"
-				+ "  CS.SENT_TIME, CS.SUBSCRIBER_LIST_ID, CSR.SENDER_DISPLAY_NAME,"
-				+ "  CSR.SENDER_EMAIL_ID, SL.SUBSCRIBER_LIST_NAME "
+				+ "  CS.SENT_TIME, CS.SUBSCRIBER_LIST_ID, CSR.DISPLAY_NAME,"
+				+ "  CSR.EMAIL_ID, SL.SUBSCRIBER_LIST_NAME "
 				+ "  FROM CAMPAIGN C,CAMPAIGN_STATUS CS,SUBSCRIBER_LIST SL, CAMPAIGN_SENDER CSR "
 				+ "  WHERE C.CAMPAIGN_ID=CS.CAMPAIGN_ID AND CS.SUBSCRIBER_LIST_ID=SL.SUBSCRIBER_LIST_ID "
 				+ "  AND CS.SENDER_ID=CSR.SENDER_ID AND C.CAMPAIGN_ID="
