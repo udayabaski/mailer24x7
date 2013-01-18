@@ -94,10 +94,10 @@
 															<td class="tbl-btm-bdr"><c:out value="${campaign.createdBy}" /></td>
 															<td class="tbl-btm-bdr"><c:out value="${campaign.lastModifiedTime}" /></td>
 															<td class="tbl-btm-bdr" width="100">
-															  <a href="view/detail/id/<c:out value="${campaign.campaignId}" />" class="add" title="view">View</a> 
-															  <a href="edit/id/<c:out value="${campaign.campaignId}" />" class="edit" title="edit">Edit</a> 
+															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
+															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
 															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
-															  <a href="delete/id/<c:out value="${campaign.campaignId}" />" class="delete" class="Delete">Delete</a></td>
+															  <a href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" title="Delete">Delete</a></td>
 														</tr>
 
 
@@ -145,10 +145,10 @@
 															<td class="tbl-btm-bdr"><c:out value="${campaign.createdBy}" /></td>
 															<td class="tbl-btm-bdr"><c:out value="${campaign.scheduledOn}" /></td>
 															<td class="tbl-btm-bdr" width="100">
-															  <a href="view/detail/id/<c:out value="${campaign.campaignId}" />" class="add" title="view">View</a> 
-															  <a href="edit/id/<c:out value="${campaign.campaignId}" />" class="edit" title="edit">Edit</a> 
+															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
+															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
 															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
-															  <a href="delete/id/<c:out value="${campaign.campaignId}" />" class="delete" class="Delete">Delete</a></td>
+															  <a href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" title="Delete">Delete</a></td>
 														</tr>
 
 
@@ -196,10 +196,10 @@
 															<td class="tbl-btm-bdr"><c:out value="${campaign.clicked}" /></td>
 															<td class="tbl-btm-bdr"><c:out value="${campaign.bounced}" /></td>
 															<td class="tbl-btm-bdr" width="100">
-															  <a href="view/detail/id/<c:out value="${campaign.campaignId}" />" class="add" title="view">View</a> 
-															  <a href="edit/id/<c:out value="${campaign.campaignId}" />" class="edit" title="edit">Edit</a> 
+															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
+															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
 															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
-															  <a href="delete/id/<c:out value="${campaign.campaignId}" />" class="delete" class="Delete">Delete</a></td>
+															  <a href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" class="Delete">Delete</a></td>
 														</tr>
 
 
