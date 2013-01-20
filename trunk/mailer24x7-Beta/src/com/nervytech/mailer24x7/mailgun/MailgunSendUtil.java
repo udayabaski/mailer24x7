@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
+import com.nervytech.mailer24x7.common.util.MailerUtil;
 import com.nervytech.mailer24x7.mail.util.HTMLParser;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -24,10 +25,9 @@ public class MailgunSendUtil {
 		cc.getClasses().add(MultiPartWriter.class);
 		Client client = Client.create(cc);
 		client.addFilter(new HTTPBasicAuthFilter("api",
-				"key-1k6eo97h--jja9t8safne-f72in8vi11"));
+				MailerUtil.MAILGUN_API_KEY));
 		WebResource webResource = client
-				.resource("https://api.mailgun.net/v2/sungod.mailgun.org"
-						+ "/messages");
+				.resource(MailerUtil.MAILGUN_MESSAGE_RESOURCE);
 		webResource.accept(MediaType.APPLICATION_JSON);
 		return webResource;
 	}
@@ -89,7 +89,7 @@ public class MailgunSendUtil {
 		FormDataMultiPart form = new FormDataMultiPart();
 		form.field("from", fromAddress);
 		// TODO. Hardcoding the subsriber list based on subsriber list id..
-		form.field("to", "sl_" + subListId + "@sungod.mailgun.org");
+		form.field("to", "sl_" + subListId + "@"+MailerUtil.MAILGUN_DOMAIN_NAME);
 		// Assigning no subject here in case of empty subject.
 		if (subject == null || subject.isEmpty()) {
 			subject = "<no subject>";
