@@ -127,7 +127,8 @@
 	    <tr valign="top">
 			<td>
 			 
-			  <textarea rows="100" cols="100" name="editorContent"></textarea>
+			 
+            <textarea name='editorContent' > </textarea>
             <script>
                 CKEDITOR.replace( 'editorContent' );
             </script>
