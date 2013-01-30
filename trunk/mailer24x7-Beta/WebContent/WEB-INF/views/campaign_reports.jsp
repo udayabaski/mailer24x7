@@ -46,12 +46,13 @@
 			
 			
 	var campaignId = ${campaignReportsBean.campaignId};
-
+	
+	//alert("CAMMMMMMMMMMMMM "+campaignId);
 
 		$.ajax({
 			//type: "POST",
 			//async: false,
-			url : "view/campaign/id/"+campaignId+"/type/campaignopens/time",
+			url : "${pageContext.request.contextPath}/usr/reports/view/campaign/id/"+campaignId+"/type/campaignopens/time",
 			//contentType: "application/json;",
 			//data: "{'groupBy': '" + group + "'}",
 			//dataType: 'json',
@@ -68,7 +69,7 @@
 		var openDataSlices = [];
 		var clickDataSlices = [];
 	    
-		alert(dataIn);
+		//alert(dataIn);
 		
 		var dataResult = dataIn.split("##");
 		
@@ -81,6 +82,9 @@
 			count = dateCount[1];
 			
 			openDataSlices.push([ date,count ]);
+			openDataSlices.push([ '26-Jan-2013',10 ]);
+			openDataSlices.push([ '29-Jan-2013',6  ]);
+			openDataSlices.push([ '10-Feb-2013',8  ]);
 		}
 		
 		for(i = 0; i < clickResult.length; i++){
@@ -88,47 +92,55 @@
 			date = dateCount[0];
 			count = dateCount[1];
 			
-			clickDataSlices.push([ date,count ]);
+			//clickDataSlices.push([ date,count ]);
 		}
 		
+		    clickDataSlices.push([ '27-Jan-2013',1 ]);
+			clickDataSlices.push([ '29-Jan-2013',10 ]);
+			clickDataSlices.push([ '10-Feb-2013',6  ]);
+			clickDataSlices.push([ '20-Feb-2013',8  ]);
 		
-	var plot1 = $.jqplot("lineChart1", [ openDataSlices, clickDataSlices ], {
+						
+	var plot1 = $.jqplot("lineChart1", [ openDataSlices, clickDataSlices], {
 			seriesColors : [ "rgba(78, 135, 194, 0.7)", "rgb(211, 235, 59)" ],
-			title : 'Opens and Clicks over time',
+			title : 'Opens over time',
 			highlighter : {
 				show : true,
 				sizeAdjust : 1,
-				tooltipOffset : 9
+				tooltipOffset : 5
 			},
 			grid : {
 				background : 'rgba(57,57,57,0.0)',
 				drawBorder : false,
 				shadow : false,
 				gridLineColor : '#666666',
-				gridLineWidth : 2
+				gridLineWidth : 0.15
 			},
 			legend : {
 				show : true,
-				placement : 'outside'
+				placement : 'inside'
 			},
 			seriesDefaults : {
 				rendererOptions : {
-					smooth : true,
+					smooth : false,
 					animation : {
 						show : true
 					}
 				},
-				showMarker : false
+				showMarker : true
 			},
 			series : [ {
-				fill : true,
-				label : 'Opens'
+				fill : false,
+				label : 'Opens',
+				lineWidth:2, markerOptions:{style:'square'}
 			}, {
-				label : 'Clicks'
+			    fill : false,
+				label : 'Clicks',
+				lineWidth:2, markerOptions:{style:'circle'}
 			} ],
 			axesDefaults : {
 				rendererOptions : {
-					baselineWidth : 1.5,
+					baselineWidth : 0,
 					baselineColor : '#444444',
 					drawBaseline : false
 				}
@@ -136,30 +148,60 @@
 			axes : {
 				xaxis : {
 					renderer : $.jqplot.DateAxisRenderer,
-					tickRenderer : $.jqplot.CanvasAxisTickRenderer,
-					tickOptions : {
-						formatString : "%b %e",
-						angle : -30,
-						textColor : '#dddddd'
-					},
-					//min : "2011-08-01",
-					//max : "2011-09-30",
-					//tickInterval : "7 days",
-					drawMajorGridlines : false
+					
+					//tickRenderer : $.jqplot.CanvasAxisTickRenderer,
+					
+					sdrawMajorGridlines : false
 				},
-				yaxis : {
-					renderer : $.jqplot.LogAxisRenderer,
-					pad : 0,
-					rendererOptions : {
-						minorTicks : 1
-					},
-					tickOptions : {
-						//formatString : "$%'d",
-						showMark : false
-					}
-				}
-			}
+				
+			},
+			//series:[{lineWidth:2, markerOptions:{style:'square'}},{lineWidth:2, markerOptions:{style:'circle'}}]				
 		});
+		
+		var plot1 = $.jqplot("lineChart2", [ clickDataSlices], {
+			seriesColors : [ "rgb(211, 235, 59)" ],
+			title : 'Clicks over time',
+			highlighter : {
+				show : true,
+				sizeAdjust : 1,
+				tooltipOffset : 5
+			},
+			grid : {
+				background : 'rgba(57,57,57,0.0)',
+				drawBorder : false,
+				shadow : false,
+				gridLineColor : '#666666',
+				gridLineWidth : 0.15
+			},
+			seriesDefaults : {
+				rendererOptions : {
+					smooth : false,
+					animation : {
+						show : true
+					}
+				},
+				showMarker : true
+			},
+			axesDefaults : {
+				rendererOptions : {
+					baselineWidth : 0,
+					baselineColor : '#444444',
+					drawBaseline : false
+				}
+			},
+			axes : {
+				xaxis : {
+					renderer : $.jqplot.DateAxisRenderer,
+					
+					//tickRenderer : $.jqplot.CanvasAxisTickRenderer,
+					
+					sdrawMajorGridlines : false
+				},
+				
+			},
+			series:[{lineWidth:2, markerOptions:{style:'square'}}]				
+		});
+		
 		$('.jqplot-highlighter-tooltip').addClass('ui-corner-all')
 	}
 
@@ -197,6 +239,14 @@
 								location : 'e'
 							}
 						});
+						$('#pieChart').bind('jqplotDataMouseOver', 
+							function (ev, seriesIndex, pointIndex, data) {
+								/* To open in a NEW window use: */
+								/* window.open(data[2]); */
+								/* To open in the same window use: */
+								window.open(data[1])
+							}
+        );
 
 					});
 </script>
@@ -298,13 +348,18 @@
 			<h2>Pie Chart</h2>
 		</div>
 		<div id="pieChart"
-					style="margin-top: 20px; margin-left: 20px; width: 500px; height: 400px;">
+					style="margin-top: 20px; margin-left: 20px; width: 500px; height: 300px;">
 		</div>
         <div class="hd" style="margin-top:15px;">
 			<h2>Open &amp; Clicks over time</h2>
 		</div>
 		<div id="lineChart1"
-					style="margin-top: 20px; margin-left: 20px; width: 1000px; height: 400px;"></div>
+					style="margin-top: 20px; margin-left: 20px; width: 1000px; height: 300px;"></div>
+	
+		<div id="pieChart1"
+					style="margin-top: 20px; margin-left: 20px; width: 500px; height: 400px;">
+		</div>
+        
         
         <div class="hd" style="margin-top:15px;">
 			<h2>Link Activity</h2>
