@@ -28,6 +28,7 @@ public class UserForm {
 	private String updatedTime;
 	private String message;
 	private String messageType;
+	private String nextAction;
 
 	public String getAction() {
 		return action;
@@ -184,6 +185,21 @@ public class UserForm {
 	 */
 	public void setMessageType(String messageType) {
 		this.messageType = messageType;
+	}
+
+	/**
+	 * @return the nextAction
+	 */
+	public String getNextAction() {
+		return nextAction;
+	}
+
+	/**
+	 * @param nextAction
+	 *            the nextAction to set
+	 */
+	public void setNextAction(String nextAction) {
+		this.nextAction = nextAction;
 	}
 
 }

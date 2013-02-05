@@ -26,9 +26,6 @@
 <body>
 
 <form:form action="${pageContext.request.contextPath}/usr/admin/update/user"  commandName="userForm" method="POST" id="userForm">
-<form:hidden path="nextAction" id="nextAction" />
-<form:hidden path="campaignId" />
-<form:hidden path="toPage" />
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">

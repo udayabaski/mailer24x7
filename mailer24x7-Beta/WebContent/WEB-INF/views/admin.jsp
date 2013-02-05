@@ -51,7 +51,7 @@
 											</li>
 									</ul>
 									<div class="right-link">
-										<a href="${pageContext.request.contextPath}/new/user" class="button grey-btn mar1" ><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />Add User</a>
+										<a href="${pageContext.request.contextPath}/usr/admin/new/user" class="button grey-btn mar1" ><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />Add User</a>
 									</div>
 
 									<div id="tabs-1" class="content">
