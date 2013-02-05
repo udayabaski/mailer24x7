@@ -89,6 +89,7 @@ public class ReportsController {
 	public @ResponseBody
 	String viewCampaignOpens(@PathVariable String campaignId, Map model,
 			HttpServletRequest request) {
+		
 
 		long campaignIdLong = -1;
 
@@ -100,11 +101,13 @@ public class ReportsController {
 
 			// return "invalidrequest";
 		}
+		
 
 		Map<Integer, List<Long>> statusMap = reportsService.getSubscriberReport(
 				campaignIdLong, SubscriberCampaignStatusEnum.OPENED.getStatus(),
 				SubscriberCampaignStatusEnum.CLICKED.getStatus());
 
+		
 		Map<String, Integer> openedMap = new HashMap<String, Integer>();
 		Map<String, Integer> clickedMap = new HashMap<String, Integer>();
 
@@ -147,6 +150,7 @@ public class ReportsController {
 				}
 			}
 		}
+		
 
 		return openedMap.toString() + "##" + clickedMap.toString();
 	}

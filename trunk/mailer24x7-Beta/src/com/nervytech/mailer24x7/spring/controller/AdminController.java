@@ -78,7 +78,7 @@ public class AdminController {
 		return "organization";
 	}
 
-	@RequestMapping(value = "/update/org", method = RequestMethod.GET)
+	@RequestMapping(value = "/update/org", method = RequestMethod.POST)
 	public String updateOrganization(OrganizationForm orgForm,
 			BindingResult result, Map model, HttpServletRequest request) {
 
@@ -125,11 +125,13 @@ public class AdminController {
 		form.setOrgId(usr.getOrgId() + "");
 
 		model.put("userForm", form);
+		
+		System.out.println("NNNNNNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
 
 		return "newuser";
 	}
 
-	@RequestMapping(value = "/update/user", method = RequestMethod.GET)
+	@RequestMapping(value = "/update/user", method = RequestMethod.POST)
 	public String updateUser(UserForm usrForm, BindingResult result, Map model,
 			HttpServletRequest request) {
 
@@ -150,6 +152,14 @@ public class AdminController {
 		usrForm.setMessage("Success");
 		usrForm.setMessageType(MessageTypeEnum.SUCCESS.name());
 
+		model.put("userForm", usrForm);
+
+		return "newuser";
+	}
+	
+	@RequestMapping(value = "/new/user", method = RequestMethod.GET)
+	public String newUser(Map model, HttpServletRequest request) {
+		UserForm form = new UserForm();
 		model.put("userForm", form);
 
 		return "newuser";

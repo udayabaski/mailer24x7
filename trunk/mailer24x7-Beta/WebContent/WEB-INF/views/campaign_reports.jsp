@@ -62,6 +62,28 @@
 		});
 
 	});
+	
+	/*$(document).ready(
+			function() {
+			
+			
+	var campaignId = ${campaignReportsBean.campaignId};
+	
+	//alert("CAMMMMMMMMMMMMM "+campaignId);
+
+		$.ajax({
+			//type: "POST",
+			//async: false,
+			url : "${pageContext.request.contextPath}/usr/reports/view/campaign/id/"+campaignId+"/type/campaignopens/region",
+			//contentType: "application/json;",
+			//data: "{'groupBy': '" + group + "'}",
+			//dataType: 'json',
+			success : function(data) {				
+				plotPieChart(data);
+			}
+		});
+
+	});*/
 
 	function plotLineChart(dataIn) {
 	    $.jqplot._noToImageButton = true;
@@ -244,7 +266,8 @@
 								/* To open in a NEW window use: */
 								/* window.open(data[2]); */
 								/* To open in the same window use: */
-								window.open(data[1])
+								alert(data);
+								//window.open(data[1])
 							}
         );
 

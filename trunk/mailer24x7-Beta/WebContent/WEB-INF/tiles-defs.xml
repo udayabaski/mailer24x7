@@ -71,7 +71,7 @@
 	
 	<definition name="newuser" extends="baseLayout">
 		<put-attribute name="title" value="Mailer24x7 : Admin" />
-		<put-attribute name="body" value="/WEB-INF/views/user_new.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/newuser.jsp" />
 	</definition>
 	
 	<definition name="campaignHome" extends="baseLayout">
