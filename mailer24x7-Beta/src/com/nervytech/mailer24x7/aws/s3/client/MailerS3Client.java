@@ -39,7 +39,7 @@ import com.nervytech.mailer24x7.client.exception.MailerS3Exception;
 /**
  * @author bsikkaya
  * 
- */
+ */ 
 public class MailerS3Client {
 
 	private static final Logger logger = LoggerFactory
