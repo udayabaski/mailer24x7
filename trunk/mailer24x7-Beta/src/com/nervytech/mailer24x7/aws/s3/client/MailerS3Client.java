@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
@@ -230,7 +231,7 @@ public class MailerS3Client {
 	}
 
 	public static String processZipFile(CommonsMultipartFile file, long orgId,
-			long userId, long campaignId) throws IOException {
+			long userId, long campaignId, Map<String, String> referencesMap) throws IOException {
 		InputStream in = null;
 		ZipInputStream zIn = null;
 		String s3Path = null;
@@ -241,30 +242,41 @@ public class MailerS3Client {
 					file.getInputStream()));
 
 			ZipEntry zipEntry;
+			
+			String absolutePath = System.getProperty("user.dir");
 
 			while ((zipEntry = zIn.getNextEntry()) != null) {
-
+				
+				if(zipEntry.isDirectory()){
+					continue;
+				}
+				
 				String fileName = zipEntry.getName().toLowerCase();
-
-				System.out.println("FileName is " + fileName);
+				
+				if(referencesMap.get(fileName) == null) {   // Unwanted file .....
+					zIn.closeEntry();  
+					continue;
+				}
 
 				String randomId = UUID.randomUUID().toString();
 
-				tempFile = new File(randomId + "###" + fileName);
-
+				tempFile = new File(absolutePath+File.separator+".."+File.separator+"temp"+File.separator+randomId);
+				
+				tempFile.createNewFile();
+				
 				IOUtils.copy(zIn, new FileOutputStream(tempFile));
-
+				
 				if (fileName.lastIndexOf(".css") != -1) {
 					// putObject(orgId, userId, campaignId, zIn, fileName,
 					// true);
-					putObject(orgId, userId, campaignId, tempFile, fileName,
+					s3Path = putObject(orgId, userId, campaignId, tempFile, fileName,
 							true);
 				} else if (fileName.lastIndexOf(".jpg") != -1
 						|| fileName.lastIndexOf(".gif") != -1
 						|| fileName.lastIndexOf(".png") != -1) {
 					// putObject(orgId, userId, campaignId, zIn, fileName,
 					// true);
-					putObject(orgId, userId, campaignId, tempFile, fileName,
+					s3Path = putObject(orgId, userId, campaignId, tempFile, fileName,
 							true);
 				} else if (fileName.lastIndexOf(".html") != -1) {
 					// putObject(orgId, userId, campaignId, zIn, fileName);
@@ -284,8 +296,13 @@ public class MailerS3Client {
 					// fileName,true);
 					s3Path = putObject(orgId, userId, campaignId, tempFile,
 							fileName, true);
+				} else if (fileName.lastIndexOf(".js") != -1) {				// It must be blocked ........ Just for testing
+					s3Path = putObject(orgId, userId, campaignId, tempFile, fileName,
+							true);
 				}
-
+				
+				referencesMap.put(fileName, S3_URL+"/"+s3Path);
+				
 				tempFile.delete();
 				zIn.closeEntry();
 			}
