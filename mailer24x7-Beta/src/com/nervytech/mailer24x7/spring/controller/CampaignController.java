@@ -33,6 +33,7 @@ import com.nervytech.mailer24x7.common.util.MailerUtil;
 import com.nervytech.mailer24x7.domain.model.Campaign;
 import com.nervytech.mailer24x7.domain.model.CampaignSender;
 import com.nervytech.mailer24x7.domain.model.CampaignStatus;
+import com.nervytech.mailer24x7.mail.util.JSoupParser;
 import com.nervytech.mailer24x7.mailgun.MailgunCampignSyncer;
 import com.nervytech.mailer24x7.model.service.api.ICampaignSenderService;
 import com.nervytech.mailer24x7.model.service.api.ICampaignService;
@@ -259,18 +260,23 @@ public class CampaignController {
 		long orgId = userDetails.getOrgId();
 
 		String htmlContent = null;
+		Map<String,String> referencesMap = null;
+		
 		try {
 			htmlContent = getHtmlContent(cmpnForm, result);
+			referencesMap = JSoupParser.getExternalReferences(htmlContent);
 		} catch (Exception e) {
 			return "importHtml";
 		}
 
 		try {
-			putZipData(cmpnForm, result, userDetails);
+			putZipData(cmpnForm, result, userDetails,referencesMap);
 		} catch (Exception e) {
 			return "importHtml";
 		}
-
+		
+		htmlContent = JSoupParser.updateExternalReferencesWithS3Link(htmlContent,referencesMap);
+		
 		String s3Path = MailerS3Client.putHtmlObject(orgId,
 				userDetails.getUserId(), cmpnForm.getCampaignId(), htmlContent,
 				true);
@@ -293,20 +299,32 @@ public class CampaignController {
 			return "redirect:/usr/campaign/view/step2/id/"
 					+ cmpnForm.getCampaignId();
 		}
-
+		
 		String htmlContent = null;
+		Map<String,String> referencesMap = null;
 		try {
 			htmlContent = getHtmlContent(cmpnForm, result);
+			referencesMap = JSoupParser.getExternalReferences(htmlContent);
 		} catch (Exception e) {
+			
+			model.put("campaignStep2ImportForm", cmpnForm);
+			
 			return "importHtml";
 		}
-
+		
 		try {
-			putZipData(cmpnForm, result, userDetails);
+			putZipData(cmpnForm, result, userDetails,referencesMap);
 		} catch (Exception e) {
+			
+			model.put("campaignStep2ImportForm", cmpnForm);
+			
 			return "importHtml";
 		}
-
+		
+		htmlContent = JSoupParser.updateExternalReferencesWithS3Link(htmlContent,referencesMap);
+		
+		System.out.println("HTMLCONTENTTTTTTTTTTTTTTTT "+htmlContent);
+		
 		String s3Path = MailerS3Client.putHtmlObject(orgId,
 				userDetails.getUserId(), cmpnForm.getCampaignId(), htmlContent,
 				true);
@@ -886,7 +904,7 @@ public class CampaignController {
 	}
 
 	private void putZipData(CampaignStep2ImportForm cmpnForm,
-			BindingResult result, SessionUser userDetails) {
+			BindingResult result, SessionUser userDetails, Map<String, String> referencesMap) {
 		if (cmpnForm.getZipFileData() != null) {
 			InputStream inputStream = null;
 			try {
@@ -909,7 +927,7 @@ public class CampaignController {
 						MailerS3Client.processZipFile(file,
 								userDetails.getOrgId(),
 								userDetails.getUserId(),
-								cmpnForm.getCampaignId());
+								cmpnForm.getCampaignId(),referencesMap);
 
 					}
 				}
