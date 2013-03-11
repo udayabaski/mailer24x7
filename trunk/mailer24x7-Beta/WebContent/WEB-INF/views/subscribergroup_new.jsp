@@ -37,11 +37,26 @@
 	  document.forms[0].submit();
 	}
 	
+	function show(f){
+
+	if(f=='csv'){
+
+	document.getElementById('csv').style.visibility = 'visible';
+	document.getElementById('man').style.visibility = 'hidden';
+
+	}else{
+	document.getElementById('csv').style.visibility = 'hidden';
+	document.getElementById('man').style.visibility = 'visible';
+	}
+	}
+	function onLoad(){
+	show('csv');
+	}
 </script>
 
 </head>
 
-<body>
+<body onload="javascript:onLoad()">
 
 <form:form id="subscriberForm" commandName="subscriberForm" action="${pageContext.request.contextPath}/usr/subscriber/step3/save/group" method="POST" enctype="multipart/form-data">
 <form:hidden path="nextAction" id="nextAction" />
@@ -93,7 +108,7 @@
             <table width="98%" cellpadding="0" cellspacing="0" align="center" >
 
 				<tr>
-				<td></td>
+				
 				<td><span class="formtext">List Name</span></td>
 				<td>
 				<c:choose>
@@ -106,43 +121,41 @@
 				   </c:otherwise>
 				</c:choose>
 				</td>
-				<td></td>
+				
 				</tr>
 				
 		<tr>
-		<td></td>
+		
 		<td><span class="formtext">Add Using</span></td>
-		<td>
+		<td >
 		<table cellpadding="0" cellspacing="0">
 		<tr>
-		<td><form:radiobutton path="addOption" id="addOption" cssClass="inputradio" value="CSV"/><span class="chk-box-paddingfont">CSV</span></td>
-		<td><form:radiobutton path="addOption" id="addOption" cssClass="inputradio" value="Manual"/><span class="chk-box-paddingfont">Manual</span></td>
+		<td><form:radiobutton path="addOption" id="addOption" cssClass="inputradio" value="CSV" onclick="javascript:show('csv')"/><span class="chk-box-paddingfont">CSV</span></td>
+		<td><form:radiobutton path="addOption" id="addOption" cssClass="inputradio" value="Manual" onclick="javascript:show('man')" /><span class="chk-box-paddingfont">Manual</span></td>
 		</tr>
 		</table>
 		</td>
-		<td></td>
+		
 		</tr>
 		
 
 
 		<tr>
-		<td></td>
-		<td></td>
-		<td>
+		
+		<td colspan="2"><div id="csv">
 		  <div class="form-divtext">Import HTML : <form:input path="fileData" type="file"/></div>
-		  <span class="errortxt"><form:errors path="fileData" /></span>
+		  <span class="errortxt"><form:errors path="fileData" /></span></div>
 		</td>
-		<td></td>
+		
 		</tr>
 
 		<tr>
-		<td></td>
-		<td></td>
-		<td>
-		  <div class="form-divtext"><form:textarea path="subscribers" id="subscribers" /></div>
-		  <span class="errortxt"><form:errors path="subscribers" /></span>
+		
+		<td colspan="2"><div id="man">
+		  <div class="form-divtext"><form:textarea path="subscribers" id="subscribers" onfocus="if(this.value == 'emailids') {this.value=''}" onblur="if(this.value == ''){this.value ='emailids'}" value="arun"/></div>
+		  <span class="errortxt"><form:errors path="subscribers" /></span></div>
 		 </td>
-		<td></td>
+		
 		</tr>
 						
 
@@ -157,6 +170,7 @@
 				   <c:when test="${toPage eq 'groups'}">
 				    <td width="100">&nbsp;</td>
 					<td align="center"><a href="#" class="button green" onclick="javascript:submitSave()">Save</a></td>
+						<td align="center"> <a class="button green" onclick="javacript:window.history.back()" href="#">Cancel</a></td>
 				   </c:when>
 				   <c:otherwise>
 					<!-- <td width="100"><span class="previous"><a href="CreateCampaignStep2.html">Previous</a></span></td>  
