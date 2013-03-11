@@ -17,6 +17,16 @@
 
 </head>
 
+<table>
+<tr>
+
+<td  width="10%" style="height:60px;">
+<img src="${pageContext.request.contextPath}/images/mailer-logo.png" /> 
+</td>
+
+</tr>
+</table>
+
 <body>
 
 
@@ -71,7 +81,7 @@
 										<td align="left"><a
 											onclick="document.forms[0].submit();return false;"
 											class="button green" href="#">Reset</a> <a
-											class="button green" href="#">Cancel</a></td>
+											class="button green" onclick="javacript:window.history.back()" href="#">Cancel</a></td>
 										<td></td>
 									</tr>
 

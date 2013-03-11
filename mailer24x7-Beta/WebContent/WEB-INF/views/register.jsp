@@ -15,9 +15,17 @@
 </head>
 
 <body>
+<table>
+<tr>
+
+<td  width="10%" style="height:60px;">
+<img src="${pageContext.request.contextPath}/images/mailer-logo.png" /> 
+</td>
+
+</tr>
+</table>
 
  <div id="pageContainer">
-	
 		
 		<ul id="tabs" class="clearfix">
 			<li class="activeTab" id="signInTab">
@@ -55,7 +63,7 @@
              </c:if>
             
             <tr>
-            <td width="45%">Full Name</td>
+            <td width="45%">User Name</td>
             <td width="3%"></td>
              <td>
                <form:input path="fullName" id="fullName" />
@@ -63,7 +71,7 @@
              </td>
             </tr>
             <tr><td colspan="3" height="20"></td></tr>
-            
+          <!--  
              <tr>
             <td>Company</td>
             <td width="3%"></td>
@@ -94,7 +102,7 @@
    			   <span class="errortxt"><form:errors path="country" /></span>
             </td>
             </tr>
-            
+            -->
             <tr><td colspan="3" height="20"></td></tr>
              <tr>
             <td>Email</td>
