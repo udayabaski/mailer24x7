@@ -49,4 +49,6 @@ public interface ICampaignDAO {
 
 	public List<CampaignReportsBean> getCampaignBean(String campaignId);
 
+	public List<CampaignBean> getCampaignDetailsForClone(String campaignId);
+
 }

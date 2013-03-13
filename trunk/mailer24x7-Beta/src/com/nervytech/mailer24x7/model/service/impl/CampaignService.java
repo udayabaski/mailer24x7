@@ -203,4 +203,19 @@ public class CampaignService implements ICampaignService {
 		return cmpnBean;
 	}
 
+	@Override
+	public CampaignBean getCampaignDetailsForClone(String campaignId) {
+		CampaignBean cmpnBean = null;
+		try {
+			List<CampaignBean> cmpnBeans = campaignDAO.getCampaignDetailsForClone(campaignId);
+			if(cmpnBeans.size() >0){
+				cmpnBean = cmpnBeans.get(0);
+			}
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		return cmpnBean;
+	}
+
 }

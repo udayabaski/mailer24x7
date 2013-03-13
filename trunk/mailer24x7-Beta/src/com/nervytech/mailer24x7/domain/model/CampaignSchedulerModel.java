@@ -29,6 +29,7 @@ public class CampaignSchedulerModel {
 	private int campaignType;
 	private long orgId;
 	private int syncStatus;
+	private String confirmationMailId;
 
 	/**
 	 * @return the campaignName
@@ -263,6 +264,20 @@ public class CampaignSchedulerModel {
 	}
 
 	/**
+	 * @return the confirmationMailId
+	 */
+	public String getConfirmationMailId() {
+		return confirmationMailId;
+	}
+
+	/**
+	 * @param confirmationMailId the confirmationMailId to set
+	 */
+	public void setConfirmationMailId(String confirmationMailId) {
+		this.confirmationMailId = confirmationMailId;
+	}
+
+	/**
 	 * @param s3Path
 	 *            the s3Path to set
 	 */
@@ -329,5 +344,7 @@ public class CampaignSchedulerModel {
 	public void setSyncStatus(int syncStatus) {
 		this.syncStatus = syncStatus;
 	}
+	
+	
 
 }

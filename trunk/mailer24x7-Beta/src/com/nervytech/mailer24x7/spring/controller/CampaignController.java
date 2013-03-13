@@ -50,6 +50,7 @@ import com.nervytech.mailer24x7.spring.form.CampaignStep2ImportForm;
 import com.nervytech.mailer24x7.spring.form.CampaignTestMailForm;
 import com.nervytech.mailer24x7.spring.security.auth.user.SessionUser;
 import com.nervytech.mailer24x7.spring.security.auth.user.UserDetailsServiceImpl;
+import com.nervytech.mailer24x7.spring.validator.CampaignStep1Validator;
 
 @Controller
 @RequestMapping("/usr/campaign")
@@ -57,6 +58,9 @@ public class CampaignController {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(CampaignController.class);
+	
+	@Autowired
+	private CampaignStep1Validator campaignStep1Validation;
 
 	@Autowired
 	private ICampaignService campaignService;
@@ -404,7 +408,7 @@ public class CampaignController {
 						CampaignStatusEnum.NOW.getStatus(),
 						deliveryForm.getConfirmationMailIdNow(),
 						MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
-
+				
 				deliveryForm = new CampaignDeliveryForm();
 				model.put("campaignDeliveryForm", deliveryForm);
 				return "campaigndelivery";
@@ -598,8 +602,14 @@ public class CampaignController {
 
 	@RequestMapping(value = "/save/step1", method = RequestMethod.POST)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String saveCampaignStep1(CampaignStep1Form cmpnForm, Map model) {
+	public String saveCampaignStep1(CampaignStep1Form cmpnForm, BindingResult result,Map model) {
+		
+		campaignStep1Validation.validate(cmpnForm, result);
 
+		if (result.hasErrors()) {
+			return "campaignStep1";
+		}
+		
 		SessionUser userDetails = UserDetailsServiceImpl.currentUserDetails();
 		long orgId = userDetails.getOrgId();
 
@@ -823,26 +833,34 @@ public class CampaignController {
 		if (!isValidCampaignId(campaignId, orgId)) {
 			return "redirect:/usr/home";
 		}
-
-		CampaignsHomeBean homeBean = new CampaignsHomeBean();
-
-		int status = CampaignStatusEnum.DRAFT.getStatus();
-		List<CampaignBean> draftCampaigns = campaignService.getCampaigns(orgId,
-				status);
-		status = CampaignStatusEnum.COMPLETED.getStatus();
-		List<CampaignBean> completedCampaigns = campaignService.getCampaigns(
-				orgId, status);
-		status = CampaignStatusEnum.SCHEDULED.getStatus();
-		List<CampaignBean> scheduledCampaigns = campaignService.getCampaigns(
-				orgId, status);
-
-		homeBean.setDraftCampaigns(draftCampaigns);
-		homeBean.setScheduledCampaigns(scheduledCampaigns);
-		homeBean.setCompletedCampaigns(completedCampaigns);
-
-		model.put("campaignsHomeBean", homeBean);
-
-		return "campaignHome";
+		
+		CampaignBean cmpnBean = campaignService.getCampaignDetailsForClone(campaignId);
+		
+		Campaign cmpn = new Campaign();
+		cmpn.setCampaignName(cmpnBean.getCampaignName());
+		cmpn.setCampaignType(cmpnBean.getCampaignType());
+		cmpn.setCreatedEmailId(userDetails.getFullName());
+		cmpn.setCreatedTime(MailerUtil.FORMATTER_WITH_TIME.format(new Date()));
+		cmpn.setImageLoc(cmpnBean.getImageLoc());
+		cmpn.setIsPoweredBy(cmpnBean.getIsPoweredBy());
+		cmpn.setOrgId(orgId);
+		cmpn.setReplyToEmailId(cmpnBean.getReplyToMailId());
+		cmpn.setSubject(cmpnBean.getSubject());
+		cmpn.setUnsubscribeSubject(cmpnBean.getUnsubscribeSubject());
+		
+		long newCampaignId = campaignService.saveCampaign(cmpn);
+		
+		CampaignStatus cmpnStatus = new CampaignStatus();
+		cmpnStatus.setCampaignId(newCampaignId);
+		cmpnStatus.setS3Path(cmpnBean.getS3Path());
+		cmpnStatus.setOrgId(orgId);
+		cmpnStatus.setSenderId(cmpnBean.getSenderId());
+		cmpnStatus.setSubscriberListId(cmpnBean.getSubscriberListId());
+		cmpnStatus.setUserId(userDetails.getUserId());
+		
+		campaignStatusService.saveCampaignStatus(cmpnStatus);
+		
+		return "redirect:/usr/campaign/view/snapshot/id/" + newCampaignId;
 	}
 
 	@RequestMapping(value = "/delete/id/{campaignId}", method = RequestMethod.GET)

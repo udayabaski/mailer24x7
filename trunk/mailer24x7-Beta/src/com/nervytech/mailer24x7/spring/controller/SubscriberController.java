@@ -122,6 +122,12 @@ public class SubscriberController {
 	@RequestMapping(value = "/save/step3", method = RequestMethod.POST)
 	public String saveStep3(CampaignStep3Form step3Form, BindingResult result,
 			Map model) throws MailerException {
+		
+		if(step3Form.getSubscriberGroup() == null || step3Form.getSubscriberGroup().equals("-1")) {
+			result.rejectValue("subscriberGroup", "NotEmpty.campaignStep3Form.subscriberGroup",
+					"Please select the subscriber group.");
+				return "campaignStep3";
+		}
 
 		campaignStatusService.updateSubscriberListId(step3Form.getCampaignId(),
 				step3Form.getSubscriberGroup());
@@ -343,7 +349,12 @@ public class SubscriberController {
 		subForm.setSubscriberName(subList.getSubscriberListName());
 
 		subForm.setAddOption("CSV");
-		subForm.setToPage("groups");
+		
+		if(request.getParameter("topage") !=null){
+			subForm.setToPage(request.getParameter("topage"));
+		} else {
+			subForm.setToPage("groups");
+		}
 
 		model.put("subscriberForm", subForm);
 
