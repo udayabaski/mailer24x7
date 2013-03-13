@@ -340,7 +340,8 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 				cmpn.setSenderEmailId(rs.getString("EMAIL_ID"));
 				cmpn.setOrgId(rs.getLong("ORG_ID"));
 				cmpn.setSyncStatus(rs.getInt("SYNC_STATUS"));
-				cmpn.setCampaignType(rs.getInt("SYNC_STATUS"));
+				cmpn.setCampaignType(rs.getInt("CAMPAIGN_TYPE"));
+				cmpn.setConfirmationMailId(rs.getString("CONFIRMATION_MAILID"));
 
 				return cmpn;
 			}
@@ -348,7 +349,7 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 
 		String selectCampaignQuery = "SELECT C.CAMPAIGN_ID,C.CAMPAIGN_NAME,C.SUBJECT,C.UNSUBSCRIBE_LINK,C.UNSUBSCRIBE_SUBJECT,"
 				+ " CS.SUBSCRIBER_LIST_ID,CS.LATEST_SUBSCRIBER_COUNT,CS.LATEST_UPDATED_SUBSCRIBERID,C.IMAGE_LOC,CS.SYNC_STATUS,CS.ORG_ID, CSR.EMAIL_ID, "
-				+ " C.CAMPAIGN_TYPE,CS.S3_path "
+				+ " C.CAMPAIGN_TYPE,CS.S3_path,CS.CONFIRMATION_MAILID "
 				+ " FROM CAMPAIGN C, CAMPAIGN_STATUS CS, CAMPAIGN_SENDER CSR "
 				+ " WHERE C.CAMPAIGN_ID=CS.CAMPAIGN_ID AND CS.SENDER_ID=CSR.SENDER_ID AND CS.STATUS= "
 				+ status + " ORDER BY CS.SCHEDULED_ON ASC LIMIT " + rowCounts;
@@ -433,6 +434,43 @@ public class CampaignDAO extends JdbcDaoSupport implements ICampaignDAO {
 		System.out.println("MAIL ID Query ===>>>> " + selectCampaignQuery);
 		return getJdbcTemplate().query(selectCampaignQuery, mapper);
 
+	}
+
+	@Override
+	public List<CampaignBean> getCampaignDetailsForClone(String campaignId) {
+		RowMapper mapper = new RowMapper() {
+			public CampaignBean mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				CampaignBean cmpn = new CampaignBean();
+
+				cmpn.setCampaignName(rs.getString("CAMPAIGN_NAME"));
+				cmpn.setIsPoweredBy(rs.getString("ISPOWEREDBY"));
+				cmpn.setSubject(rs.getString("SUBJECT"));
+				cmpn.setImageLoc(rs.getString("IMAGE_LOC"));
+				cmpn.setSentTime(rs.getString("CAMPAIGN_LINK"));
+				cmpn.setUnsubscribeSubject(rs.getString("UNSUBSCRIBE_SUBJECT"));
+				cmpn.setCampaignType(rs.getInt("CAMPAIGN_TYPE"));
+				cmpn.setReplyToMailId(rs.getString("REPLYTO_MAILID"));
+				cmpn.setSubscriberListId(rs.getLong("SUBSCRIBER_LIST_ID"));
+				cmpn.setSenderId(rs.getInt("SENDER_ID"));
+				cmpn.setS3Path(rs.getString("S3_PATH"));
+
+				return cmpn;
+			}
+		};
+
+		
+		String selectCampaignQuery = "SELECT C.CAMPAIGN_NAME,"
+				+ "  C.ISPOWEREDBY, C.SUBJECT, C.IMAGE_LOC,"
+				+ "  C.CAMPAIGN_LINK, C.UNSUBSCRIBE_LINK, C.UNSUBSCRIBE_SUBJECT, C.CAMPAIGN_TYPE," +
+				" C.REPLYTO_MAILID,CS.SUBSCRIBER_LIST_ID,CS.SENDER_ID,CS.S3_PATH "
+				+ "  FROM CAMPAIGN C,CAMPAIGN_STATUS CS "
+				+ "  WHERE C.CAMPAIGN_ID=CS.CAMPAIGN_ID "
+				+ "  AND C.CAMPAIGN_ID="
+				+ campaignId;
+
+		System.out.println("MAIL ID Query ===>>>> " + selectCampaignQuery);
+		return getJdbcTemplate().query(selectCampaignQuery, mapper);
 	}
 
 }

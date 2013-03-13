@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.nervytech.mailer24x7.aws.s3.client.MailerS3Client;
@@ -79,7 +80,11 @@ public class CampaignTaskExecutor {
 								cmpn.getCampaignId(), cmpn.getSenderEmailId(),
 								cmpn.getSubscriberListId(), cmpn.getOrgId(),
 								cmpn.getSubject(), null, content, null, null);
-
+						
+						MailgunSendUtil.sendCampaignTestMail(-1l, -1l,
+								MailerUtil.CONFIRMATION_MAIL_FROM, cmpn.getConfirmationMailId(),
+								MailerUtil.CONFIRMATION_MAIL_SUBJECT, null, content, null);
+												
 						System.out.println("Mail Sent Status is : "
 								+ response.getClientResponseStatus().toString()
 								+ " Status ===>> " + response.getStatus());

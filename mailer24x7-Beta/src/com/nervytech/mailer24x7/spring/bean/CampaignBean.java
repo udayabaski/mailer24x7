@@ -31,6 +31,12 @@ public class CampaignBean {
 	private String unsubscribeLink;
 	private String unsubscribeSubject;
 	private String sentTime;
+	private String isPoweredBy;
+	private String imageLoc;
+	private int campaignType;
+	private String replyToMailId;
+	private long senderId;
+	private String s3Path;
 
 	/**
 	 * @return the campaignName
@@ -317,4 +323,88 @@ public class CampaignBean {
 		this.sentTime = sentTime;
 	}
 
+	/**
+	 * @return the isPoweredBy
+	 */
+	public String getIsPoweredBy() {
+		return isPoweredBy;
+	}
+
+	/**
+	 * @param isPoweredBy the isPoweredBy to set
+	 */
+	public void setIsPoweredBy(String isPoweredBy) {
+		this.isPoweredBy = isPoweredBy;
+	}
+
+	/**
+	 * @return the imageLoc
+	 */
+	public String getImageLoc() {
+		return imageLoc;
+	}
+
+	/**
+	 * @param imageLoc the imageLoc to set
+	 */
+	public void setImageLoc(String imageLoc) {
+		this.imageLoc = imageLoc;
+	}
+
+	/**
+	 * @return the campaignType
+	 */
+	public int getCampaignType() {
+		return campaignType;
+	}
+
+	/**
+	 * @param campaignType the campaignType to set
+	 */
+	public void setCampaignType(int campaignType) {
+		this.campaignType = campaignType;
+	}
+
+	/**
+	 * @return the replyToMailId
+	 */
+	public String getReplyToMailId() {
+		return replyToMailId;
+	}
+
+	/**
+	 * @param replyToMailId the replyToMailId to set
+	 */
+	public void setReplyToMailId(String replyToMailId) {
+		this.replyToMailId = replyToMailId;
+	}
+
+	/**
+	 * @return the senderId
+	 */
+	public long getSenderId() {
+		return senderId;
+	}
+
+	/**
+	 * @param senderId the senderId to set
+	 */
+	public void setSenderId(long senderId) {
+		this.senderId = senderId;
+	}
+
+	/**
+	 * @return the s3Path
+	 */
+	public String getS3Path() {
+		return s3Path;
+	}
+
+	/**
+	 * @param s3Path the s3Path to set
+	 */
+	public void setS3Path(String s3Path) {
+		this.s3Path = s3Path;
+	}
+	
 }

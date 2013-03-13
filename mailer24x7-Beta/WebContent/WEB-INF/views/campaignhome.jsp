@@ -96,7 +96,7 @@
 															<td class="tbl-btm-bdr" width="100">
 															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
 															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
-															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
+															  <a href=""${pageContext.request.contextPath}/usr/campaign/clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
 															  <a href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" title="Delete">Delete</a></td>
 														</tr>
 
@@ -147,7 +147,7 @@
 															<td class="tbl-btm-bdr" width="100">
 															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
 															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
-															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
+															  <a href=""${pageContext.request.contextPath}/usr/campaign/clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
 															  <a href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" title="Delete">Delete</a></td>
 														</tr>
 
@@ -198,7 +198,7 @@
 															<td class="tbl-btm-bdr" width="100">
 															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
 															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
-															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
+															  <a href=""${pageContext.request.contextPath}/usr/campaign/clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
 															  <a href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" class="Delete">Delete</a></td>
 														</tr>
 

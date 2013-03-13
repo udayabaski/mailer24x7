@@ -43,6 +43,8 @@ public class MailerUtil {
 	public static final String MAILGUN_RESOURCE = "https://api.mailgun.net/v2/"+MAILGUN_DOMAIN_NAME+"/campaigns";
 	public static final String MAILGUN_MESSAGE_RESOURCE = "https://api.mailgun.net/v2/"+MAILGUN_DOMAIN_NAME+"/messages";
 	
+	public static final String CAMPAIGN_SENT_CONFIRMATION_MAIL_SUBJECT = "Mailer24x7 - Campaign Sent Successsfully";
+	
 
 	public static Properties mailProps = null;
 

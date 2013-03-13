@@ -49,4 +49,6 @@ public interface ICampaignService {
 
 	public CampaignReportsBean getCampaignBean(String campaignId);
 
+	public CampaignBean getCampaignDetailsForClone(String campaignId);
+
 }
