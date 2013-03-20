@@ -45,6 +45,8 @@ public class MailerUtil {
 	
 	public static final String CAMPAIGN_SENT_CONFIRMATION_MAIL_SUBJECT = "Mailer24x7 - Campaign Sent Successsfully";
 	
+	public static final String SALESFORCE_API_TOKEN = "3MVG9Y6d_Btp4xp6NhORDtcrlHgyV8bML07Yqv3t0iSmbXjsJINloMsbneTFoxVmrvkMrTVMp4x9FNHtc9wNy";
+	public static final String SALESFORCE_API_SECRET = "6990886758311161066";
 
 	public static Properties mailProps = null;
 
