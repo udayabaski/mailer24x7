@@ -47,9 +47,6 @@ public class CRMController {
 	public String signupFacebook(Map model, HttpServletRequest request,
 			HttpServletResponse response) {
 		
-		System.out.println("Query StringGGGGGGGGGGGGGGGGGG "+request.getQueryString());
-		System.out.println("Request URIIIIIIIIIIIIIIIIIIIII "+request.getRequestURI());
-		System.out.println("Param MapPPPPPPPPPppppppppppppp "+request.getParameterMap());
 		String verifierStr = request.getParameter("code");
 
 		Map<String, String> map = salesforceService.getAccessTokenMap(
@@ -91,6 +88,8 @@ public class CRMController {
 				.getAuthorizationURL(MailerUtil.SALESFORCE_API_TOKEN,
 						MailerUtil.SALESFORCE_API_SECRET,
 						"http://localhost:18080/mailer24x7/usr/integrations/salesforce/fetch/contacts/step2");
+		
+		System.out.println("Authorization URLLLLLL "+authUrl);
 
 		return "redirect:" + authUrl;
 
