@@ -65,7 +65,7 @@ If you do not supply a scope parameter, it will default to id api refresh_token.
 			String apiSecret, String callbackUrl) {
 		OAuthService service = new ServiceBuilder().provider(ForceDotComApi.class)
 				.apiKey(apiKey).apiSecret(apiSecret)
-				.scope("refresh_token")
+				//.scope("refresh_token")
 				.callback(callbackUrl).build();
 		
 		return service.getAuthorizationUrl(EMPTY_TOKEN);
