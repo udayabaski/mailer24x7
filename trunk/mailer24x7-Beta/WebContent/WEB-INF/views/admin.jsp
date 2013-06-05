@@ -89,13 +89,6 @@
 													<div class="greytxt">Configure your organization profile and include an image of your brand logo.</div>
 												</div>
 											</div>   
-											<div class="settings-block">
-												<div class="seticon2 sections left"></div>
-												<div class="content-block">
-													<div class="titletxt"><a href="${pageContext.request.contextPath}/usr/integrations/salesforce/fetch/contacts/step1">Salesforce Contacts</a></div>
-													<div class="greytxt">Import Contacts from Salesforce.</div>
-												</div>
-											</div>  
 											<!-- <div class="settings-block">
 												<div class="seticon4 sections left"></div>
 												<div class="content-block">
