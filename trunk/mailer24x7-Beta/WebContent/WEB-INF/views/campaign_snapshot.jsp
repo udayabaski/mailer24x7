@@ -188,7 +188,7 @@
 			<h2>Recipients</h2>
 			<span  class="options">
              <c:if test="${not empty listName}">
-			  <a href="${pageContext.request.contextPath}/usr/subscriber/edit/group/id/${campaignSnapshotBean.subscriberListId}/topage=snapshot">Add more recipients</a>
+			  <a href="${pageContext.request.contextPath}/usr/subscriber/view/step3/id/${campaignSnapshotBean.campaignId}">Add more recipients</a>
 			 </c:if>
 			</span>
 		</div>
