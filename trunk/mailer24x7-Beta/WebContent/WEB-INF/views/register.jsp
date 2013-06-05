@@ -11,168 +11,133 @@
 <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
 <link href="${pageContext.request.contextPath}/styles/signup-style.css" rel="stylesheet" type="text/css" />
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/script/excanvas.js"></script><![endif]-->
+<link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/styles/stylez.css" />
+<link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/styles/signup.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/bootstrap.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/font-awesome.css" />
+<link href="//fonts.googleapis.com/css?family=Open+Sans:400,300" rel="stylesheet" type="text/css" />
+
+
+
+
 
 </head>
 
 <body>
-<table>
-<tr>
 
-<td  width="10%" style="height:60px;">
-<img src="${pageContext.request.contextPath}/images/mailer-logo.png" /> 
-</td>
 
-</tr>
-</table>
+ <!--Top header tiles starts-->
+<div class="client-banner cf">
+    <div class="container">
+        <div class="row">
+            <div class="inner-wrapper cf span12" style="position:relative; left:15px;">
+                <div class="left">
+                    <a href="#" style="text-decoration:none">
+                        <div class="panel-sitename">
+                            <h4 style="color:#fff; padding-top:2px; font-size:25px;"><span class="helper-font-24">
+                    <i class="icon-envelope-alt" style="font-size:36px; color:#fff"></i>
+                </span> <span style="position:relative; bottom:2px; font-weight:normal; left:5px; ">Mail Engage Sign in below</span></h4>
+                        </div>
+                    </a>
 
- <div id="pageContainer">
-		
-		<ul id="tabs" class="clearfix">
-			<li class="activeTab" id="signInTab">
-				<div class="signInTabContent">
-					<h1><b>Get Started with a Free Account</b></h1>
-				</div>
-				<span class="activeTabArrow"><!-- --></span>
-			</li>
-			<li class="hd-right"><b class="txt">Already a member?</b> <a href="${pageContext.request.contextPath}/auth/login" class="button green mar1">Login</a></li>
-		</ul>
+                </div>
+                <b class="txt">Already a member?</b> <a href="${pageContext.request.contextPath}/auth/login" class="button green mar1">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Top header tiles Ends-->
 
-      <form:form action="join"  commandName="registrationForm" method="POST" id="registration">
+ <!--Content area tiles Starts-->  
+ <form:form action="join"  commandName="registrationForm" method="POST" id="registration">
       <form:hidden path="uuId" />
-      	
-      	
-		<div id="signUp" class="clearfix toggleTab">
-		
-			
-            <table width="100%" cellpadding="0" cellspacing="0">
-            
-            
-      	
-         <div class="${registrationForm.messageType}">
-         </div>
-            
-            <tr>
-            <td valign="top" width="70%">
-            <table width="80%" cellpadding="0" cellspacing="0">
-            
-            <c:set var="uuId" value="${registrationForm.uuId}"></c:set>
+<div >
+ <div class="bodyOfSpan">
+ 
+		   <c:set var="uuId" value="${registrationForm.uuId}"></c:set>
             <c:if test="${not empty uuId}">
             <tr><td colspan="3" height="20" class="${registrationForm.messageType}">Thanks for registration. An activation mail has been sent to your email. Please follow the mail. 
           Click the link below to send the mail again if you have not got the mail. <a href="${pageContext.request.contextPath}/reg/join/confirm/resend/usr/<c:out value="${registrationForm.uuId}"/>">Send now.</a></td></tr>
             <tr><td colspan="3" height="20"></td></tr>
              </c:if>
-            
-            <tr>
-            <td width="45%">User Name</td>
-            <td width="3%"></td>
-             <td>
-               <form:input path="fullName" id="fullName" />
-               <span class="errortxt"><form:errors path="fullName" /></span>
-             </td>
-            </tr>
-            <tr><td colspan="3" height="20"></td></tr>
-          <!--  
-             <tr>
-            <td>Company</td>
-            <td width="3%"></td>
-             <td>
-              <form:input path="company" id="company" />
-              <span class="errortxt"><form:errors path="company" /></span>
-            </td>
-           </tr>
-            
-             <tr><td colspan="3" height="20"></td></tr>
-             <tr>
-            <td>Website</td>
-            <td width="3%"></td>
-            <td>
-              <form:input path="website" id="website" />
-              <span class="errortxt"><form:errors path="website" /></span>
-             </td>
-            </tr>
-            
-            <tr><td colspan="3" height="20"></td></tr>
-             <tr>
-            <td>Country</td>
-            <td width="3%"></td>
-             <td>
-               <form:select path="country" cssClass="selbox2" id="sub_group">
-				  <form:options items="${countryMap}" />
-   			   </form:select>
-   			   <span class="errortxt"><form:errors path="country" /></span>
-            </td>
-            </tr>
-            -->
-            <tr><td colspan="3" height="20"></td></tr>
-             <tr>
-            <td>Email</td>
-            <td width="3%"></td>
-             <td>
-              <form:input path="emailId" id="emailId" />
+ 
+ <div class="signup-wrapper cf">
+    <div class="form-wrapper left">
+        <div class="email-white bottom20px">
+            <div class="padding20px form">
+                <form accept-charset="utf-8" method="post">
+                <div class="cf small-inputs">
+                    <div class="left">
+                        <label>First Name</label>
+                        <form:input path="fullName" id="fullName" />
+              			 <span class="errortxt"><form:errors path="fullName" /></span>
+                                            
+                        </div>
+
+           
+                </div>
+
+                <label style="float:left">Company or organisation</label>
+                <input type="text" value="" name="company_name" />
+                <label>Email address</label><form:input path="emailId" id="emailId" />
               <span class="errortxt"><form:errors path="emailId" /></span>
-            </td>
-           </tr>
-            
-            <tr><td colspan="3" height="20"></td></tr>
-             <tr>
-            <td>Password</td>
-            <td width="3%"></td>
-            <td>
-              <form:password path="password" id="password" />
+           
+                <label>Password</label><form:password path="password" id="password" />
               <span class="errortxt"><form:errors path="password" /></span>
-             </td>
-            </tr>
-            
-            <tr><td colspan="3" height="20"></td></tr>
-             <tr>
-            <td>Retype password</td>
-            <td width="3%"></td>
-            <td>
-              <form:password path="confirmPassword" id="confirmPassword" />
+              
+               <label>Retype password</label> <form:password path="confirmPassword" id="confirmPassword" />
               <span class="errortxt"><form:errors path="confirmPassword" /></span>
-            </td>
-            </tr>
             
-             <tr><td colspan="3" height="20"></td></tr>
-            <tr>    
-            <td></td>        
-            <td colspan="2"  align="center"> <a onclick="document.forms[0].submit();return false;" class="button green" href="#">Create My Account</a> <!-- <a class="button green" href="#">Cancel</a> --></td>            
-            </tr>
-            
-             <tr><td colspan="3" height="10"></td></tr>
-            <tr>          
-            <td colspan="3"  align="left" class="cond">"By signing up, you agree to our <a href="javascript:void(0);" class="conditions">Terms of Use</a>, <a href="javascript:void(0);" class="conditions">Privacy Policy</a>, and <a href="javascript:void(0);" class="conditions">Anti-spam Policy</a>"
-</td>            
-            </tr>
-            
-            </table>
-            </td>
-            
-            <td width="3%"></td>
-            <td valign="top" width="27%">
-            <table cellpadding="0" cellspacing="0">
-            <tr>
-            <td>
-            <div id="sidebar">
-				<h3>Benefits for signing up</h3>
-				
-				<ul>
-					<li>24/7 support from our team</li>
-					<li>Another great benefit</li>
-					<li>We're in the cloud, so accessing your data will be 10x faster</li>
-					<li>We use the latest technology on the market today</li>
-				</ul>
-				
-			</div>
-            </td>
-            </tr>
-            </table>
-            
-            </td>
-            </tr>
-            </table>
-		</div>
-		</form:form> 
-	</div>
-	</body>
+        		
+        		
+        		
+                              <div class="cf">
+                    <div class="left">
+                        <span class="free-trial">30 day free trial, no credit card required.</span>
+                    </div>
+                    <div class="right">
+                        <input type="submit" value="Get started" class="btn btn-success btn-large"  onclick="document.forms[0].submit();return false;"  href="#"/>
+                    </div>
+                </div>
+                </form>         <br>       <span class="by-clicking">By clicking "Get Started" you agree to <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</span>
+            </div>
+        </div>
+    </div>
+    <div class="perks right">
+        <p class="up-and-running">Benefits for signing up</p>
+        <p class="included">Included in your account:</p>
+        <ul class="perks-list">
+            <li>24/7 support from our team</li>
+            <li>Another great benefit</li>
+            <li>100GB Storage</li>
+            <li>We're in the cloud, so accessing your data will be 10x faster</li>
+            <li>We use the latest technology on the market today</li>
+        </ul>
+        <p class="joining">
+           Online email marketing solution to manage contacts,<br> send emails and track results Offers plug-ins for other programs.
+        </p>
+    </div>
+
+</div>
+ 
+ </div>
+
+</div>
+
+</form:form>
+
+
+
+<!--Content area tiles Ends-->  
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script type="text/javascript"  src="js/bootstrap.js"></script>
+</body>
 </html>
+
+
+
+
+
+
+
