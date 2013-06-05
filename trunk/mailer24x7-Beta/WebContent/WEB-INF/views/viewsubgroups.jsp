@@ -1,7 +1,4 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -29,9 +26,7 @@
 </script>
 
 
-</head>
 
-<body>
 
 <form:form action="subscriber" method="POST" commandName="subscriberHomeBean">
 
@@ -43,7 +38,7 @@
 <td width="80%" valign="top">
 
 
-
+<a href="${pageContext.request.contextPath}/usr/subscriber/new/group" class="button grey-btn mar1" ><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New Subscribers Group</a>
 
 <table cellpadding="0" cellspacing="0" width="100%">
 
@@ -51,28 +46,23 @@
 
 
 <td width="100%" class="contentLayer">
-<div id="tabbed_box_1" class="tabbed_box">
+
 	
-    <div class="tabbed_area">
-	
-	<div class="right-link">
-		<a href="${pageContext.request.contextPath}/usr/subscriber/new/group" class="button grey-btn mar1" ><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New Subscribers Group</a>
-	</div>
+
+		
+
 
 	
     
-        <div id="content_1" class="content">
-        	
-        	
-        	<div class="tableData">
-        	<table cellpadding="0" cellspacing="0" width="100%">
+       
+        	<table cellpadding="0" cellspacing="0" width="100%" class="content-padding">
             <tr>
-            <td class="table-heading">Group Name</td>
-            <td class="table-heading">Active</td>
-            <td class="table-heading">Unsubscribed</td>
-            <td class="table-heading">Bounced</td>
-            <td class="table-heading">Last Modified</td>
-            <td class="table-heading">Actions</td>
+            <th>Group Name</th>
+            <th>Active</th>
+           <th>Unsubscribed</th>
+            <th>Bounced</th>
+           <th>Last Modified</th>
+           <th>Actions</th>
             </tr>
             <c:choose>
             
@@ -103,10 +93,7 @@
             </c:choose>
             
             </table>
-            </div>
-        </div>
-    </div>
-</div>
+        
 </td>
 </tr>
 </table>
@@ -121,5 +108,4 @@
 </form:form>
 
 
-</body>
-</html>
+
