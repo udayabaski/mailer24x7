@@ -9,21 +9,51 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <title>Mailer24x7 : home</title>
-<link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
-<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/excanvas.js"></script><![endif]-->
-<link href="${pageContext.request.contextPath}/styles/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/script/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/script/jquery-ui-1.9.1.custom.min.js"></script>
 
 	<script>
-    	$(function() {
-          $( "#tabs" ).tabs();
-        });
+    	$(document).ready(
+    		function(){
+			document.getElementById("draftlist").style.display="none" ;
+			document.getElementById("sentlist").style.display="block" ;
+			document.getElementById("scheduledlist").style.display="none" ;
+    						
+    			$("#Ctype").change(
+    				function(){
+    					var txt = $("#Ctype option:selected").val();
+    					
+    					if(txt == "Draft"){
+    						
+						document.getElementById("draftlist").style.display="block" ;
+						document.getElementById("sentlist").style.display="none" ;
+						document.getElementById("scheduledlist").style.display="none" ;
+    						
+    					}
+					if(txt == "Scheduled"){
+    						
+						document.getElementById("draftlist").style.display="none" ;
+						document.getElementById("sentlist").style.display="none" ;
+						document.getElementById("scheduledlist").style.display="block" ;
+    						
+    					}
+					if(txt == "Sent"){
+    						
+						document.getElementById("draftlist").style.display="none" ;
+						document.getElementById("sentlist").style.display="block" ;
+						document.getElementById("scheduledlist").style.display="none" ;
+    						
+    					}
+    					
+    					
+    				}	
+    			
+    			
+    			);
+    			
+    		}	
+    	
+    	);
     </script>
 
-</head>
-
-<body>
 
 <form:form action="view" method="POST" commandName="campaignsHomeBean">
 
@@ -35,30 +65,43 @@
 			<td width="10%"></td>
 			<td width="80%" valign="top">
 				<table cellpadding="0" cellspacing="0" width="100%">
+				<tr>
+				<td>
+				<select id="Ctype">
+				
+				<option value="Sent">Sent</option>
+				<option value="Scheduled">Scheduled</option>
+				<option value= "Draft">Draft</option>
+				</select>
+				</td>
+				</tr>
+				
 					<tr>
-						<td width="100%" class="contentLayer">
-							<div id="tabbed_box_1" class="tabbed_box">
 
-								<div id="tabs" class="tabbed_area">
+			
+ 			
+					
 
-									<ul class="tabs">
-										<li><a href="#tabs-1" title="content_1" class="tab active">Drafted Campaigns
-										</a></li>
-										<li><a href="#tabs-2" title="content_2" class="tab">Scheduled
-												Campaigns </a></li>
-										<li><a href="#tabs-3" title="content_3" class="tab">Sent
-												Campaigns </a></li>
-											<li>
+<td width="100%" class="contentLayer" >
 
-											</li>
-									</ul>
+
+	<div id="tabs" class="tabbed_area">
+
+
+									
 									<div class="right-link">
-										<a href="${pageContext.request.contextPath}/usr/campaign/new" class="button grey-btn mar1" ><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New Campaign</a>
-										<a href="${pageContext.request.contextPath}/usr/campaign/new" class="button grey-btn mar1" ><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New A/B Campaign</a>
+										<a href="${pageContext.request.contextPath}/usr/campaign/new" class="button grey-btn mar1" ><img 
+
+src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New Campaign</a>
+										<a href="${pageContext.request.contextPath}/usr/campaign/new" class="button grey-btn mar1" ><img 
+
+src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New A/B Campaign</a>
 									</div>
 
-									<div id="tabs-1" class="content">
-										<table cellpadding="0" cellspacing="0" width="100%">
+									<div id="draftlist" class="content">
+										<table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-
+
+shadow: 0 0px 0px #CDCDCD;    border-radius: 5px;">
 											
 
 					   <c:set var="draftCampaignsCount" value="${fn:length(campaignsHomeBean.draftCampaigns)}"></c:set>
@@ -68,19 +111,21 @@
        						<tr valign="top" >
 								<td class="pad1"><img src="${pageContext.request.contextPath}/images/img-campaign.png" width="75" height="72" alt="" /></td>
 								<td><h1>Design your campaign</h1>
-								<p>Get started by creating your first email campaign. We'll walk through the entire process, and you can choose how you'd like to pay before you send.</p>
-								<p><a href="${pageContext.request.contextPath}/usr/campaign/new" class="button green mar1 bg" >Create Campaign<img src="${pageContext.request.contextPath}/images/arrows.png" width="20" height="20" alt="" class="arrows" /></a></p></td>
+								<p>Get started by creating your first email campaign. We'll walk through the entire process, and you can choose how you'd like to pay 
+
+before you send.</p>
+								<p><a href="${pageContext.request.contextPath}/usr/campaign/new" class="button green mar1 bg" >Create Campaign<img 
+
+src="${pageContext.request.contextPath}/images/arrows.png" width="20" height="20" alt="" class="arrows" /></a></p></td>
 							</tr>
        					</c:when>
        					<c:otherwise>
 
-													<tr>
-														<td class="table-heading">Name</td>
-														<td class="table-heading">Subject</td>
-														<td class="table-heading">Created By</td>
-														<td class="table-heading">Last Modified</td>
-														<td class="table-heading" width="100">Actions</td>
-													</tr>
+													  <tr>
+    <th>Campaign Name</th>
+    <th>Last Modified</th>
+    <th>Actions</th>
+  </tr>
 													
 								<c:forEach items="${campaignsHomeBean.draftCampaigns}" var="campaign" varStatus="reStatus">
 								
@@ -89,15 +134,27 @@
 															class="emailcampheader odd">
 
 															<td class="tbl-btm-bdr"><a
-																href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" ><c:out value="${campaign.campaignName}" /></a></td>
-															<td class="tbl-btm-bdr"><c:out value="${campaign.subject}" /></td>
-															<td class="tbl-btm-bdr"><c:out value="${campaign.createdBy}" /></td>
-															<td class="tbl-btm-bdr"><c:out value="${campaign.lastModifiedTime}" /></td>
+																
+
+href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" ><c:out value="${campaign.campaignName}" /></a>
+,by <c:out value="${campaign.createdBy}" /> </td>
+															
+															
+															<td class="tbl-btm-bdr">
+<img src="${pageContext.request.contextPath}/images/icon-shedule.png" class="email-list-icons" style="position:relative; top:2px;"><c:out value="${campaign.lastModifiedTime}" /></td>
 															<td class="tbl-btm-bdr" width="100">
-															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
-															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
-															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
-															  <a href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" title="Delete">Delete</a></td>
+															  <a 
+
+href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
+															  <a 
+
+href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
+															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" 
+
+class="clone" title="Clone">Clone</a> 
+															  <a 
+
+href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" title="Delete">Delete</a></td>
 														</tr>
 
 
@@ -112,28 +169,32 @@
 											</ul>
 										</div>
 									</div>
-									<div id="tabs-2" class="content">
-										<table cellpadding="0" cellspacing="0" width="100%">
-											<c:set var="scheduledCampaignsCount" value="${fn:length(campaignsHomeBean.scheduledCampaigns)}"></c:set>
+									<div id="scheduledlist" class="content">
+										<table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-
+
+shadow: 0 0px 0px #CDCDCD;    border-radius: 5px;">
+											<c:set var="scheduledCampaignsCount" value="${fn:length
+
+(campaignsHomeBean.scheduledCampaigns)}"></c:set>
 												
 											<c:choose>
         									<c:when test="${scheduledCampaignsCount == 0}">
        											<tr>
 														<td colspan="4" class="">No Campaigns are
-															scheduled. <a href="${pageContext.request.contextPath}/usr/campaign/new"><b>Schedule</b></a>
+															scheduled. <a 
+
+href="${pageContext.request.contextPath}/usr/campaign/new"><b>Schedule</b></a>
 															a campaign.
 														</td>
 													</tr>
        										</c:when>
        										<c:otherwise>
        												
-       												<tr>
-														<td class="table-heading">Name</td>
-														<td class="table-heading">Created By</td>
-														<td class="table-heading">Scheduled On</td>
-														<td class="table-heading" width="100">Actions</td>
-													</tr>
-													
+       												  <tr>
+    <th>Campaign Name</th>
+    <th>Scheduled On</th>
+    <th>Actions</th>
+  </tr>
 								<c:forEach items="${campaignsHomeBean.scheduledCampaigns}" var="campaign" varStatus="reStatus">
 								
 														<tr onmouseout="this.className='emailcampheader odd'"
@@ -141,28 +202,47 @@
 															class="emailcampheader odd">
 
 															<td class="tbl-btm-bdr"><a
-																href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}"><c:out value="${campaign.campaignName}" /></a></td>
-															<td class="tbl-btm-bdr"><c:out value="${campaign.createdBy}" /></td>
-															<td class="tbl-btm-bdr"><c:out value="${campaign.scheduledOn}" /></td>
+																
+
+href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}"><c:out value="${campaign.campaignName}" /></a>
+,by  <c:out value="${campaign.createdBy}" /> </td>
+															
+															<td class="tbl-btm-bdr"><img 
+
+src="${pageContext.request.contextPath}/images/icon-shedule.png" class="email-list-icons" style="position:relative; top:2px;"><c:out value="${campaign.scheduledOn}" /></td>
 															<td class="tbl-btm-bdr" width="100">
-															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
-															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
-															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
-															  <a href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" title="Delete">Delete</a></td>
+															  <a 
+
+href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
+															  <a 
+
+href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
+															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" 
+
+class="clone" title="Clone">Clone</a> 
+															  <a 
+
+href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" title="Delete">Delete</a></td>
 														</tr>
 
 
 								</c:forEach>
-       											       											       										   
+       											       										
+
+	       										   
 											</c:otherwise>
 											</c:choose>	
 
 										</table>
 									</div>
-									<div id="tabs-3" class="content">
-										<table cellpadding="0" cellspacing="0" width="100%">
+									<div id="sentlist" class="content">
+										  <table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-
+
+shadow: 0 0px 0px #CDCDCD;border-radius: 5px;">
 											
-												<c:set var="completedCampaignsCount" value="${fn:length(campaignsHomeBean.completedCampaigns)}"></c:set>
+												<c:set var="completedCampaignsCount" value="${fn:length
+
+(campaignsHomeBean.completedCampaigns)}"></c:set>
 												
 											<c:choose>
         									<c:when test="${completedCampaignsCount == 0}">
@@ -172,15 +252,11 @@
        										</c:when>
        										<c:otherwise>
 													
-													<tr>
-														<td class="table-heading">Name</td>
-														<td class="table-heading">Created By</td>
-														<td class="table-heading">Last Updated</td>
-														<td class="table-heading">Opened</td>
-														<td class="table-heading">Clicked</td>
-														<td class="table-heading">Bounced</td>
-														<td class="table-heading" width="100">Actions</td>
-													</tr>
+													  <tr>
+    														<th>Campaign Name</th>
+    														<th>Status</th>
+    														<th>Actions</th>
+ 													 </tr>
 													
 								<c:forEach items="${campaignsHomeBean.completedCampaigns}" var="campaign" varStatus="reStatus">
 								
@@ -189,17 +265,33 @@
 															class="emailcampheader odd">
 
 															<td class="tbl-btm-bdr"><a
-																href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}"><c:out value="${campaign.campaignName}" /></a></td>
-															<td class="tbl-btm-bdr"><c:out value="${campaign.createdBy}" /></td>
-															<td class="tbl-btm-bdr"><c:out value="${campaign.lastModifiedTime}" /></td>
-															<td class="tbl-btm-bdr"><c:out value="${campaign.opened}" /></td>
-															<td class="tbl-btm-bdr"><c:out value="${campaign.clicked}" /></td>
-															<td class="tbl-btm-bdr"><c:out value="${campaign.bounced}" /></td>
+																
+
+href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}"><c:out value="${campaign.campaignName}" /></a>
+																by <c:out value="${campaign.createdBy}" /> , on 
+
+<c:out value="${campaign.lastModifiedTime}" />
+																
+																</td>
+															
+															<td class="tbl-btm-bdr">
+<img src="${pageContext.request.contextPath}/images/icon-email.png" class="email-list-icons" style="position:relative; top:2px;" title= "<c:out value="${campaign.opened}" />" />&nbsp;
+<img src="${pageContext.request.contextPath}/images/icon-email.png" class="email-list-icons" style="position:relative; top:2px;" title= "<c:out value="${campaign.clicked}" />" >&nbsp;<img 
+
+src="${pageContext.request.contextPath}/images/icon-bounce.png" class="email-list-icons" style="position:relative; top:2px;" title ="<c:out value="${campaign.bounced}" />" /></td>
 															<td class="tbl-btm-bdr" width="100">
-															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
-															  <a href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
-															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" class="clone" title="Clone">Clone</a> 
-															  <a href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" class="Delete">Delete</a></td>
+															  <a 
+
+href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="add" title="view">View</a> 
+															  <a 
+
+href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" class="edit" title="edit">Edit</a> 
+															  <a href="clone/id/<c:out value="${campaign.campaignId}" />" 
+
+class="clone" title="Clone">Clone</a> 
+															  <a 
+
+href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campaignId}" class="delete" class="Delete">Delete</a></td>
 														</tr>
 
 
@@ -214,7 +306,7 @@
 
 								</div>
 
-							</div>
+
 						</td>
 					</tr>
 				</table>
@@ -230,8 +322,3 @@
 
 
 
-<!--footer part starts!-->
-
-<!--footer part ends!-->
-</body>
-</html>
