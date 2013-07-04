@@ -1,25 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<title>Mailer24x7 : home</title>
+
+
 
 	<script>
-    	$(document).ready(
-    		function(){
+    	function changeit(txt){
+    		
 			document.getElementById("draftlist").style.display="none" ;
 			document.getElementById("sentlist").style.display="block" ;
 			document.getElementById("scheduledlist").style.display="none" ;
     						
-    			$("#Ctype").change(
-    				function(){
-    					var txt = $("#Ctype option:selected").val();
+    			
+    				
+    					
     					
     					if(txt == "Draft"){
     						
@@ -44,64 +39,46 @@
     					}
     					
     					
-    				}	
+    				
     			
     			
-    			);
-    			
-    		}	
-    	
-    	);
+    			}
     </script>
 
 
 <form:form action="view" method="POST" commandName="campaignsHomeBean">
+<div class="content">
+
+
+<div id="email-list">
+  
+    <div class="bodyOfSpan">
+  <div class="btn-group">
+<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+Recent Campaigns
+<span class="caret"></span>
+</a>
+<ul class="dropdown-menu">
+<!-- dropdown menu links -->
+<li><a href="javascript:changeit('Draft')">Drafts</a></li>
+<li><a href="javascript:changeit('Sent')">Sent</a></li>
+<li><a href="javascript:changeit('Scheduled')">Scheduled</a></li>
+</ul>
+</div>
+
+  
+    <a href="${pageContext.request.contextPath}/usr/campaign/new">+ New Campaign</a>
+			
+			
 
 
 	<!--content main controller table starts!-->
-	<table cellpadding="0" cellspacing="0" width="100%"
-		class="content-padding">
-		<tr>
-			<td width="10%"></td>
-			<td width="80%" valign="top">
-				<table cellpadding="0" cellspacing="0" width="100%">
-				<tr>
-				<td>
-				<select id="Ctype">
-				
-				<option value="Sent">Sent</option>
-				<option value="Scheduled">Scheduled</option>
-				<option value= "Draft">Draft</option>
-				</select>
-				</td>
-				</tr>
-				
-					<tr>
-
-			
- 			
-					
-
-<td width="100%" class="contentLayer" >
-
-
-	<div id="tabs" class="tabbed_area">
-
-
-									
-									<div class="right-link">
-										<a href="${pageContext.request.contextPath}/usr/campaign/new" class="button grey-btn mar1" ><img 
-
-src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New Campaign</a>
-										<a href="${pageContext.request.contextPath}/usr/campaign/new" class="button grey-btn mar1" ><img 
-
-src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New A/B Campaign</a>
-									</div>
-
-									<div id="draftlist" class="content">
-										<table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-
-
-shadow: 0 0px 0px #CDCDCD;    border-radius: 5px;">
+	
+	
+					<div id="draftlist" class="content">
+<table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-shadow: 0 0px 0px #CDCDCD;
+	    border-radius: 5px;">
+  
 											
 
 					   <c:set var="draftCampaignsCount" value="${fn:length(campaignsHomeBean.draftCampaigns)}"></c:set>
@@ -137,7 +114,7 @@ src="${pageContext.request.contextPath}/images/arrows.png" width="20" height="20
 																
 
 href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}" ><c:out value="${campaign.campaignName}" /></a>
-,by <c:out value="${campaign.createdBy}" /> </td>
+<div> <span class="label label-warning">Draft</span> , by <c:out value="${campaign.createdBy}" /> </td>
 															
 															
 															<td class="tbl-btm-bdr">
@@ -163,16 +140,12 @@ href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campa
 										 </c:otherwise>
 										</c:choose>
 										</table>
-										<div class="pagination">
-											<ul>
-												
-											</ul>
-										</div>
+										
 									</div>
 									<div id="scheduledlist" class="content">
-										<table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-
-
-shadow: 0 0px 0px #CDCDCD;    border-radius: 5px;">
+ <table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-shadow: 0 0px 0px #CDCDCD;
+										    border-radius: 5px;">
+  
 											<c:set var="scheduledCampaignsCount" value="${fn:length
 
 (campaignsHomeBean.scheduledCampaigns)}"></c:set>
@@ -205,7 +178,7 @@ href="${pageContext.request.contextPath}/usr/campaign/new"><b>Schedule</b></a>
 																
 
 href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}"><c:out value="${campaign.campaignName}" /></a>
-,by  <c:out value="${campaign.createdBy}" /> </td>
+<div><span class="label label-important">Failed</span> </div> ,by  <c:out value="${campaign.createdBy}" /> </td>
 															
 															<td class="tbl-btm-bdr"><img 
 
@@ -236,9 +209,9 @@ href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campa
 										</table>
 									</div>
 									<div id="sentlist" class="content">
-										  <table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-
-
-shadow: 0 0px 0px #CDCDCD;border-radius: 5px;">
+										 <table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-shadow: 0 0px 0px #CDCDCD;
+										    border-radius: 5px;">
+  
 											
 												<c:set var="completedCampaignsCount" value="${fn:length
 
@@ -267,18 +240,18 @@ shadow: 0 0px 0px #CDCDCD;border-radius: 5px;">
 															<td class="tbl-btm-bdr"><a
 																
 
-href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}"><c:out value="${campaign.campaignName}" /></a>
+href="${pageContext.request.contextPath}/usr/campaign/view/snapshot/id/${campaign.campaignId}"><c:out value="${campaign.campaignName}" /></a> <div><span class="label label-success">Sent</span>
 																by <c:out value="${campaign.createdBy}" /> , on 
 
-<c:out value="${campaign.lastModifiedTime}" />
+<c:out value="${campaign.lastModifiedTime}" /></div>
 																
 																</td>
 															
-															<td class="tbl-btm-bdr">
-<img src="${pageContext.request.contextPath}/images/icon-email.png" class="email-list-icons" style="position:relative; top:2px;" title= "<c:out value="${campaign.opened}" />" />&nbsp;
-<img src="${pageContext.request.contextPath}/images/icon-email.png" class="email-list-icons" style="position:relative; top:2px;" title= "<c:out value="${campaign.clicked}" />" >&nbsp;<img 
+															<td><div class="email-list-icons">
+<img src="${pageContext.request.contextPath}/images/icon-email.png" class="email-list-icons"  title= "<c:out value="${campaign.opened}" />" />
+<img src="${pageContext.request.contextPath}/images/icon-email.png" class="email-list-icons"  title= "<c:out value="${campaign.clicked}" />" />
 
-src="${pageContext.request.contextPath}/images/icon-bounce.png" class="email-list-icons" style="position:relative; top:2px;" title ="<c:out value="${campaign.bounced}" />" /></td>
+<img src="${pageContext.request.contextPath}/images/icon-bounce.png" class="email-list-icons"  title ="<c:out value="${campaign.bounced}" />" /></div></td>
 															<td class="tbl-btm-bdr" width="100">
 															  <a 
 
@@ -304,16 +277,12 @@ href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campa
 										</table>
 									</div>
 
-								</div>
+								
 
 
-						</td>
-					</tr>
-				</table>
-			</td>
-			<td width="10%"></td>
-		</tr>
-	</table>
+				
+				</div></div></div>
+			
 	<!--content main controller table ends!-->
 
 </form:form>

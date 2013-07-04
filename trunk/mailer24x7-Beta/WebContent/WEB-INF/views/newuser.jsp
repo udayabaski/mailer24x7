@@ -1,17 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
 
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<title>Mailer247 - Create Campaign Step1</title>
 
-<link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
-<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/script/excanvas.js"></script><![endif]-->
-<script type="text/javascript" src="${pageContext.request.contextPath}/script/jquery-1.8.3.min.js"></script>
+
 
 <script type="text/javascript">
 	
@@ -21,11 +13,11 @@
 	
 </script>
 
-</head>
+
 
 <body>
 
-<form:form action="${pageContext.request.contextPath}/usr/admin/update/user"  commandName="userForm" method="POST" id="userForm">
+<form:form action="${pageContext.request.contextPath}/usr/admin/show/user"  commandName="userForm" method="POST" id="userForm">
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
@@ -123,8 +115,9 @@
 		<div class="btn">
 			<table>
 				<tr>
-				    <td width="100">&nbsp;</td>
-					<td align="center"><a href="#" class="button green" onclick="javascript:submitUpdate()">Update</a></td>
+				    
+					<td align="center"><a href="#" class="button green" onclick="javascript:submitUpdate()">Save</a></td>
+					<td align="right"><a href="#" class="button green" onclick="javascript:window.back()">Cancel</a></td>
 				</tr>
 			</table>
 			
@@ -150,6 +143,3 @@
 
 
 </body>
-
-</body>
-</html>
