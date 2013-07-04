@@ -21,6 +21,7 @@ import com.nervytech.mailer24x7.domain.model.User;
 import com.nervytech.mailer24x7.model.service.api.IOrganizationService;
 import com.nervytech.mailer24x7.model.service.api.IUserService;
 import com.nervytech.mailer24x7.spring.bean.AdminBean;
+import com.nervytech.mailer24x7.spring.bean.UserBean;
 import com.nervytech.mailer24x7.spring.form.OrganizationForm;
 import com.nervytech.mailer24x7.spring.form.UserForm;
 import com.nervytech.mailer24x7.spring.security.auth.user.SessionUser;
@@ -46,7 +47,7 @@ public class AdminController {
 		
 		AdminBean bean = new AdminBean();
 		
-		List<User> usersList = usrService.getUsers(usr.getUserId()+"");
+		List<User> usersList = usrService.getUsers(usr.getOrgId()+"");
 		
 		bean.setUsersList(usersList);
 		
@@ -163,6 +164,22 @@ public class AdminController {
 		model.put("userForm", form);
 
 		return "newuser";
+	}
+	
+	@RequestMapping(value = "/view/all/users", method = RequestMethod.GET)
+	public String viewAllUser(Map model, HttpServletRequest request) {
+		
+
+        SessionUser usr = UserDetailsServiceImpl.currentUserDetails();
+        long orgId = usr.getOrgId();
+        System.out.println(" the orgid is ====>"+orgId);
+        UserBean usrbean = new UserBean();
+        List<User> allusers = usrService.getUsers(orgId+"");
+        System.out.println(" the useruve is ====>"+allusers);
+        usrbean.setUsers(allusers);
+        model.put("userBean", usrbean);
+               
+		return "viewusers";
 	}
 
 }
