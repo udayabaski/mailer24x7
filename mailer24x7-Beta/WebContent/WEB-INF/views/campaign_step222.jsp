@@ -3,7 +3,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -12,10 +11,7 @@
 
 <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/script/excanvas.js"></script><![endif]-->
-
-<script src="${pageContext.request.contextPath}/script/jquery-1.8.3.min.js"></script>
- 
-
+<script type="text/javascript" src="${pageContext.request.contextPath}/script/jquery-1.8.3.min.js"></script>
 
 <script type="text/javascript">
 
@@ -25,56 +21,25 @@
 	}
 	
 	function submitNext(){
-	   document.getElementById("htmlData").value=CKEDITOR.instances.editorContent.getData();
 	  document.getElementById("nextAction").value="next";
 	  document.forms[0].submit();
 	}
 	
 	function submitExit(){
-	  document.getElementById("htmlData").value=CKEDITOR.instances.editorContent.getData();
 	  document.getElementById("nextAction").value="exit";
 	  document.forms[0].submit();
 	}
 	
-	function submitUpdate(){
-	  document.forms[0].action = "${pageContext.request.contextPath}/usr/campaign/update/html";
-	  document.getElementById("nextAction").value="update";
-	  document.forms[0].submit();
-	}
-	
-	function submitPreview(){	  
-	  writeConsole(CKEDITOR.instances.editorContent.getData());
-	}
-	
-	function writeConsole(content) {
-      top.consoleRef=window.open('','Preview',
-       'width=600,height=650'
-        +',menubar=0'
-   		+',toolbar=1'
-   		+',status=0'
-   		+',scrollbars=1'
-   		+',resizable=1')
- 	 top.consoleRef.document.writeln(
-  		'<html><head><title>Preview</title></head>'
-   			+'<body bgcolor=white onLoad="self.focus()">'
-   					+content
-   		+'</body></html>'
- 		)
- 		top.consoleRef.document.close()
-	}
-	
 </script>
+
 
 </head>
 
 <body>
 
-<form:form id="campaignEditor" commandName="campaignStep2EditorForm" action="${pageContext.request.contextPath}/usr/campaign/save/html" method="POST">
+<form:form id="campaignStep2" commandName="campaignStep2Form" action="${pageContext.request.contextPath}/usr/campaign/save/step2" method="POST">
 <form:hidden path="nextAction" id="nextAction" />
 <form:hidden path="campaignId" />
-<form:hidden path="editorType" />
-<form:hidden path="toPage" />
-<form:hidden path="htmlData" id="htmlData"/>
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
@@ -84,9 +49,6 @@
 <table cellpadding="0" cellspacing="0" width="100%">
 <tr>
 <td width="100%" class="contentLayer">
-
-
-
 
 <table width="98%" cellpadding="0" cellspacing="0" align="center" >
 <tr>
@@ -113,48 +75,52 @@
 
             
 
-		<div class="btn" style="padding-top:0px;margin:0px;padding-bottom:20px;" >
-			<table>
-				<tr>
-					<!-- <td width="100"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span></td> -->
-					<td align="center"><a href="#" class="button green" onclick="javascript:submitPreview()">Preview</a></td>
-					<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td>
-				</tr>
-			</table>
-			
-		</div>
-		<table width="99%" cellpadding="0" cellspacing="0" class="campaign-page">
+		<table width="98%" cellpadding="0" cellspacing="0" align="center" class="campaign-page">
 	    <tr valign="top">
-			<td>
-			 
-			 
-            <textarea name='editorContent' > </textarea>
-            <script>
-                CKEDITOR.replace( 'editorContent' );
-            </script>
+			<td width="20"><form:radiobutton path="contentType" value="0"/> </td>
+			<td class="txthd">
+				<h4>Import my own design</h4>
+				<p class="greytxt">Import a HTML email design from your computer or the web and add a plain text version for your recipients with older or mobile email clients. We provide detailed reporting on the results.</p>
+			</td>
+		</tr>
+	    <tr valign="top">
+			<td width="20"><form:radiobutton path="contentType" value="1"/></td>
+			<td class="txthd">
+				<h4>Plain text only</h4>
+				<p class="greytxt">Plain text ensures that your message will be viewable by all re3cipients but means you can't add any formatting or style to your email. Only basic reporting will be available.</p>
+			</td>
+		</tr>
+	    <tr valign="top">
+			<td width="20"><form:radiobutton path="contentType" value="2"/></td>
+			<td class="txthd">
+				<h4>HTML Editor</h4>
+				<p class="greytxt">Design a HTML email using our HTML editor.</p>
+			</td>
+		</tr>
+	    <tr valign="top">
+			<td width="20"><form:radiobutton path="contentType" value="3"/></td>
+			<td class="txthd">
+				<h4>New Templates</h4>
+				<p class="greytxt">Design a HTML email using our template layouts.</p>
+			</td>
+		</tr>
+	    <tr valign="top">
+			<td width="20"><form:radiobutton path="contentType" value="4"/></td>
+			<td class="txthd">
+				<h4>Use one of my predefined Templates</h4>
+				<p class="greytxt">Add content to one of your pre-designed email templates.</p>
 			</td>
 		</tr>
 		</table>
 		<div class="btn">
 			<table>
 				<tr>
-				 <c:set var="toPage" value="${campaignStep1Form.toPage}"></c:set>
-				  <c:choose>
-				   <c:when test="${not empty toPage}">
-				    <td width="100">&nbsp;</td>
-				    <td align="center"><a href="#" class="button green" onclick="javascript:submitPreview()">Preview</a></td>
-					<td align="center"><a href="#" class="button green" onclick="javascript:submitUpdate()">Update</a></td>
-				   </c:when>
-				   <c:otherwise>
 					<td width="100"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span></td>
-					<td width="100"><span class="previous"><a href="#" onclick="javascript:submitExit()">Save & Exit</a></span></td>  
-					<td align="center"><a href="#" class="button green" onclick="javascript:submitPreview()">Preview</a></td>
+					<td align="center"><a href="#" class="button green" onclick="javascript:submitExit()">Save &amp; Exit</a></td>
 					<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td>
-				   </c:otherwise>
-				   </c:choose>
-					
 				</tr>
 			</table>
+			
 		</div>
         </fieldset>
 
@@ -174,9 +140,6 @@
 <!--content main controller table ends!-->
 
 </form:form>
-
-
-</body>
 
 
 </body>

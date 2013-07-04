@@ -13,10 +13,6 @@
 <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/script/excanvas.js"></script><![endif]-->
 
-<script src="${pageContext.request.contextPath}/script/jquery-1.8.3.min.js"></script>
- 
-
-
 <script type="text/javascript">
 
 	function submitPrev(){
@@ -25,25 +21,23 @@
 	}
 	
 	function submitNext(){
-	   document.getElementById("htmlData").value=CKEDITOR.instances.editorContent.getData();
 	  document.getElementById("nextAction").value="next";
 	  document.forms[0].submit();
 	}
 	
 	function submitExit(){
-	  document.getElementById("htmlData").value=CKEDITOR.instances.editorContent.getData();
 	  document.getElementById("nextAction").value="exit";
 	  document.forms[0].submit();
 	}
 	
 	function submitUpdate(){
-	  document.forms[0].action = "${pageContext.request.contextPath}/usr/campaign/update/html";
+	  document.forms[0].action = "${pageContext.request.contextPath}/usr/campaign/update/text";
 	  document.getElementById("nextAction").value="update";
 	  document.forms[0].submit();
 	}
 	
-	function submitPreview(){	  
-	  writeConsole(CKEDITOR.instances.editorContent.getData());
+	function submitPreview(){
+	  writeConsole(document.getElementById("textData").value);
 	}
 	
 	function writeConsole(content) {
@@ -54,14 +48,10 @@
    		+',status=0'
    		+',scrollbars=1'
    		+',resizable=1')
- 	 top.consoleRef.document.writeln(
-  		'<html><head><title>Preview</title></head>'
-   			+'<body bgcolor=white onLoad="self.focus()">'
-   					+content
-   		+'</body></html>'
- 		)
- 		top.consoleRef.document.close()
+ 	  top.consoleRef.document.writeln(content)
+ 	  top.consoleRef.document.close()
 	}
+	
 	
 </script>
 
@@ -69,12 +59,11 @@
 
 <body>
 
-<form:form id="campaignEditor" commandName="campaignStep2EditorForm" action="${pageContext.request.contextPath}/usr/campaign/save/html" method="POST">
+<form:form id="campaignEditor" commandName="campaignStep2EditorForm" action="${pageContext.request.contextPath}/usr/campaign/save/text" method="POST">
 <form:hidden path="nextAction" id="nextAction" />
 <form:hidden path="campaignId" />
 <form:hidden path="editorType" />
 <form:hidden path="toPage" />
-<form:hidden path="htmlData" id="htmlData"/>
 
 <!--content main controller table starts!-->
 <table cellpadding="0" cellspacing="0" border="0" width="100%" class="content-padding">
@@ -125,34 +114,28 @@
 		</div>
 		<table width="99%" cellpadding="0" cellspacing="0" class="campaign-page">
 	    <tr valign="top">
-			<td>
-			 
-			 
-            <textarea name='editorContent' > </textarea>
-            <script>
-                CKEDITOR.replace( 'editorContent' );
-            </script>
+			<td><form:textarea path="textData" id="textData"/>
 			</td>
 		</tr>
 		</table>
 		<div class="btn">
 			<table>
 				<tr>
-				 <c:set var="toPage" value="${campaignStep1Form.toPage}"></c:set>
-				  <c:choose>
+				   <c:set var="toPage" value="${campaignStep1Form.toPage}"></c:set>
+				   
+					<c:choose>
 				   <c:when test="${not empty toPage}">
 				    <td width="100">&nbsp;</td>
 				    <td align="center"><a href="#" class="button green" onclick="javascript:submitPreview()">Preview</a></td>
 					<td align="center"><a href="#" class="button green" onclick="javascript:submitUpdate()">Update</a></td>
 				   </c:when>
 				   <c:otherwise>
-					<td width="100"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span></td>
-					<td width="100"><span class="previous"><a href="#" onclick="javascript:submitExit()">Save & Exit</a></span></td>  
+					<td width="100"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span></td> 
+					<td width="100"><span class="previous"><a href="#" onclick="javascript:submitExit()">Save & Exit</a></span></td>
 					<td align="center"><a href="#" class="button green" onclick="javascript:submitPreview()">Preview</a></td>
 					<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td>
 				   </c:otherwise>
-				   </c:choose>
-					
+				</c:choose>
 				</tr>
 			</table>
 		</div>

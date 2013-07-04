@@ -1,14 +1,8 @@
 
 
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<title>Mailer247 - Create Campaign Step1</title>
-
-<link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
-<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/script/excanvas.js"></script><![endif]-->
 <script type="text/javascript" src="${pageContext.request.contextPath}/script/jquery-1.8.3.min.js"></script>
 
 
@@ -29,34 +23,23 @@
 
 
 <form:form action="subscriber" method="POST" commandName="subscriberHomeBean">
+<div class="content">
 
+
+<div id="email-list">
+  
+    <div class="bodyOfSpan">
+
+ <div class="btn-group" style="float:right;">
+   <a href="${pageContext.request.contextPath}/usr/subscriber/new/group" class="button grey-btn mar1" ><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New Subscribers Group</a>
+  </div>
 
 <!--content main controller table starts!-->
-<table cellpadding="0" cellspacing="0" width="100%" class="content-padding">
-<tr>
-<td width="10%"></td>
-<td width="80%" valign="top">
-
-
-<a href="${pageContext.request.contextPath}/usr/subscriber/new/group" class="button grey-btn mar1" ><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New Subscribers Group</a>
-
-<table cellpadding="0" cellspacing="0" width="100%">
-
-<tr>
-
-
-<td width="100%" class="contentLayer">
-
-	
-
-		
-
-
-	
+<div id="sublist" class="content">
+<table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-shadow: 0 0px 0px #CDCDCD;
+	    border-radius: 5px;">
     
-       
-        	<table cellpadding="0" cellspacing="0" width="100%" class="content-padding">
-            <tr>
+<tr>
             <th>Group Name</th>
             <th>Active</th>
            <th>Unsubscribed</th>
@@ -93,18 +76,10 @@
             </c:choose>
             
             </table>
-        
-</td>
-</tr>
-</table>
-</td>
-<td width="10%"></td>
-</tr>
-</table>
 
 <!--content main controller table ends!-->
 
-
+</div></div></div></div>
 </form:form>
 
 
