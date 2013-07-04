@@ -28,6 +28,7 @@ public class CampaignSnapshotBean {
 	private String content;
 	private String s3Path;
 	private String nextAction;
+	private String deliveryType;
 
 	/**
 	 * @return the campaignName
@@ -268,5 +269,21 @@ public class CampaignSnapshotBean {
 	public void setReplyToEmailId(String replyToEmailId) {
 		this.replyToEmailId = replyToEmailId;
 	}
+
+	/**
+	 * @return the deliveryType
+	 */
+	public String getDeliveryType() {
+		return deliveryType;
+	}
+
+	/**
+	 * @param deliveryType the deliveryType to set
+	 */
+	public void setDeliveryType(String deliveryType) {
+		this.deliveryType = deliveryType;
+	}
+	
+	
 
 }
