@@ -47,10 +47,11 @@
 
 
 <form:form action="view" method="POST" commandName="campaignsHomeBean">
+
+
 <div class="content">
-
-
-<div id="email-list">
+  <!--email-list-->
+  <div id="email-list">
   
     <div class="bodyOfSpan">
   <div class="btn-group">
@@ -61,10 +62,12 @@ Recent Campaigns
 <ul class="dropdown-menu">
 <!-- dropdown menu links -->
 <li><a href="javascript:changeit('Draft')">Drafts</a></li>
-<li><a href="javascript:changeit('Sent')">Sent</a></li>
+<li><a href="javascript:changeit('Sent')">Reviewed</a></li>
 <li><a href="javascript:changeit('Scheduled')">Scheduled</a></li>
 </ul>
 </div>
+
+
 
   
     <a href="${pageContext.request.contextPath}/usr/campaign/new">+ New Campaign</a>
@@ -286,7 +289,12 @@ href="${pageContext.request.contextPath}/usr/campaign/delete/id/${campaign.campa
 	<!--content main controller table ends!-->
 
 </form:form>
-
+<script>
+document.getElementById("draftlist").style.display="none" ;
+			document.getElementById("sentlist").style.display="block" ;
+			document.getElementById("scheduledlist").style.display="none" ;
+    				
+</script>
 
 
 
