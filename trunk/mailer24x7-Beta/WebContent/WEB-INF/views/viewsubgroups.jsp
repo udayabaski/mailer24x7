@@ -31,13 +31,13 @@
     <div class="bodyOfSpan">
 
  <div class="btn-group" style="float:right;">
-   <a href="${pageContext.request.contextPath}/usr/subscriber/new/group" class="button grey-btn mar1" ><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />New Subscribers Group</a>
+   <a href="${pageContext.request.contextPath}/usr/subscriber/new/group" class="btn btn-success" >New Subscribers Group</a>
   </div>
 
 <!--content main controller table starts!-->
 <div id="sublist" class="content">
 <table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-shadow: 0 0px 0px #CDCDCD;
-	    border-radius: 5px;">
+	    border-radius: 5px; margin:10px 0px 0px 0px; float:left;">
     
 <tr>
             <th>Group Name</th>

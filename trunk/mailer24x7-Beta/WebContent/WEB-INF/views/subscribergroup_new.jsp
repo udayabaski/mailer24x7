@@ -118,7 +118,7 @@
 <td><label class="control-label" for="inputEmail">Add using</label></td>
 
 <td>
-<span class="radiospan"><form:radiobutton path="addOption" id="addOption" cssClass="inputradio" value="Manual" onclick="javascript:show('man')" /><p class="radio-text-padding">Manual</p></span>
+<span ><form:radiobutton path="addOption" id="addOption" cssClass="inputradio" value="Manual" onclick="javascript:show('man')" /><p class="radio-text-padding">Manual</p></span>
 		
 <span class="radiospan"><form:radiobutton path="addOption" id="addOption" cssClass="inputradio" value="CSV" onclick="javascript:show('csv')"/><p class="radio-text-padding">CSV</p></span>
 </td>
@@ -127,8 +127,9 @@
 </tr>
   
   <tr>
+  <td ></td>
   
-  <td width="300" align="left" class="radio-btn-td" colspan="2">
+  <td width="300" align="left"  colspan="2">
 
 <div id="csv">
 		  <div class="custom_file_upload" ><form:input path="fileData" type="file"/></div>
@@ -137,7 +138,7 @@
 		  
 		  
 		  <div id="man">
-		  		  <div class="form-divtext"><form:textarea path="subscribers" id="subscribers" onfocus="if(this.value == 'emailids') {this.value=''}" onblur="if(this.value == ''){this.value ='emailids'}" value="arun"/></div>
+		  		  <div class="form-divtext"><form:textarea style="width:300px; height:150px;" path="subscribers" id="subscribers" onfocus="if(this.value == 'emailids') {this.value=''}" onblur="if(this.value == ''){this.value ='emailids'}" value="arun"/></div>
 		  <span class="errortxt"><form:errors path="subscribers" /></span></div>
 		  
 		  
@@ -147,7 +148,7 @@
   </tr>
 
 
-
+<tr><td colspan="2" style="height:20px;"></td></tr>
 
 </table>
 
@@ -159,14 +160,14 @@
   				
 				<c:choose>
 				   <c:when test="${toPage eq 'groups'}">
-				    <td width="100">&nbsp;</td>
-					<td align="center"><a href="#" class="button green" onclick="javascript:submitSave()">Save</a></td>
-						<td align="center"> <a class="button green" onclick="javacript:window.history.back()" href="#">Cancel</a></td>
+				    <td width="190">&nbsp;</td>
+					<td align="center"><a href="#" class="btn btn-success" onclick="javascript:submitSave()">Save</a> &nbsp; </td>
+						<td align="center"> <a class="btn" onclick="javacript:window.history.back()" href="#">Cancel</a></td>
 				   </c:when>
 				   <c:otherwise>
-					<!-- <td width="100"><span class="previous"><a href="CreateCampaignStep2.html">Previous</a></span></td>  
+					<!-- <td width="190"><span class="previous"><a href="CreateCampaignStep2.html">Previous</a></span></td>  
 					<td align="center"><a href="#" class="button green" onclick="document.forms[0].submit();return false;">Save &amp; Exit</a></td> -->
-					<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td>
+					<td width="190"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td>
 				   </c:otherwise>
 				</c:choose>
 				

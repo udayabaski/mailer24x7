@@ -1,15 +1,13 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<html>
 <head>
 
 
- <%@ page language="java" contentType="text/html; charset=ISO-8859-1" 	pageEncoding="ISO-8859-1"%>
+ 
     <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <title>Mailer24x7 : Login</title>
-<link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
 
-<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/excanvas.js"></script><![endif]-->
 <link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/styles/stylez.css" />
 <link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/styles/signup.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/bootstrap.css"/>
@@ -23,7 +21,7 @@
 
 <body>
 <div class="client-banner cf">
-    <div class="container">
+    <div class="">
         <div class="row">
             <div class="inner-wrapper cf span12" style="position:relative; left:15px;">
                 <div class="left">
@@ -35,8 +33,6 @@
                         </div>
                     </a>
                     
-                    <b class="txt">Don't have an account?</b> <a href="${pageContext.request.contextPath}/reg/join" class="button green mar1">Sign Up</a>
-
                 </div>
                 
             </div>
@@ -52,10 +48,13 @@
 		 	</c:if>
 <!--Content area tiles Starts-->  
 <div >
- <div class="bodyOfSpan">
+ <div >
  
  <div class="signup-wrapper cf">
     <div class="form-wrapper left">
+    <div style="font-size:12px; padding:20px 0px 20px 10px;">
+                        <b class="txt">Don't have an account?</b> <a href="${pageContext.request.contextPath}/reg/join" class="btn btn-success btn-small">Sign Up</a>
+</div>
         <div class="email-white bottom20px">
         <div class="page-header">
             <h1>Log in</h1>

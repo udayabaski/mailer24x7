@@ -62,7 +62,7 @@ Recent Campaigns
 <ul class="dropdown-menu">
 <!-- dropdown menu links -->
 <li><a href="javascript:changeit('Draft')">Drafts</a></li>
-<li><a href="javascript:changeit('Sent')">Reviewed</a></li>
+<li><a href="javascript:changeit('Sent')">Sent</a></li>
 <li><a href="javascript:changeit('Scheduled')">Scheduled</a></li>
 </ul>
 </div>
@@ -70,7 +70,7 @@ Recent Campaigns
 
 
   
-    <a href="${pageContext.request.contextPath}/usr/campaign/new">+ New Campaign</a>
+   <div style="float:right;"> <a href="${pageContext.request.contextPath}/usr/campaign/new" class="btn btn-success">+ New Campaign</a></div>
 			
 			
 
