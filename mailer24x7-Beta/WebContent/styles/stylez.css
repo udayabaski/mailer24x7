@@ -809,6 +809,14 @@ div.custom_file_upload {
 	height: 20px;
 	margin: 25px 0px 20px 0px;
 }
+.inputradio {
+    float: left;
+    font: bold 0.95em arial,sans-serif;
+    margin: 10px;
+}
+.radio-text-padding{ font-size:14px; padding:2px 0px 0px 7px; float:left; color:#595959;}
+.radio-text{ font-size:14px; padding:2px 0px 0px 7px; float:left; color:#595959;}
+.radio-btn-td{ padding:0px 0px 0px 0px}
 
 input.file {
 	width: 200px;
@@ -946,9 +954,9 @@ margin: 0px 0;
 text-rendering: optimizelegibility;
 }
 .form-divtext {
-    background-color: #F6F6F6;  
+    background-color: #fff;  
     font-size: 14px;
-      padding: 15px; border-radius:4px;
+      padding: 15px 15px 10px 0px; border-radius:4px;
 }
 
 .calendarReportImg {
