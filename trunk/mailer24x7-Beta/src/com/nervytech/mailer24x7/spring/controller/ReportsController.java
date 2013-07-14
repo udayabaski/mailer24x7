@@ -73,11 +73,11 @@ public class ReportsController {
 		
 		int totalSent = bean.getTotalEmailsSent();
 		
-		bean.setOpenedPercentage(totalSent == 0?0.0f:(bean.getOpened()/totalSent)*100);
-		bean.setClickedPercentage(totalSent == 0?0.0f:(bean.getClicked()/totalSent)*100);
-		bean.setBouncedPercentage(totalSent == 0?0.0f:(bean.getBounced()/totalSent)*100);
-		bean.setDroppedPercentage(totalSent == 0?0.0f:(bean.getDropped()/totalSent)*100);
-		bean.setUnsubscribedPercentage(totalSent == 0?0.0f:(bean.getUnsubscribed()/totalSent)*100);
+		bean.setOpenedPercentage(totalSent == 0?0.0f:((float)bean.getOpened()/(float)totalSent)*100);
+		bean.setClickedPercentage(totalSent == 0?0.0f:((float)bean.getClicked()/(float)totalSent)*100);
+		bean.setBouncedPercentage(totalSent == 0?0.0f:((float)bean.getBounced()/(float)totalSent)*100);
+		bean.setDroppedPercentage(totalSent == 0?0.0f:((float)bean.getDropped()/(float)totalSent)*100);
+		bean.setUnsubscribedPercentage(totalSent == 0?0.0f:((float)bean.getUnsubscribed()/(float)totalSent)*100);
 
 		
 		model.put("campaignReportsBean", bean);
@@ -161,6 +161,11 @@ public class ReportsController {
 		
 		return "campaignRegionReports";
 	}
-
+	
+	public static void main(String args[]){
+		int opened = 2;
+		int totalSent = 4;
+		System.out.println(((float)opened/(float)totalSent)*100);
+	}
 
 }
