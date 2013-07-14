@@ -32,12 +32,19 @@
  <table cellpadding="0" cellspacing="0" width="100%">
  <tr>
  <td class="contentLayer">
- 
- 
- 
+
 <table width="98%" cellspacing="0" cellpadding="0" align="center">
 <tr>
-<td  colspan="2" class="content-heading"><img class="top-icon-padd" src="${pageContext.request.contextPath}/images/rss.png">Campaign Settings </td>
+<td  colspan="2" class="content-heading"><div class="wizard-menu">
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>1</span> Campaign Settings</a></div>
+<div  class="wizard-menu-new" ><a href="#" style="text-decoration:none;"><span>2</span> Create my campaign</a></div>
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>3</span> Subscriber List</a></div>
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>4</span> Delivery</a></div>
+</div>
+
+
+
+</td>
 
 </tr>
 

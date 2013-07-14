@@ -39,7 +39,12 @@
 
 <table width="98%" cellspacing="0" cellpadding="0" align="center">
 <tr>
-<td  colspan="2" class="content-heading"><img class="top-icon-padd" src="${pageContext.request.contextPath}/images/rss.png">New Subscriber</td>
+<td  colspan="2" class="content-heading"><div class="wizard-menu">
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>1</span> Campaign Settings</a></div>
+<div  class="wizard-menu-new" ><a href="#" style="text-decoration:none;"><span>2</span> Create my campaign</a></div>
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>3</span> Subscriber List</a></div>
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>4</span> Delivery</a></div>
+</div></td>
 
 </tr>
 
@@ -50,6 +55,7 @@
 
 <tr>
 <td colspan="2">
+
 
 <form>
 <fieldset>
@@ -78,10 +84,10 @@
 
 <div class="button-padding" align="center">
 
-<button class="btn btn-success">
-<a href="#">Previous</a></button>
-<a href="#" class="button green" onclick="javascript:submitExit()">Save &amp; Exit</a>
-<button class="btn btn-success"><a onclick="javascript:submitNext()" href="#">Next</a></button>
+
+<a href="#"  onclick="javascript:submitPrev()"  class="btn btn-success">Previous</a>
+<a href="#" class="btn btn-success" onclick="javascript:submitExit()">Save &amp; Exit</a>
+<a onclick="javascript:submitNext()" href="#" class="btn btn-success">Next</a>
 			
 
 
