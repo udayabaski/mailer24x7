@@ -437,7 +437,7 @@ public class MailgunCampignSyncer {
 
 	private int getCamapignEventStatus(String eventString) {
 		// TODO. Build it in the enum itself.
-		if (eventString.equals(CampaignJSONKeyEnum.opened)) {
+		if (eventString.equals(CampaignJSONKeyEnum.opened.name())) {
 			return SubscriberCampaignStatusEnum.OPENED.getStatus();
 		} else if (eventString.equals(CampaignJSONKeyEnum.clicked.name())) {
 			return SubscriberCampaignStatusEnum.CLICKED.getStatus();
