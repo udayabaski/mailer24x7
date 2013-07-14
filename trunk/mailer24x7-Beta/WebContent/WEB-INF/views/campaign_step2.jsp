@@ -1,13 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
 
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<title>Mailer247 - Create Campaign Step2</title>
+
 
 <script src="${pageContext.request.contextPath}/ckeditor/ckeditor.js"></script>
 
@@ -50,6 +46,24 @@
  		top.consoleRef.document.close()
 	}
 	
+	function changeit(txt){
+	    		
+				
+    				if(txt == "0"){
+	    						
+							document.getElementById("fhtml").style.display="block" ;
+							document.getElementById("ckeditor").style.display="none" ;
+						}
+    				if(txt == "2"){
+							    						
+							document.getElementById("fhtml").style.display="none" ;
+							document.getElementById("ckeditor").style.display="block" ;
+													
+							    						
+    						}
+    					}
+    					
+	
 </script>
 
 
@@ -61,7 +75,12 @@
 
 <table width="98%" cellspacing="0" cellpadding="0" align="center">
 <tr>
-<td  colspan="2" class="content-heading"><img class="top-icon-padd" src="img/rss.png">Create my campaign<button class="btn btn-success" type="button" style="float:right"> Creat my campaign</button></td>
+<td  colspan="2" class="content-heading"><div class="wizard-menu">
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>1</span> Campaign Settings</a></div>
+<div  class="wizard-menu-new" ><a href="#" style="text-decoration:none;"><span>2</span> Create my campaign</a></div>
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>3</span> Subscriber List</a></div>
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>4</span> Delivery</a></div>
+</div></td>
 
 </tr>
 
@@ -83,13 +102,14 @@
 
 <table cellpadding="0" cellspacing="0" width="100%">
 <tr>
-<td><span class="radiospan"><form:radiobutton path="contentType" value="0"/><p class="radio-text">Import My design</p></span>
-<span class="radiospan"><form:radiobutton path="contentType" value="2"/><p class="radio-text">Html Plain Text</p></span>
+<td colspan="2"><span class="radiospan"><form:radiobutton path="contentType" value="0" checked="checked" onclick="javascript:changeit('0')" /></span><p class="radio-text">Import My design</p>
+<span class="radiospan"><form:radiobutton path="contentType" value="2" onclick="javascript:changeit('2')"/></span><p class="radio-text">Html Plain Text</p></td>
 <!--<span class="radiospan"><form:radiobutton path="contentType" value="0"/><p class="radio-text">Template</p></span></td>-->
 </tr>
 
 <tr>
-<td>
+<td>&nbsp; <td>
+<td><div id="fhtml">
  <table width="98%" cellpadding="0" cellspacing="0" align="center" class="campaign-page">
 	    <tr valign="top">
 			<td width="50">&nbsp;</td>
@@ -110,12 +130,12 @@
 				<p><form:input path="zipFileData" type="file" id="htmlFileDataId"/></p>
 			</td>
 		</tr>
- </table>
-</td>
+ </table></div></td>
 </tr>
 
 <tr>
-<td>
+<td>&nbsp; <td>
+<td><div id="ckeditor">
 <table width="99%" cellpadding="0" cellspacing="0" class="campaign-page">
 	    <tr valign="top">
 			<td>
@@ -128,14 +148,14 @@
 			</td>
 		</tr>
 		</table>
-		</td>
+		</div></td>
 </tr>
 
 <tr>
 
 	<td width="100"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span></td>
-	<td align="center"><a href="#" class="button green" onclick="javascript:submitExit()">Save &amp; Exit</a></td>
-	<td align="center"><a href="#" class="button green" onclick="javascript:submitPreview()">Preview</a></td>
+	<td align="center"><a href="#" class="btn btn-success" onclick="javascript:submitExit()">Save &amp; Exit</a></td>
+	<td align="center"><a href="#" class="btn btn-success" onclick="javascript:submitPreview()">Preview</a></td>
 	<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td> 
   
  </tr>
@@ -150,3 +170,8 @@
  </tr>
  </table>
  </div>
+ </div>
+<script>
+document.getElementById("ckeditor").style.display="none" ;
+document.getElementById("fhtml").style.display="block" ;
+</script>

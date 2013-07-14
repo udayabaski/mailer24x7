@@ -1,13 +1,28 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<title>Mailer247 - Campaign Snapshot</title>
+
 	
-<link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css" />
-<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/script/excanvas.js"></script><![endif]-->
+
+
 
 <script type="text/javascript">
+function changeit(txt){
+
+			
+
+					if(txt == "L"){
+
+						document.getElementById("sch").style.display="block" ;
+					}
+					if(txt == "N"){
+
+						document.getElementById("sch").style.display="none" ;
+
+
+
+					}
+				}
 
 	function submitNext(){
 	  document.getElementById("nextAction").value="next";
@@ -59,7 +74,6 @@
 </script>
 
 
- <!--Content area tiles Starts-->  
 <div class="content">
  <div class="bodyOfSpan">
  <table cellpadding="0" cellspacing="0" width="100%">
@@ -68,7 +82,12 @@
 
 <table width="98%" cellspacing="0" cellpadding="0" align="center">
 <tr>
-<td  colspan="2" class="content-heading"><img class="top-icon-padd" src="img/rss.png">Campaign and sender<button class="btn btn-success" type="button" style="float:right"> Campaign and sender</button></td>
+<td  colspan="2" class="content-heading"><div class="wizard-menu">
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>1</span> Campaign Settings</a></div>
+<div  class="wizard-menu-new" ><a href="#" style="text-decoration:none;"><span>2</span> Create my campaign</a></div>
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>3</span> Subscriber List</a></div>
+<div class="completed-wiz"><a href="#" style="text-decoration:none;"><span>4</span> Delivery</a></div>
+</div></td>
 
 </tr>
 
@@ -140,7 +159,7 @@
 
 <tr>
 <td width="25%" class="formtext">Subscriber List</td>
-111222<td width="10"></td>
+<td width="10"></td>
 <td class="formtext"><c:out value="${campaignSnapshotBean.subscriberListName}" /></td>
 </tr>
 <tr>
@@ -156,8 +175,8 @@
 <td>
 <table cellspacing="0" cellpadding="0">
 <tbody><tr>
-<td><span ><form:radiobutton path="deliveryType" value="later"/><p class="radio-text">Send Now</p></span></td>
-<td><span class="radiospan"><form:radiobutton path="deliveryType" value="later"/><p class="radio-text">Send later</p></span></td>
+<td><span ><form:radiobutton path="deliveryType" value="now" onclick="javascript:changeit('N')" checked="checked"/><p class="radio-text">Send Now</p></span></td>
+<td><span class="radiospan"><form:radiobutton path="deliveryType" value="later" onclick="javascript:changeit('L')"/><p class="radio-text">Send later</p></span></td>
 </tr>
 </tbody></table>
 </td>
@@ -167,9 +186,7 @@
 <tr>
 <td></td>
 <td></td>
-<td><div class="form-divtext" ><input type="time" style="position: relative; left: 10px; width: 120px; height: 19px; -moz-border-radius:0;
-	-khtml-border-radius:0; height:21px;" class="calendarReportImg " value="From"> <input type="time" style="position: relative; left: 20px; width: 120px; height: 19px; -moz-border-radius:0;
-	-khtml-border-radius:0; height:21px;" class="calendarReportImg " value="To"></div></td>
+<td><div class="form-divtext"  id="sch"><input type="time" style="position: relative; left: 10px; width: 120px; height: 19px; -moz-border-radius:0;-khtml-border-radius:0; height:21px;" class="calendarReportImg " value="Time"> </div></td>
 
 </tr>
 </table>
@@ -210,6 +227,10 @@
  
  
  </div>
- <!-- #footer -->
+ 
 </div>
+<script>
+
+document.getElementById("sch").style.display="none" ;
+</script>
 
