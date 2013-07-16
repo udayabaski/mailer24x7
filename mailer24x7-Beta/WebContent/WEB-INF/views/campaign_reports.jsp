@@ -2,6 +2,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<link rel="stylesheet" type="text/css"  hrf="${pageContext.request.contextPath}/styles/jquery.jqplot.css" />
+
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/script/plugin/jquery.jqplot.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/script/plugin/jqplot.json2.js"></script>
+<script type="text/javascript"	src="${pageContext.request.contextPath}/script/plugin/jqplot.highlighter.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/script/plugin/jqplot.cursor.js"></script>
+<script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.dateAxisRenderer.js"></script>
+
+<script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.pieRenderer.js"></script>
+<script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.donutRenderer.js"></script>
+<script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.logAxisRenderer.js"></script>
+<script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.canvasTextRenderer.js"></script>
+<script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.canvasAxisTicketRenderer.js"></script>
+
 
 <script>
 	// When the document loads do everything inside here ...
@@ -12,8 +27,7 @@
 			
 	var campaignId = ${campaignReportsBean.campaignId};
 	
-	//alert("CAMMMMMMMMMMMMM "+campaignId);
-
+	
 		$.ajax({
 			//type: "POST",
 			//async: false,
@@ -21,7 +35,8 @@
 			//contentType: "application/json;",
 			//data: "{'groupBy': '" + group + "'}",
 			//dataType: 'json',
-			success : function(data) {				
+			success : function(data) {	
+				alert("Data is "+data);
 				plotLineChart(data);
 			}
 		});
@@ -56,7 +71,7 @@
 		var openDataSlices = [];
 		var clickDataSlices = [];
 	    
-		//alert(dataIn);
+		alert(dataIn);
 		
 		var dataResult = dataIn.split("##");
 		
@@ -192,51 +207,6 @@
 		$('.jqplot-highlighter-tooltip').addClass('ui-corner-all')
 	}
 
-	$(document)
-			.ready(
-					function() {
-
-						var dataSlices = [];
-
-						dataSlices.push([ "opened",
-								parseInt("${campaignReportsBean.opened}") ]);
-						dataSlices.push([ "clicked",
-								parseInt("${campaignReportsBean.clicked}") ]);
-						dataSlices.push([ "unsubscribed",
-								parseInt("${campaignReportsBean.unsubscribed}") ]);
-						dataSlices.push([ "bounced",
-								parseInt("${campaignReportsBean.bounced}") ]);
-
-						$.jqplot('pieChart', [ dataSlices ], {
-							seriesDefaults : {
-								shadow : false,
-								fontSize : 20,
-								renderer : jQuery.jqplot.PieRenderer,
-								rendererOptions : {
-
-									startAngle : 180,
-									sliceMargin : 4,
-									showDataLabels : true,
-									dataLabels : 'value',
-								}
-							},
-							legend : {
-								fontSize : 15,
-								show : true,
-								location : 'e'
-							}
-						});
-						$('#pieChart').bind('jqplotDataMouseOver', 
-							function (ev, seriesIndex, pointIndex, data) {
-								/* To open in a NEW window use: */
-								/* window.open(data[2]); */
-								/* To open in the same window use: */
-								alert(data);
-								//window.open(data[1])
-							}
-        );
-
-					});
 </script>
 
 
@@ -312,7 +282,20 @@
 
 <tr>
 
-<td><img src="${pageContext.request.contextPath}/images/line.gif"></td>
+<td>
+
+<div id="lineChart1"
+					style="margin-top: 20px; margin-left: 20px; width: 600px; height: 300px;"></div>
+					
+					<div id="lineChart2"
+					style="margin-top: 20px; margin-left: 20px; width: 600px; height: 300px;"></div>
+	
+		<!--<div id="pieChart1"
+					style="margin-top: 20px; margin-left: 20px; width: 500px; height: 400px;">
+		</div>-->
+
+</td>
+
 </tr>
 
 

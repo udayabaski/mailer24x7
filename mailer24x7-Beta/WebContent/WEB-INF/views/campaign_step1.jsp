@@ -113,30 +113,35 @@
 	              </div>
 	
 	
-	<div align="center">
 	
-	<c:set var="toPage" value="${campaignStep1Form.toPage}"></c:set>
-		  <c:choose>
-			<c:when test="${not empty toPage}">
-			   <td width="100">&nbsp;</td>
-			   <td align="center"><a href="#" class="btn btn-success" onclick="javascript:submitUpdate()">Update</a></td>
-			</c:when>
-			<c:otherwise>
-			   <td width="100">&nbsp;</td>
-			   <td align="center"><a href="#" class="btn btn-success" onclick="javascript:submitExit()">Save &amp; Exit</a></td>
-			   <td width="100"><span class="next"><a href="#" onclick="javascript:submitNext()">Next</a></span></td> 
-			</c:otherwise>
-	  </c:choose>	
-	
-	</div>
 	</fieldset>
 	
 </form:form>
 	</td>
 	</tr>
+	<tr>
+		 <div align="center">
+		 	
+		 	<c:set var="toPage" value="${campaignStep1Form.toPage}"></c:set>
+		 		  <c:choose>
+		 			<c:when test="${not empty toPage}">
+		 			  
+		 			   <td align="center"><a href="#" class="btn btn-success" onclick="javascript:submitUpdate()">Update</a></td>
+		 			</c:when>
+		 			<c:otherwise>
+		 			  
+		 			   <td>
+		 			  <div align="center"> <a href="#" class="btn btn-success" onclick="javascript:submitExit()">Save &amp; Exit</a>
+		 			   <span class="next"><a href="#" onclick="javascript:submitNext()">Next</a></span></div.</td> 
+		 			</c:otherwise>
+		 	  </c:choose>	
+		 	
+		</div>
+	 </tr>
 	</table>
 	</td>
 	 </tr>
+	 
 	 </table>
 	</div>
 	
