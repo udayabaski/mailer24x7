@@ -10,6 +10,10 @@
 
 
 
+<script type="text/javascript" src="${pageContext.request.contextPath}/script/jquery-1.8.3.min.js"></script>
+
+
+
 </head>
 <body>
 
