@@ -17,14 +17,14 @@ import com.nervytech.mailer24x7.model.service.api.ISubscriberReportsService;
 
 /**
  * @author bsikkaya
- *
+ * 
  */
 @Service
-public class SubscriberReportsService implements ISubscriberReportsService{
-	
+public class SubscriberReportsService implements ISubscriberReportsService {
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(SubscriberReportsService.class);
-	
+
 	@Autowired
 	private ISubscriberReportsDAO subscriberReportsDAO;
 
@@ -44,7 +44,8 @@ public class SubscriberReportsService implements ISubscriberReportsService{
 			int openSatus, int clickStatus) {
 		Map<Integer, List<Long>> map = null;
 		try {
-			map = subscriberReportsDAO.getSubscriberReport(campaignId, openSatus,clickStatus);
+			map = subscriberReportsDAO.getSubscriberReport(campaignId,
+					openSatus, clickStatus);
 		} catch (Exception e) {
 			logger.error("Error while saving user detail.", e);
 			throw new RuntimeException(e.getMessage());
@@ -52,6 +53,19 @@ public class SubscriberReportsService implements ISubscriberReportsService{
 		return map;
 	}
 
-	
-	
+	@Override
+	public Map<Integer, Map<String, Integer>> getSubscriberRegionReport(
+			long campaignIdLong) {
+		Map<Integer, Map<String, Integer>> map = null;
+		try {
+			map = subscriberReportsDAO.getSubscriberRegionReport(
+					campaignIdLong);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		return map;
+	}
+
 }

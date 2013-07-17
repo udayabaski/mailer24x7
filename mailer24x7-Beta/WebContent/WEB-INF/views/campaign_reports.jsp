@@ -11,22 +11,26 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/script/plugin/jqplot.cursor.js"></script>
 <script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.dateAxisRenderer.js"></script>
 
+<script type="text/javascript" src="${pageContext.request.contextPath}/script/plugin/jqplot.barRenderer.js"></script>
+
 <script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.pieRenderer.js"></script>
 <script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.donutRenderer.js"></script>
 <script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.logAxisRenderer.js"></script>
 <script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.canvasTextRenderer.js"></script>
 <script type="text/javascript" 	src="${pageContext.request.contextPath}/script/plugin/jqplot.canvasAxisTicketRenderer.js"></script>
 
+<script type="text/javascript" src="${pageContext.request.contextPath}/script/plugin/jqplot.categoryAxisRenderer.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/script/plugin/jqplot.pointLabels.js"></script>
+
 
 <script>
 	// When the document loads do everything inside here ...
-
+	
 	$(document).ready(
 			function() {
 			
 			
 	var campaignId = ${campaignReportsBean.campaignId};
-	
 	
 		$.ajax({
 			//type: "POST",
@@ -36,34 +40,32 @@
 			//data: "{'groupBy': '" + group + "'}",
 			//dataType: 'json',
 			success : function(data) {	
-				alert("Data is "+data);
+				//alert("Data is "+data);
 				plotLineChart(data);
 			}
 		});
 
 	});
 	
-	/*$(document).ready(
+	$(document).ready(
 			function() {
-			
-			
+						
 	var campaignId = ${campaignReportsBean.campaignId};
 	
-	//alert("CAMMMMMMMMMMMMM "+campaignId);
-
 		$.ajax({
 			//type: "POST",
 			//async: false,
-			url : "${pageContext.request.contextPath}/usr/reports/view/campaign/id/"+campaignId+"/type/campaignopens/region",
+			url : "${pageContext.request.contextPath}/usr/reports/view/campaign/id/"+campaignId+"/type/region",
 			//contentType: "application/json;",
 			//data: "{'groupBy': '" + group + "'}",
 			//dataType: 'json',
-			success : function(data) {				
-				plotPieChart(data);
+			success : function(data) {
+				alert("REGIONNNNNNN "+data);
+				plotRegionBarChart(data);
 			}
 		});
 
-	});*/
+	});
 
 	function plotLineChart(dataIn) {
 	    $.jqplot._noToImageButton = true;
@@ -71,7 +73,7 @@
 		var openDataSlices = [];
 		var clickDataSlices = [];
 	    
-		alert(dataIn);
+		//alert(dataIn);
 		
 		var dataResult = dataIn.split("##");
 		
@@ -84,9 +86,9 @@
 			count = dateCount[1];
 			
 			openDataSlices.push([ date,count ]);
-			openDataSlices.push([ '26-Jan-2013',10 ]);
+			/*openDataSlices.push([ '26-Jan-2013',10 ]);
 			openDataSlices.push([ '29-Jan-2013',6  ]);
-			openDataSlices.push([ '10-Feb-2013',8  ]);
+			openDataSlices.push([ '10-Feb-2013',8  ]);*/
 		}
 		
 		for(i = 0; i < clickResult.length; i++){
@@ -94,13 +96,13 @@
 			date = dateCount[0];
 			count = dateCount[1];
 			
-			//clickDataSlices.push([ date,count ]);
+			clickDataSlices.push([ date,count ]);
 		}
 		
-		    clickDataSlices.push([ '27-Jan-2013',1 ]);
+		    /*clickDataSlices.push([ '27-Jan-2013',1 ]);
 			clickDataSlices.push([ '29-Jan-2013',10 ]);
 			clickDataSlices.push([ '10-Feb-2013',6  ]);
-			clickDataSlices.push([ '20-Feb-2013',8  ]);
+			clickDataSlices.push([ '20-Feb-2013',8  ]);*/
 		
 						
 	var plot1 = $.jqplot("lineChart1", [ openDataSlices, clickDataSlices], {
@@ -120,7 +122,7 @@
 			},
 			legend : {
 				show : true,
-				placement : 'inside'
+				placement : 'outside'
 			},
 			seriesDefaults : {
 				rendererOptions : {
@@ -142,7 +144,7 @@
 			} ],
 			axesDefaults : {
 				rendererOptions : {
-					baselineWidth : 0,
+					baselineWidth : 1,
 					baselineColor : '#444444',
 					drawBaseline : false
 				}
@@ -159,53 +161,109 @@
 			},
 			//series:[{lineWidth:2, markerOptions:{style:'square'}},{lineWidth:2, markerOptions:{style:'circle'}}]				
 		});
-		
-		var plot1 = $.jqplot("lineChart2", [ clickDataSlices], {
-			seriesColors : [ "rgb(211, 235, 59)" ],
-			title : 'Clicks over time',
-			highlighter : {
-				show : true,
-				sizeAdjust : 1,
-				tooltipOffset : 5
-			},
-			grid : {
-				background : 'rgba(57,57,57,0.0)',
-				drawBorder : false,
-				shadow : false,
-				gridLineColor : '#666666',
-				gridLineWidth : 0.15
-			},
-			seriesDefaults : {
-				rendererOptions : {
-					smooth : false,
-					animation : {
-						show : true
-					}
-				},
-				showMarker : true
-			},
-			axesDefaults : {
-				rendererOptions : {
-					baselineWidth : 0,
-					baselineColor : '#444444',
-					drawBaseline : false
-				}
-			},
-			axes : {
-				xaxis : {
-					renderer : $.jqplot.DateAxisRenderer,
-					
-					//tickRenderer : $.jqplot.CanvasAxisTickRenderer,
-					
-					sdrawMajorGridlines : false
-				},
-				
-			},
-			series:[{lineWidth:2, markerOptions:{style:'square'}}]				
-		});
-		
+						
 		$('.jqplot-highlighter-tooltip').addClass('ui-corner-all')
 	}
+	
+	
+	function plotRegionBarChart(dataIn){
+	
+	  var dataResult = dataIn.split("##");
+		
+	  var openResult = dataResult[0].replace("{","").replace("}","").split(",");
+	  var clickResult = dataResult[1].replace("{","").replace("}","").split(",");
+	  var unsubscribeResult = dataResult[2].replace("{","").replace("}","").split(",");
+	  var bounceResult = dataResult[3].replace("{","").replace("}","").split(",");
+	  var complainResult = dataResult[4].replace("{","").replace("}","").split(",");
+	  
+	  var openCounts = new Array(openResult.length);
+	  var openTicks = new Array(openResult.length);
+	  
+	  for(i = 0; i < openResult.length; i++){
+		    var dateCount = openResult[i].split("="); 
+			region = dateCount[0];
+			count = dateCount[1];
+			openCounts[i] = count;
+			openTicks[i] = region;			
+	  }
+	  
+	  //alert("OPPPPPPPPPPPPPPP "+openCounts+" TTTTTTT "+openTicks);	
+		
+	  $.jqplot.config.enablePlugins = true;
+        var s1 = [2, 6, 7, 10];
+        var ticks = ['a', 'b', 'c', 'd'];
+         
+        plot1 = $.jqplot('barChart1', [openCounts], {
+            // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+            animate: !$.jqplot.use_excanvas,
+            seriesDefaults:{
+                renderer:$.jqplot.BarRenderer,
+                pointLabels: { show: true },
+				shadowAngle: 135,
+                rendererOptions: {
+                    barDirection: 'horizontal'}
+            },
+            axes: {
+                yaxis: {
+                    renderer: $.jqplot.CategoryAxisRenderer,
+                    ticks: openTicks
+                }
+            },
+            highlighter: { show: false }
+        });
+     
+        $('#chart1').bind('jqplotDataClick',
+            function (ev, seriesIndex, pointIndex, data) {
+                $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+            }
+        );
+	}
+	
+	$(document)
+			.ready(
+					function() {
+
+						var dataSlices = [];
+
+						dataSlices.push([ "opened",
+								parseInt("${campaignReportsBean.opened}") ]);
+						dataSlices.push([ "clicked",
+								parseInt("${campaignReportsBean.clicked}") ]);
+						dataSlices.push([ "unsubscribed",
+								parseInt("${campaignReportsBean.unsubscribed}") ]);
+						dataSlices.push([ "bounced",
+								parseInt("${campaignReportsBean.bounced}") ]);
+
+						$.jqplot('pieChart', [ dataSlices ], {
+							seriesDefaults : {
+								shadow : false,
+								fontSize : 20,
+								renderer : jQuery.jqplot.PieRenderer,
+								rendererOptions : {
+
+									startAngle : 180,
+									sliceMargin : 4,
+									showDataLabels : true,
+									dataLabels : 'value',
+								}
+							},
+							legend : {
+								fontSize : 15,
+								show : true,
+								location : 'e'
+							}
+						});
+						$('#pieChart').bind('jqplotDataMouseOver', 
+							function (ev, seriesIndex, pointIndex, data) {
+								/* To open in a NEW window use: */
+								/* window.open(data[2]); */
+								/* To open in the same window use: */
+								alert(data);
+								//window.open(data[1])
+							}
+        );
+
+					});
 
 </script>
 
@@ -285,14 +343,17 @@
 <td>
 
 <div id="lineChart1"
-					style="margin-top: 20px; margin-left: 20px; width: 600px; height: 300px;"></div>
+					style="margin-top: 20px; margin-left: 20px; width: 900px; height: 250px;"></div>
 					
-					<div id="lineChart2"
-					style="margin-top: 20px; margin-left: 20px; width: 600px; height: 300px;"></div>
+					
 	
-		<!--<div id="pieChart1"
-					style="margin-top: 20px; margin-left: 20px; width: 500px; height: 400px;">
-		</div>-->
+		<div id="pieChart"
+					style="margin-top: 20px; margin-left: 20px; width: 400px; height: 300px;">
+		</div>
+		
+		<div id="barChart1"
+					style="margin-top: 20px; margin-left: 20px; width: 600px; height: 300px;">
+		</div>
 
 </td>
 
