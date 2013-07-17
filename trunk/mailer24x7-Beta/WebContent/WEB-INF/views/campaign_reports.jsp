@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<link rel="stylesheet" type="text/css"  hrf="${pageContext.request.contextPath}/styles/jquery.jqplot.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/jquery.jqplot.css" />
 
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/script/plugin/jquery.jqplot.js"></script>

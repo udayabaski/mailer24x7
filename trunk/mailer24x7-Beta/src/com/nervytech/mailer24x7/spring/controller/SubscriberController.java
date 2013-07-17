@@ -384,7 +384,7 @@ public class SubscriberController {
 		return "redirect:/usr/subscriber/view/all/groups";
 	}
 
-	@RequestMapping(value = "/view/group/subscribers/id/{groupId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/view/group/id/{groupId}", method = RequestMethod.GET)
 	public String showGroup(@PathVariable String groupId, Map model,
 			HttpServletRequest request) {
 
@@ -455,7 +455,7 @@ public class SubscriberController {
 
 		// TODO : Arun - Need to update subscriber_reports table ...
 		
-		return "redirect:/usr/subscriber/view/group/subscribers/id/"+subscriberListId;
+		return "redirect:/usr/subscriber/view/group/id/"+subscriberListId;
 	}
 
 	private String getCommaSeparatedSubscribersList(String[] subscribersSelected) {
@@ -500,7 +500,7 @@ public class SubscriberController {
 				getCommaSeparatedSubscribersList(subscribersSelected),
 				subForm.getMoveTo());
 		
-		return "redirect:/usr/subscriber/view/group/subscribers/id/"+subscriberListId;
+		return "redirect:/usr/subscriber/view/group/id/"+subscriberListId;
 	}
 
 	// This is for AJAX ..........
