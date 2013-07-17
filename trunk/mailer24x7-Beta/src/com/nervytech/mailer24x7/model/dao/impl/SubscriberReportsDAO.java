@@ -39,8 +39,8 @@ public class SubscriberReportsDAO extends JdbcDaoSupport implements
 
 	public void addCampaignEvents(final long campaignId,
 			final List<CampaignEvent> eventList) {
-		String sqlStr = "INSERT INTO SUBSCRIBER_REPORTS (CAMPAIGN_ID, SUBSCRIBER_LIST_ID, EMAIL_ID," +
-				" STATUS, TIME_IN_LONG, CITY, REGION, IP , COUNTRY ) VALUES (?,?,?,?,?,?,?,?,?)";
+		String sqlStr = "INSERT INTO SUBSCRIBER_REPORTS (CAMPAIGN_ID, SUBSCRIBER_LIST_ID, EMAIL_ID,"
+				+ " STATUS, TIME_IN_LONG, CITY, REGION, IP , COUNTRY ) VALUES (?,?,?,?,?,?,?,?,?)";
 
 		logger.debug("Subscriber Reports Query : " + sqlStr);
 
@@ -68,7 +68,7 @@ public class SubscriberReportsDAO extends JdbcDaoSupport implements
 					}
 				});
 	}
-	
+
 	public Map<Integer, List<Long>> getSubscriberReport(long campaignId,
 			int openSatus, int clickStatus) {
 
@@ -106,5 +106,36 @@ public class SubscriberReportsDAO extends JdbcDaoSupport implements
 	public static SubscriberReportsDAO getFromApplicationContext(
 			ApplicationContext ctx) {
 		return (SubscriberReportsDAO) ctx.getBean("SubscriberIdStatusDAO");
+	}
+
+	@Override
+	public Map<Integer, Map<String, Integer>> getSubscriberRegionReport(
+			long campaignIdLong) {
+
+		Map<Integer, Map<String, Integer>> toReturn = new HashMap<Integer, Map<String, Integer>>();
+
+		String selectSubscriberGroupsQuery = "select status,region,count(region) as count from subscriber_reports where campaign_id=? group by status,region";
+
+		Object[] parms = { campaignIdLong };
+
+		List<Map<String, Object>> rows = getJdbcTemplate().queryForList(
+				selectSubscriberGroupsQuery,parms);
+
+		for (Map row : rows) {
+			if (toReturn.get((Integer) row.get("STATUS")) == null) {
+				Map<String, Integer> regionMap = new HashMap<String, Integer>();
+				regionMap.put((String) row.get("region"),
+						((Long) row.get("count")).intValue());
+				toReturn.put((Integer) row.get("STATUS"), regionMap);
+			} else {
+				Map<String, Integer> regionMap = toReturn.get((Integer) row
+						.get("STATUS"));
+				regionMap.put((String) row.get("region"),
+						((Long) row.get("count")).intValue());
+				toReturn.put((Integer) row.get("STATUS"), regionMap);
+			}
+		}
+
+		return toReturn;
 	}
 }
