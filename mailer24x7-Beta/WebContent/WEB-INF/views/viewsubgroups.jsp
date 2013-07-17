@@ -54,7 +54,7 @@
             
              <tr onmouseout="this.className='emailcampheader'" onmouseover="this.className='emailcampHeaderHover'" class="emailcampheader">
              
-              <td class="tbl-btm-bdr"><a href="${pageContext.request.contextPath}/usr/subscriber/view/group/subscribers/id/${pageItem.subscriberListId}"><c:out value="${pageItem.subscriberListName}"></c:out></a></td>
+              <td class="tbl-btm-bdr"><a href="${pageContext.request.contextPath}/usr/subscriber/view/group/id/${pageItem.subscriberListId}"><c:out value="${pageItem.subscriberListName}"></c:out></a></td>
               <td class="tbl-btm-bdr"><a href="subscriber.form?action=deleteGroup&object=<c:out value="${pageItem.subscriberListId}"/>"><c:out value="${pageItem.activeCount}"></c:out></a></td>
               <td class="tbl-btm-bdr"><c:out value="${pageItem.unsubscriberCount}"></c:out></td>
               <td class="tbl-btm-bdr"><c:out value="${pageItem.bouncedCount}"></c:out></td>
