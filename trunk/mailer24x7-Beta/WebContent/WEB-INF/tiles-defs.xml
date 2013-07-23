@@ -162,6 +162,16 @@
 		<put-attribute name="title" value="Mailer24x7 : home" />
 		<put-attribute name="body" value="/WEB-INF/views/viewsubgroups.jsp" />
 	</definition>
+	
+	<definition name="viewsubstatusreports" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : home" />
+		<put-attribute name="body" value="/WEB-INF/views/viewsubstatusreports.jsp" />
+	</definition>
+	
+	<definition name="viewcampaignsubreports" extends="baseLayout">
+		<put-attribute name="title" value="Mailer24x7 : home" />
+		<put-attribute name="body" value="/WEB-INF/views/viewcampaignsubreports.jsp" />
+	</definition>
 
 	<definition name="viewgroupdetails" extends="baseLayout">
 		<put-attribute name="title" value="Mailer24x7 : home" />
