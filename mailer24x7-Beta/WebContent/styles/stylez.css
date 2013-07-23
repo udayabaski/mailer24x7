@@ -1089,6 +1089,131 @@ position: relative;
 top: 0px;
 }
 
+.dropdown
+{
+color: #555;
+margin: 3px -22px 0 0;
+width: 143px;
+position: relative;
+height: 17px;
+text-align:left;
+}
+.submenu
+{
+background: #fff;
+position: absolute;
+top: -12px;
+left: -20px;
+z-index: 100;
+width: 135px;
+display: none;
+margin-left: 10px;
+padding: 40px 0 5px;
+border-radius: 6px;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+.dropdown li a
+{
+color: #555555;
+display: block;
+font-family: arial;
+font-weight: bold;
+padding: 6px 15px;
+cursor: pointer;
+text-decoration:none;
+}
+
+.dropdown li a:hover
+{
+background:#155FB0;
+color: #FFFFFF;
+text-decoration: none;
+}
+a.account 
+{
+font-size: 11px;
+line-height: 16px;
+color: #555;
+position: absolute;
+z-index: 110;
+display: block;
+padding: 11px 0 0 20px;
+height: 28px;
+width: 121px;
+margin: -11px 0 0 -10px;
+text-decoration: none;
+background: url(icons/arrow.png) 116px 17px no-repeat;
+cursor:pointer;
+}
+.root
+{
+list-style:none;
+margin:0px;
+padding:0px;
+font-size: 11px;
+padding: 11px 0 0 0px;
+border-top:1px solid #dedede;
+}
+.first-wiz-new  {
+    color:#646464;
+    background:#000; text-decoration:none;
+}
+.first-wiz-new a:before {
+   
+    border:none; text-decoration:none;
+}
+.first-wiz-new a:after {
+    border-left: 12px solid #dcdcdc; text-decoration:none;
+}
+.first-wiz-new span {
+  
+    color: #646464;
+    text-shadow:none;
+}
+
+.wizard-menu-new a {
+position: relative;
+display: block;
+width: auto;
+height: 30px;
+margin-right: 14px;
+padding: 14px 10px 6px 10px;
+float: left;
+font-size: 14px;
+line-height: 24px;
+color: #bbb;
+background: #DCDCDC;
+text-decoration: none;
+text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8);
+outline:none;
+}
+
+
+.wizard-menu-new a:before {
+width: 0px;
+height: 0px;
+border-top: 25px solid #DCDCDC;
+border-bottom: 25px solid #DCDCDC;
+border-left: 13px solid rgba(0, 0, 0, 0);
+position: absolute;
+content: "";
+top: 0px;
+left: -12px; text-decoration: none;
+}
+
+.wizard-menu-new a:after {
+width: 0;
+height: 0;
+border-top: 25px solid rgba(0, 0, 0, 0);
+border-bottom: 25px solid rgba(0, 0, 0, 0);
+border-left: 12px solid #DCDCDC;
+position: absolute;
+content: "";
+top: 0px;
+right: -12px; text-decoration: none;
+}
+
+
 .empty{ height:20px;}
 
 
