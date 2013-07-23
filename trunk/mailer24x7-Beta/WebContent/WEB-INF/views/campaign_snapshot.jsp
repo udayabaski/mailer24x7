@@ -1,12 +1,21 @@
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-	
-
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/jquery-ui-1.9.1.custom.min.css" />
 
 
 <script type="text/javascript">
+$(function(){
+  $.datepicker.setDefaults(
+    $.extend($.datepicker.regional[""])
+  );
+  $("#datepicker").datepicker({
+    minDate: "0", //The minimal date that can be selected, i.e. 30 days from the "now"
+    //maxDate: " +1m +1w +3d" //The maximal date that can be selected, i.e. + 1 month, 1 week, and 3 days from "now"
+});
+  
+  
+});
 function changeit(txt){
 
 			
@@ -186,7 +195,7 @@ function changeit(txt){
 <tr>
 <td></td>
 <td></td>
-<td><div class="form-divtext"  id="sch"><input type="time" style="position: relative; left: 10px; width: 120px; height: 19px; -moz-border-radius:0;-khtml-border-radius:0; height:21px;" class="calendarReportImg " value="Time"> </div></td>
+<td><div class="form-divtext"  id="sch">Date : <input id="datepicker" type="text" /> </div></td>
 
 </tr>
 </table>

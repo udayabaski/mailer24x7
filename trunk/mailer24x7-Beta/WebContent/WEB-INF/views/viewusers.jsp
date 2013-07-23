@@ -18,10 +18,12 @@
 
 <body>
 <form:form action="view" method="POST" commandName="userBean">
+
 <div class="content">
 <div id="email-list">
 <div class="bodyOfSpan">
 <!--content main controller table starts!-->
+<div style="float:right;"> <a href="${pageContext.request.contextPath}/usr/admin/new/user" class="btn btn-success">+ New User</a></div>
 <div id="sublist" class="content">
 <table class="table table-striped" style="white-space:nowrap; border:1px solid #ebebeb; font-size: 13px; box-shadow: 0 0px 0px #CDCDCD;    border-radius: 5px;"> 
 
@@ -50,8 +52,8 @@
 															
 <td class="tbl-btm-bdr" width="100">
 
-<a href="edit/id/<c:out value="${user.userId}" />" class="edit" title="edit">Edit</a> 
-<a href="delete/id/<c:out value="${user.userId}" />" class="delete" class="Delete">Delete</a></td>
+<a href="${pageContext.request.contextPath}/usr/admin/edit/id/<c:out value="${user.userId}" />" class="edit" title="edit">Edit</a> 
+<a href="${pageContext.request.contextPath}/usr/admin/delete/id/<c:out value="${user.userId}" />" class="delete" class="Delete">Delete</a></td>
 </tr>
 </c:forEach>
 </c:otherwise>
