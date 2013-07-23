@@ -42,7 +42,7 @@
 
         <fieldset>
 
-            <legend>Campaign Headers</legend>
+            <legend>User Details</legend>
 
            
 	   <table width="98%" cellpadding="0" cellspacing="0" align="center">
@@ -62,7 +62,7 @@
 	   <td></td>
 	   <td><span class="formtext">EmailId:</span></td>
 	   <td>
-	     <span class="formtext"><b><c:out value="${userForm.emailId}" /></b></span> 
+	     
 	     <form:input path="emailId" id="emailId" />
          <span class="errortxt"><form:errors path="emailId" /></span>
 	    </td>
@@ -112,16 +112,15 @@
 	   
 	   </table>
 	   
-		<div class="btn">
-			<table>
+		
 				<tr>
 				    
-					<td align="center"><a href="#" class="button green" onclick="javascript:submitUpdate()">Save</a></td>
-					<td align="right"><a href="#" class="button green" onclick="javascript:window.back()">Cancel</a></td>
+					<td align="center" ><a href="#" class="btn btn-success" onclick="javascript:submitUpdate()">Save</a></td>
+					<td align="left" ><a href="#" class="btn btn-success" onclick="javascript:window.back()">Cancel</a></td>
 				</tr>
 			</table>
 			
-		</div>
+		
 
         </fieldset>
         </form>

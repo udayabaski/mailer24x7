@@ -6,6 +6,47 @@
 
 
 	<script>
+	$(document).ready(function()
+	{
+	
+	$(".account").click(function()
+	{
+	var X=$(this).attr('id');
+	if(X==1)
+	{
+	$(".submenu").hide();
+	$(this).attr('id', '0');
+	}
+	else
+	{
+	$(".submenu").show();
+	$(this).attr('id', '1');
+	}
+	
+	});
+	
+	//Mouse click on sub menu
+	$(".submenu").mouseup(function()
+	{
+	return false
+	});
+	
+	//Mouse click on my account link
+	$(".account").mouseup(function()
+	{
+	return false
+	});
+	
+	
+	//Document Click
+	$(document).mouseup(function()
+	{
+	$(".submenu").hide();
+	$(".account").attr('id', '');
+	});
+});
+	
+	
     	function changeit(txt){
     		
 			document.getElementById("draftlist").style.display="none" ;
@@ -54,18 +95,23 @@
   <div id="email-list">
   
     <div class="bodyOfSpan">
-  <div class="btn-group">
-<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-Recent Campaigns
-<span class="caret"></span>
-</a>
-<ul class="dropdown-menu">
-<!-- dropdown menu links -->
-<li><a href="javascript:changeit('Draft')">Drafts</a></li>
-<li><a href="javascript:changeit('Sent')">Sent</a></li>
-<li><a href="javascript:changeit('Scheduled')">Scheduled</a></li>
-</ul>
+    <div class="dropdown">
+    <a class="account" >Campaigns</a>
+    
+    <div class="submenu">
+    <ul class="root">
+    
+    <li ><a href="javascript:changeit('Draft')" >Drafts</a></li>
+    <li ><a href="javascript:changeit('Sent')">Sent</a></li>
+    <li ><a href="javascript:changeit('Scheduled')">Scheduled</a></li>
+    </ul>
+    </div>
+    
 </div>
+    
+    
+    
+ 
 
 
 

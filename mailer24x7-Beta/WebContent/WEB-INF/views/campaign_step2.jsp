@@ -52,11 +52,13 @@
     				if(txt == "0"){
 	    						
 							document.getElementById("fhtml").style.display="block" ;
+							document.getElementById("fhtml1").style.display="block" ;
 							document.getElementById("ckeditor").style.display="none" ;
 						}
     				if(txt == "2"){
 							    						
 							document.getElementById("fhtml").style.display="none" ;
+							document.getElementById("fhtml1").style.display="none" ;
 							document.getElementById("ckeditor").style.display="block" ;
 													
 							    						
@@ -65,6 +67,7 @@
     					
 	
 </script>
+
 
 
 <div class="content">
@@ -90,85 +93,98 @@
 </tr>
 
 <tr>
-<td colspan="2">
 
 <form:form id="campaignStep2" commandName="campaignStep2Form" action="${pageContext.request.contextPath}/usr/campaign/save/step2" method="POST" enctype="multipart/form-data">
 <form:hidden path="nextAction" id="nextAction" />
 <form:hidden path="campaignId" />
 <form:hidden path="htmlData" id="htmlData"/>
 
-<fieldset>
 
 
-<table cellpadding="0" cellspacing="0" width="100%">
-<tr>
-<td colspan="2"><span class="radiospan"><form:radiobutton path="contentType" value="0" checked="checked" onclick="javascript:changeit('0')" /></span><p class="radio-text">Import My design</p>
-<span class="radiospan"><form:radiobutton path="contentType" value="2" onclick="javascript:changeit('2')"/></span><p class="radio-text">Html Plain Text</p></td>
-<!--<span class="radiospan"><form:radiobutton path="contentType" value="0"/><p class="radio-text">Template</p></span></td>-->
+<td><span class="radiospan"><form:radiobutton path="contentType" value="0" checked="checked" onclick="javascript:changeit('0')" class="inputradio" /><p class="radio-text">Import My design</p></span>
+<span class="radiospan"><form:radiobutton path="contentType" value="2" onclick="javascript:changeit('2')" class="inputradio"/><p class="radio-text">Html Plain Text</p></span>
+</td>
 </tr>
 
-<tr>
-<td>&nbsp; <td>
-<td><div id="fhtml">
- <table width="98%" cellpadding="0" cellspacing="0" align="center" class="campaign-page">
-	    <tr valign="top">
-			<td width="50">&nbsp;</td>
-			<td class="txthd">
-				<h4>HTML File</h4>
-				<p class="greytxt">Browse and select a HTML file that you created for this campaign.</p>
-				<p><form:input path="htmlFileData" type="file" id="htmlFileDataId"/></p>
-			</td>
-		</tr>
-	    <tr valign="top">
-			<td height="40" colspan="2">&nbsp;</td>
-		</tr>
-	    <tr valign="top">
-			<td width="50">&nbsp;</td>
-			<td class="txthd">
-				<h4>Image files (optional)</h4>
-				<p class="greytxt">Zip additional files(if any), that were created for this campaign and upload them here. This may include your logo, banner, CSS files. For more details on this topic, please refer to our help section.</p>
-				<p><form:input path="zipFileData" type="file" id="htmlFileDataId"/></p>
-			</td>
-		</tr>
- </table></div></td>
-</tr>
 
 <tr>
-<td>&nbsp; <td>
-<td><div id="ckeditor">
+
+<td  colspan="2"><div id="fhtml" >
+
+<h5>HTML File</h5>
+<p>Browse and select a HTML file that you created for this campaign.</p>
+<div class="custom_file_upload">
+<p><form:input path="htmlFileData" type="file"    id="htmlFileDataId"/></p>
+
+</div>
+</td>
+
+</tr>
+
+<tr valign="top">
+
+<td class="txthd" colspan="2"><div id="fhtml1" >
+<h5>Image files (optional)</h5>
+<p class="greytxt">Zip additional files(if any), that were created for this campaign and upload them here. This may include your logo, banner, CSS files. For more details on this topic, please refer to our help section.</p>
+<p><form:input path="zipFileData" type="file" id="htmlFileDataId"/></p>
+</div>
+</td>
+</tr>
+
+
+
+
+
+<tr>
+
+<td colspan="2"><div id="ckeditor">
 <table width="99%" cellpadding="0" cellspacing="0" class="campaign-page">
-	    <tr valign="top">
-			<td>
-			 
-			 
-            <textarea name='editorContent' > </textarea>
-            <script>
-                CKEDITOR.replace( 'editorContent' );
-            </script>
-			</td>
-		</tr>
-		</table>
-		</div></td>
+<tr valign="top">
+<td width="100%">
+
+
+<textarea name='editorContent' > </textarea>
+<script>
+CKEDITOR.replace( 'editorContent' );
+</script>
+</td>
 </tr>
+</table>
+</div></td>
+</tr>
+
 
 <tr>
 
-	<td width="100"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span></td>
-	<td align="center"><a href="#" class="btn btn-success" onclick="javascript:submitExit()">Save &amp; Exit</a></td>
-	<td align="center"><a href="#" class="btn btn-success" onclick="javascript:submitPreview()">Preview</a></td>
-	<td width="100"><span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td> 
-  
- </tr>
-<!--Import My design ends-->
+<td  align="center"><span class="previous"><a href="#" onclick="javascript:submitPrev()">Previous</a></span>
+<a href="#" class="btn btn-success" onclick="javascript:submitExit()">Save &amp; Exit</a>
+<a href="#" class="btn btn-success" onclick="javascript:submitPreview()">Preview</a>
+<span class="next1"><a href="#" onclick="javascript:submitNext()">Next</a></span></td> 
+
+</tr>
+
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </fieldset>
 </form:form>
 </td>
 </tr>
 </table>
-</td>
- </tr>
- </table>
+
  </div>
  </div>
 <script>
