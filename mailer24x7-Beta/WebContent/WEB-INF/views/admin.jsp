@@ -29,25 +29,22 @@
 
 
 <tr>
-<td class="empty" colspan="2"></td>
+<td class="empty" colspan="3"></td>
 </tr>
 
-<tr>
-<td colspan="2"><a href="${pageContext.request.contextPath}/usr/admin/edit/user">User Profile</a></td>
-</tr>
-<tr>
-<td colspan="2"><a href="${pageContext.request.contextPath}/usr/admin/view/all/users">All Users</a></td>
-</tr>
-<tr>
-<td colspan="2"><a href="${pageContext.request.contextPath}/usr/admin/edit/org">Company Settings</a></td>
-</tr>
 
 <tr>
-<td colspan="2"><a href="${pageContext.request.contextPath}/usr/pwd/change">Change Password</a></td>
-</tr>
+<td  class="pad1">
+<img src="${pageContext.request.contextPath}/images/user.png" width="75" height="72" alt="" />
+<a href="${pageContext.request.contextPath}/usr/admin/view/all/users">All Users</a></td>
 
-<tr>
-<td colspan="2"><a href="${pageContext.request.contextPath}/usr/admin/new/user"><img src="${pageContext.request.contextPath}/images/add.png" width="16" height="15" alt="" />Add User</a></td>
+<td  class="pad1">
+<img src="${pageContext.request.contextPath}/images/icon-admin.png" width="75" height="72" alt="" />
+<a href="${pageContext.request.contextPath}/usr/admin/edit/org">Company Settings</a></td>
+
+<td  class="pad1">
+<img src="${pageContext.request.contextPath}/images/group_gear.png" width="75" height="72" alt="" />
+<a href="${pageContext.request.contextPath}/usr/pwd/change">Change Password</a></td>
 </tr>
 
 
