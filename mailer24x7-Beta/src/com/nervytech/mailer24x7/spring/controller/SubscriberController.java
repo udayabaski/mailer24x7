@@ -30,9 +30,12 @@ import com.nervytech.mailer24x7.common.enums.SubscriberStatusEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
 import com.nervytech.mailer24x7.domain.model.SubscriberIdStatus;
 import com.nervytech.mailer24x7.domain.model.SubscriberList;
+import com.nervytech.mailer24x7.domain.model.SubscriberReports;
 import com.nervytech.mailer24x7.model.service.api.ICampaignStatusService;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberIdStatusService;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberListService;
+import com.nervytech.mailer24x7.reports.bean.SubscriberCampaignReportsBean;
+import com.nervytech.mailer24x7.reports.bean.SubscriberStatusReportsBean;
 import com.nervytech.mailer24x7.spring.bean.SubscriberHomeBean;
 import com.nervytech.mailer24x7.spring.form.CampaignStep3Form;
 import com.nervytech.mailer24x7.spring.form.SubscriberForm;
@@ -325,6 +328,53 @@ public class SubscriberController {
 
 	}
 
+	@RequestMapping(value = "/reports/{campaignId}/{statusId}", method = RequestMethod.GET)
+	public String showSubscriberReportByStatus(@PathVariable String campaignId,@PathVariable String statusId, Map model,
+			HttpServletRequest request) {
+
+		long campaignIdLong = -1;
+
+		try {
+			campaignIdLong = Long.parseLong(campaignId);
+		} catch (Exception e) {
+			logger.info("Invalid Subscriber Group Id : " + campaignId
+					+ ". Hence redirecting to home page. ");
+
+			return "invalidrequest";
+		}
+		
+		SubscriberStatusReportsBean subscribersBean = new SubscriberStatusReportsBean();
+		
+		System.out.println("CAMPAIGN IDDDDDDDDDDDDD "+campaignId+" STATUSSSSSSS "+statusId);
+
+		List<SubscriberReports> subLists = subscriberListService
+				.getSubscribersByStatus(campaignIdLong,Integer.parseInt(statusId));
+		
+		subscribersBean.setSubscriberList(subLists);
+
+		model.put("subscriberStatusReportsBean", subscribersBean);
+
+		return "viewsubstatusreports";
+	}
+	
+	@RequestMapping(value = "/reports/campaigns/{statusId}", method = RequestMethod.GET)
+	public String showCampaignReportBySubscriber(@PathVariable String statusId, Map model,
+			HttpServletRequest request) {
+
+		
+		SubscriberCampaignReportsBean subscribersBean = new SubscriberCampaignReportsBean();
+		
+		subscriberListService
+				.getCampaignReportsBySubscribers(statusId,subscribersBean);
+		
+		subscriberListService
+		.setCampaignCounts(statusId,subscribersBean);
+		
+		model.put("subscriberCampaignReportsBean", subscribersBean);
+
+		return "viewcampaignsubreports";
+	}
+	
 	@RequestMapping(value = "/edit/group/id/{groupId}", method = RequestMethod.GET)
 	public String editSubGroups(@PathVariable String groupId, Map model,
 			HttpServletRequest request) {

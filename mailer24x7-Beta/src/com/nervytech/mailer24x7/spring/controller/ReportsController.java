@@ -2,6 +2,7 @@ package com.nervytech.mailer24x7.spring.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,6 +24,7 @@ import com.nervytech.mailer24x7.common.enums.CampaignStatusEnum;
 import com.nervytech.mailer24x7.common.enums.SubscriberCampaignStatusEnum;
 import com.nervytech.mailer24x7.model.service.api.ICampaignService;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberReportsService;
+import com.nervytech.mailer24x7.reports.bean.BarChartReportsBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignReportsBean;
 import com.nervytech.mailer24x7.spring.bean.CampaignsHomeBean;
@@ -155,10 +157,10 @@ public class ReportsController {
 		return openedMap.toString() + "##" + clickedMap.toString();
 	}
 
-	@RequestMapping(value = "/view/campaign/id/{campaignId}/type/region", method = RequestMethod.GET)
+	@RequestMapping(value = "/view/campaign/id/{campaignId}/type/country", method = RequestMethod.GET)
 	public @ResponseBody
-	String campaignReportsByRegion(@PathVariable String campaignId,
-			Map model, HttpServletRequest request) {
+	String campaignReportsByRegion(@PathVariable String campaignId, Map model,
+			HttpServletRequest request) {
 
 		long campaignIdLong = -1;
 
@@ -171,85 +173,69 @@ public class ReportsController {
 			// return "invalidrequest";
 		}
 
-		Map<Integer, Map<String, Integer>> statusRegionsMap = reportsService
-				.getSubscriberRegionReport(campaignIdLong);
-		
-		Map<String, Integer> openedMap = new HashMap<String, Integer>();
-		Map<String, Integer> clickedMap = new HashMap<String, Integer>();
-		Map<String, Integer> unsubscribedMap = new HashMap<String, Integer>();
-		Map<String, Integer> bouncedMap = new HashMap<String, Integer>();
-		Map<String, Integer> complainedMap = new HashMap<String, Integer>();
+		Map<String, BarChartReportsBean> countryStatusMap = reportsService
+				.getSubscriberRegionReport(campaignIdLong,
+						SubscriberCampaignStatusEnum.OPENED.getStatus(),
+						SubscriberCampaignStatusEnum.CLICKED.getStatus(),
+						SubscriberCampaignStatusEnum.BOUNCED.getStatus(),
+						SubscriberCampaignStatusEnum.UNSUBSCRIBED.getStatus());
+
+		List openedClickedTickList = new ArrayList();
+		List bouncedUnSubscribedTickList = new ArrayList();
+		List openedList = new ArrayList();
+		List clickedList = new ArrayList();
+		List bouncedList = new ArrayList();
+		List unsubscribedList = new ArrayList();
 
 		String toReturn = null;
 
-		Iterator itr = statusRegionsMap.entrySet().iterator();
+		Iterator itr = countryStatusMap.entrySet().iterator();
 
 		while (itr.hasNext()) {
-			Map.Entry<Integer, Map<String, Integer>> entrySet = (Map.Entry<Integer, Map<String, Integer>>) itr
+			Map.Entry<String, BarChartReportsBean> entrySet = (Map.Entry<String, BarChartReportsBean>) itr
 					.next();
-			int status = entrySet.getKey();
-			Map<String, Integer> regionsMap = entrySet.getValue();
+			String country = entrySet.getKey();
+			BarChartReportsBean bean = entrySet.getValue();
 
-			if (status == SubscriberCampaignStatusEnum.OPENED.getStatus()) {
-				
-				openedMap = regionsMap;
-				/*if (toReturn != null) {
-					toReturn = toReturn + "##"
-							+ SubscriberCampaignStatusEnum.OPENED.name() + "="
-							+ regionsMap.toString();
-				} else {
-					toReturn = SubscriberCampaignStatusEnum.OPENED.name() + "="
-							+ regionsMap.toString();
-				}*/
-			} else if (status == SubscriberCampaignStatusEnum.CLICKED
-					.getStatus()) {
-				clickedMap = regionsMap;
-				/*if (toReturn != null) {
-					toReturn = toReturn + "##"
-							+ SubscriberCampaignStatusEnum.CLICKED.name() + "="
-							+ regionsMap.toString();
-				} else {
-					toReturn = SubscriberCampaignStatusEnum.CLICKED.name()
-							+ "=" + regionsMap.toString();
-				}*/
-			} else if (status == SubscriberCampaignStatusEnum.UNSUBSCRIBED
-					.getStatus()) {
-				unsubscribedMap = regionsMap;
-				/*if (toReturn != null) {
-					toReturn = toReturn + "##"
-							+ SubscriberCampaignStatusEnum.UNSUBSCRIBED.name()
-							+ "=" + regionsMap.toString();
-				} else {
-					toReturn = SubscriberCampaignStatusEnum.UNSUBSCRIBED.name()
-							+ "=" + regionsMap.toString();
-				}*/
-			} else if (status == SubscriberCampaignStatusEnum.BOUNCED
-					.getStatus()) {
-				bouncedMap = regionsMap;
-				/*if (toReturn != null) {
-					toReturn = toReturn + "##"
-							+ SubscriberCampaignStatusEnum.BOUNCED.name() + "="
-							+ regionsMap.toString();
-				} else {
-					toReturn = SubscriberCampaignStatusEnum.BOUNCED.name()
-							+ "=" + regionsMap.toString();
-				}*/
-			} else if (status == SubscriberCampaignStatusEnum.COMPLAINED
-					.getStatus()) {
-				complainedMap = regionsMap;
-				/*if (toReturn != null) {
-					toReturn = toReturn + "##"
-							+ SubscriberCampaignStatusEnum.COMPLAINED.name()
-							+ "=" + regionsMap.toString();
-				} else {
-					toReturn = SubscriberCampaignStatusEnum.COMPLAINED.name()
-							+ "=" + regionsMap.toString();
-				}*/
+			if (!(bean.getOpened() == 0 && bean.getClicked() == 0)) {
+				openedClickedTickList.add(country);
+				openedList.add(bean.getOpened());
+				clickedList.add(bean.getClicked());
+			}
+
+			if (!(bean.getBounced() == 0 && bean.getUnsubscribed() == 0)) {
+				bouncedUnSubscribedTickList.add(country);
+				bouncedList.add(bean.getBounced());
+				unsubscribedList.add(bean.getUnsubscribed());
 			}
 		}
 
-		//return toReturn == null ? "" : toReturn;
-		return openedMap.toString() + "##" + clickedMap.toString()+ "##" + unsubscribedMap.toString()+ "##" + bouncedMap.toString()+ "##" + complainedMap.toString();
+		StringBuilder builder = new StringBuilder();
+		if (openedClickedTickList.size() > 0) {
+			builder.append(openedClickedTickList.toString());
+			builder.append("##");
+			builder.append(openedList.toString());
+			builder.append("##");
+			builder.append(clickedList.toString());
+			builder.append("###");
+		} else {
+			builder.append("No Date for Opened And Clicked");
+			builder.append("###");
+		}
+
+		if (openedClickedTickList.size() > 0) {
+			builder.append(bouncedUnSubscribedTickList.toString());
+			builder.append("##");
+			builder.append(bouncedList.toString());
+			builder.append("##");
+			builder.append(unsubscribedList.toString());
+		} else {
+			builder.append("No Date for Bounced and UnSubscribed");
+			builder.append("###");
+		}
+
+		// return toReturn == null ? "" : toReturn;
+		return builder.toString();
 
 	}
 
