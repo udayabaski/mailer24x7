@@ -15,8 +15,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
+import com.nervytech.mailer24x7.common.enums.SubscriberCampaignStatusEnum;
 import com.nervytech.mailer24x7.mailgun.CampaignEvent;
 import com.nervytech.mailer24x7.model.dao.interfaces.ISubscriberReportsDAO;
+import com.nervytech.mailer24x7.reports.bean.BarChartReportsBean;
 
 /**
  * A data access object (DAO) providing persistence and search support for Users
@@ -109,33 +111,46 @@ public class SubscriberReportsDAO extends JdbcDaoSupport implements
 	}
 
 	@Override
-	public Map<Integer, Map<String, Integer>> getSubscriberRegionReport(
-			long campaignIdLong) {
+	public Map<String, BarChartReportsBean> getSubscriberRegionReport(
+			long campaignIdLong,int opened, int clicked, int bounced, int unsubscribed) {
 
-		Map<Integer, Map<String, Integer>> toReturn = new HashMap<Integer, Map<String, Integer>>();
+		Map<String, BarChartReportsBean> toReturn = new HashMap<String, BarChartReportsBean>();
 
-		String selectSubscriberGroupsQuery = "select status,region,count(region) as count from subscriber_reports where campaign_id=? group by status,region";
+		String selectSubscriberGroupsQuery = "select status,country,count(country) as count from subscriber_reports where " +
+				" campaign_id=? and status in (?,?,?,?) group by status,country";
 
-		Object[] parms = { campaignIdLong };
+		Object[] parms = { campaignIdLong, opened, clicked, bounced, unsubscribed };
 
 		List<Map<String, Object>> rows = getJdbcTemplate().queryForList(
 				selectSubscriberGroupsQuery,parms);
 
 		for (Map row : rows) {
-			if (toReturn.get((Integer) row.get("STATUS")) == null) {
-				Map<String, Integer> regionMap = new HashMap<String, Integer>();
-				regionMap.put((String) row.get("region"),
-						((Long) row.get("count")).intValue());
-				toReturn.put((Integer) row.get("STATUS"), regionMap);
+			
+			if(toReturn.get((String)row.get("country")) != null){
+				BarChartReportsBean bean = toReturn.get((String)row.get("country"));
+				setCountInBean(bean,(Integer) row.get("status"),((Long) row.get("count")).intValue());
 			} else {
-				Map<String, Integer> regionMap = toReturn.get((Integer) row
-						.get("STATUS"));
-				regionMap.put((String) row.get("region"),
-						((Long) row.get("count")).intValue());
-				toReturn.put((Integer) row.get("STATUS"), regionMap);
+				BarChartReportsBean bean = new BarChartReportsBean();
+				setCountInBean(bean,(Integer) row.get("status"),((Long) row.get("count")).intValue());
+				toReturn.put((String)row.get("country"),bean);
 			}
+			
 		}
 
 		return toReturn;
+	}
+
+	private void setCountInBean(BarChartReportsBean bean, int status,
+			int count) {
+		if(status == SubscriberCampaignStatusEnum.OPENED.getStatus()){
+			bean.setOpened(count);
+		} else if(status == SubscriberCampaignStatusEnum.CLICKED.getStatus()) {
+			bean.setClicked(count);
+		} else if(status == SubscriberCampaignStatusEnum.BOUNCED.getStatus()) {
+			bean.setBounced(count);
+		} else if(status == SubscriberCampaignStatusEnum.UNSUBSCRIBED.getStatus()) {
+			bean.setUnsubscribed(count);
+		}
+		
 	}
 }

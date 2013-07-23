@@ -1,25 +1,27 @@
 package com.nervytech.mailer24x7.campaign.job.task;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.nervytech.mailer24x7.aws.s3.client.MailerS3Client;
 import com.nervytech.mailer24x7.client.exception.MailerException;
 import com.nervytech.mailer24x7.common.enums.CampaignStatusEnum;
 import com.nervytech.mailer24x7.common.enums.CampaignTypeEnum;
+import com.nervytech.mailer24x7.common.enums.SubscriberStatusEnum;
 import com.nervytech.mailer24x7.common.util.MailerUtil;
 import com.nervytech.mailer24x7.domain.model.Campaign;
 import com.nervytech.mailer24x7.domain.model.CampaignSchedulerModel;
 import com.nervytech.mailer24x7.mailgun.MailgunCampignSyncer;
 import com.nervytech.mailer24x7.mailgun.MailgunSendUtil;
 import com.nervytech.mailer24x7.model.service.api.ICampaignStatusService;
+import com.nervytech.mailer24x7.model.service.api.ISubscriberIdStatusService;
 import com.sun.jersey.api.client.ClientResponse;
 
 public class CampaignTaskExecutor {
@@ -29,6 +31,9 @@ public class CampaignTaskExecutor {
 
 	@Autowired
 	private ICampaignStatusService cmpnStatusService;
+	
+	@Autowired
+	private ISubscriberIdStatusService subscriberIdStatusService;
 
 	@Autowired
 	private MailgunCampignSyncer mailgunSyncer;
@@ -93,6 +98,9 @@ public class CampaignTaskExecutor {
 								.getCampaignId(), CampaignStatusEnum.COMPLETED
 								.getStatus(), MailerUtil.FORMATTER_WITH_TIME
 								.format(new Date()));
+						
+						List<Long> subscriebrs = subscriberIdStatusService.getAllSubscribersByStatus(cmpn.getSubscriberListId(), SubscriberStatusEnum.ACTIVE.getStatus());
+						subscriberIdStatusService.addCampaignSentForSubscribers(subscriebrs,cmpn.getCampaignId());
 
 						System.out.println("Updated Campaign Status : "
 								+ cmpn.getCampaignId());

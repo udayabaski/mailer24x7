@@ -6,6 +6,8 @@ package com.nervytech.mailer24x7.model.dao.interfaces;
 import java.util.List;
 
 import com.nervytech.mailer24x7.domain.model.SubscriberList;
+import com.nervytech.mailer24x7.domain.model.SubscriberReports;
+import com.nervytech.mailer24x7.reports.bean.SubscriberCampaignReportsBean;
 
 /**
  * @author bsikkaya
@@ -37,5 +39,14 @@ public interface ISubscriberListDAO {
 	public void updateActiveCount(long subscriberListId, int length);
 	
 	public void addActiveCount(long subscriberListId, int length);
+
+	public List<SubscriberReports> getSubscribersByStatus(long campaignIdLong,
+			int status);
+
+	public void getCampaignReportsBySubscribers(String statusId,
+			SubscriberCampaignReportsBean subscribersBean);
+
+	public void setCampaignCounts(String statusId,
+			SubscriberCampaignReportsBean subscribersBean);
 	
 }

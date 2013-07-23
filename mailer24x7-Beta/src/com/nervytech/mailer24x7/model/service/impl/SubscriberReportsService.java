@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.nervytech.mailer24x7.mailgun.CampaignEvent;
 import com.nervytech.mailer24x7.model.dao.interfaces.ISubscriberReportsDAO;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberReportsService;
+import com.nervytech.mailer24x7.reports.bean.BarChartReportsBean;
 
 /**
  * @author bsikkaya
@@ -54,12 +55,12 @@ public class SubscriberReportsService implements ISubscriberReportsService {
 	}
 
 	@Override
-	public Map<Integer, Map<String, Integer>> getSubscriberRegionReport(
-			long campaignIdLong) {
-		Map<Integer, Map<String, Integer>> map = null;
+	public Map<String, BarChartReportsBean> getSubscriberRegionReport(
+			long campaignIdLong, int opened, int clicked, int bounced, int unsubscribed) {
+		Map<String, BarChartReportsBean> map = null;
 		try {
 			map = subscriberReportsDAO.getSubscriberRegionReport(
-					campaignIdLong);
+					campaignIdLong,opened,clicked, bounced, unsubscribed);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Error while saving user detail.", e);
