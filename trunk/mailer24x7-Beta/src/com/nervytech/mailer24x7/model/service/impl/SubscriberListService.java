@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nervytech.mailer24x7.domain.model.SubscriberList;
+import com.nervytech.mailer24x7.domain.model.SubscriberReports;
 import com.nervytech.mailer24x7.model.dao.interfaces.ISubscriberListDAO;
 import com.nervytech.mailer24x7.model.service.api.ISubscriberListService;
+import com.nervytech.mailer24x7.reports.bean.SubscriberCampaignReportsBean;
 
 /**
  * @author bsikkaya
@@ -145,5 +147,41 @@ public class SubscriberListService implements ISubscriberListService{
 			logger.error("Error while saving user detail.", e);
 			throw new RuntimeException(e.getMessage());
 		}		
+	}
+
+	@Override
+	public List<SubscriberReports> getSubscribersByStatus(long campaignIdLong,
+			int status) {
+		List<SubscriberReports> list = null;
+		try {
+			list = subscriberListDAO.getSubscribersByStatus(campaignIdLong,status);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		return list;
+	}
+
+	@Override
+	public void getCampaignReportsBySubscribers(
+			String statusId, SubscriberCampaignReportsBean subscribersBean) {
+		try {
+			subscriberListDAO.getCampaignReportsBySubscribers(statusId,subscribersBean);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void setCampaignCounts(String statusId,
+			SubscriberCampaignReportsBean subscribersBean) {
+		try {
+			subscriberListDAO.setCampaignCounts(statusId,subscribersBean);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		
 	}
 }

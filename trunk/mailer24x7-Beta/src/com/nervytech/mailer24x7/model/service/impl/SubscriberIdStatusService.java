@@ -136,4 +136,29 @@ public class SubscriberIdStatusService implements ISubscriberIdStatusService {
 		}
 
 	}
+
+	@Override
+	public List<Long> getAllSubscribersByStatus(long subscriberListId,
+			int status) {
+		List<Long> list = null;
+		try {
+			list = subscriberIdStatusDAO.getAllSubscribersByStatus(subscriberListId,status);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		return list;
+	}
+
+	@Override
+	public void addCampaignSentForSubscribers(List<Long> subscriebrs,
+			long campaignId) {
+		try {
+			subscriberIdStatusDAO.addCampaignSentForSubscribers(subscriebrs, campaignId);
+		} catch (Exception e) {
+			logger.error("Error while saving user detail.", e);
+			throw new RuntimeException(e.getMessage());
+		}
+		
+	}
 }

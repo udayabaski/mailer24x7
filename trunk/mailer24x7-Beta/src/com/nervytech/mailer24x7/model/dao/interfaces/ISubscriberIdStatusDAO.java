@@ -35,5 +35,11 @@ public interface ISubscriberIdStatusDAO {
 	public void deleteSubscriber(String statusIds);
 	
 	public void updateSubscribersStatus(String statusIds, int status);
+
+	public List<Long> getAllSubscribersByStatus(long subscriberListId,
+			int status);
+
+	public void addCampaignSentForSubscribers(List<Long> subscriebrs,
+			long campaignId);
 	
 }

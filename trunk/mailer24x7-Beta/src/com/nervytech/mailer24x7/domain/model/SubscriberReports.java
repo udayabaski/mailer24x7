@@ -19,6 +19,8 @@ public class SubscriberReports {
 	private String region;
 	private String ip;
 	private String country;
+	private long subscriberId;
+	private int count;
 
 	/**
 	 * @return the id
@@ -168,6 +170,36 @@ public class SubscriberReports {
 	 */
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	/**
+	 * @return the subscriberId
+	 */
+	public long getSubscriberId() {
+		return subscriberId;
+	}
+
+	/**
+	 * @param subscriberId
+	 *            the subscriberId to set
+	 */
+	public void setSubscriberId(long subscriberId) {
+		this.subscriberId = subscriberId;
+	}
+
+	/**
+	 * @return the count
+	 */
+	public int getCount() {
+		return count;
+	}
+
+	/**
+	 * @param count
+	 *            the count to set
+	 */
+	public void setCount(int count) {
+		this.count = count;
 	}
 
 	/*

@@ -267,4 +267,55 @@ public class SubscriberIdStatusDAO extends JdbcDaoSupport implements
 		return (SubscriberIdStatusDAO) ctx.getBean("SubscriberListDAO");
 	}
 
+	@Override
+	public List<Long> getAllSubscribersByStatus(long subscriberListId,
+			int status) {
+
+		final List<Long> activeSubscribers = new ArrayList<Long>();
+
+		String selectSubscriberQuery = "SELECT * FROM SUBSCRIBERID_STATUS WHERE SUBSCRIBER_LIST_ID="
+				+ subscriberListId + " and status="+status;
+
+		logger.debug("Select All Subscriber Query : " + selectSubscriberQuery);
+
+		getJdbcTemplate().query(selectSubscriberQuery,
+				new RowCallbackHandler() {
+					public void processRow(ResultSet rs) throws SQLException {
+						activeSubscribers.add(rs.getLong("STATUS_ID"));
+					}
+				});
+
+
+		return activeSubscribers;
+
+	}
+
+	@Override
+	public void addCampaignSentForSubscribers(final List<Long> subscriebrs,
+			final long campaignId) {
+		
+		String insertSubscriberQuery = "INSERT INTO SUBSCRIBER_CAMPAIGN "
+				+ " VALUES(?,?)";
+
+		logger.debug("Inser Subscriber Query : " + insertSubscriberQuery);
+
+		getJdbcTemplate().batchUpdate(insertSubscriberQuery,
+				new BatchPreparedStatementSetter() {
+
+					@Override
+					public void setValues(PreparedStatement ps, int count)
+							throws SQLException {
+						ps.setLong(1, subscriebrs.get(count));
+						ps.setLong(2, campaignId);
+					}
+
+					@Override
+					public int getBatchSize() {
+						return subscriebrs.size();
+					}
+				});
+
+		
+	}
+
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.nervytech.mailer24x7.mailgun.CampaignEvent;
+import com.nervytech.mailer24x7.reports.bean.BarChartReportsBean;
 
 /**
  * @author bsikkaya
@@ -20,7 +21,7 @@ public interface ISubscriberReportsDAO {
 	public Map<Integer, List<Long>> getSubscriberReport(long campaignId,
 			int openSatus, int clickStatus);
 
-	public Map<Integer, Map<String, Integer>> getSubscriberRegionReport(
-			long campaignIdLong);
+	public Map<String, BarChartReportsBean> getSubscriberRegionReport(
+			long campaignIdLong, int opened, int clicked, int bounced, int unSubscribed);
 
 }
