@@ -132,7 +132,7 @@
 		 			  
 		 			   <td>
 		 			  <div align="center"> <a href="#" class="btn btn-success" onclick="javascript:submitExit()">Save &amp; Exit</a>
-		 			   <span class="next"><a href="#" onclick="javascript:submitNext()">Next</a></span></div.</td> 
+		 			   <span class="next"><a href="#" onclick="javascript:submitNext()">Next</a></span></div></td> 
 		 			</c:otherwise>
 		 	  </c:choose>	
 		 	
